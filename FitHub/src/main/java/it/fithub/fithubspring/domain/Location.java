@@ -1,34 +1,18 @@
-package it.fithub.fithubspring.entity;
+package it.fithub.fithubspring.domain;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "location")
+/**
+ * Location entity - represents a gym or park location.
+ * Pure POJO - no JPA annotations.
+ */
 public class Location {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
     private String type; // 'gym' or 'park'
-
-    @Column(nullable = false)
     private Double latitude;
-
-    @Column(nullable = false)
     private Double longitude;
-
-    @Column(nullable = false)
     private String address;
-
-    @Column(nullable = false)
     private Double rating;
-
-    @Column(columnDefinition = "TEXT")
     private String warning; // Nullable - for broken equipment alerts
 
     // Constructors

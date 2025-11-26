@@ -1,7 +1,7 @@
 package it.fithub.fithubspring.service;
 
 import it.fithub.fithubspring.dto.LocationDTO;
-import it.fithub.fithubspring.entity.Location;
+import it.fithub.fithubspring.domain.Location;
 import it.fithub.fithubspring.repository.LocationRepository;
 import org.springframework.stereotype.Service;
 

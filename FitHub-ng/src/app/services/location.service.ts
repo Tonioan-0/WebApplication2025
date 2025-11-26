@@ -17,6 +17,7 @@ export interface Location {
     providedIn: 'root'
 })
 export class LocationService {
+    // TODO: Non so se va messo nelle variabili d'ambiente, da chiedere al professore
     private apiUrl = 'http://localhost:8081/api/locations';
 
     constructor(private http: HttpClient) { }
