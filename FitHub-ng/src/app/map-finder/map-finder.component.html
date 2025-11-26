@@ -1,0 +1,29 @@
+<div class="map-container">
+  <div id="map"></div>
+
+  <div class="map-overlay">
+    <div class="search-bar">
+      <input type="text" placeholder="Search for gyms or parks...">
+    </div>
+
+    <div class="filter-chips">
+      <div class="chip" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">All</div>
+      <div class="chip" [class.active]="activeFilter === 'gym'" (click)="setFilter('gym')">Gyms</div>
+      <div class="chip" [class.active]="activeFilter === 'park'" (click)="setFilter('park')">Parks</div>
+    </div>
+  </div>
+
+  <div class="info-card" [class.visible]="selectedLocation">
+    <ng-container *ngIf="selectedLocation">
+      <div class="info-card-header">
+        <h3>{{ selectedLocation.name }}</h3>
+        <button class="close-btn" (click)="closeInfoCard()">×</button>
+      </div>
+      <div class="info-card-body">
+        <p>{{ selectedLocation.address }}</p>
+        <p>Rating: {{ selectedLocation.rating }} ★</p>
+      </div>
+      <button class="navigate-btn">Navigate</button>
+    </ng-container>
+  </div>
+</div>
