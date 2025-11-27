@@ -1,22 +1,22 @@
 /* Colori di prova */
 :root {
-    /* Primary Colors */
+    /* Primary */
     --primary: oklch(51.01% 0.274 263.83);
     --primary-container: oklch(45% 0.25 263.83);
     --on-primary: #ffffff;
     --on-primary-container: oklch(85% 0.15 263.83);
 
-    /* Secondary Colors  */
+    /* Secondary  */
     --secondary: oklch(72% 0.19 50);
     --secondary-container: oklch(65% 0.17 50);
     --on-secondary: #ffffff;
     --on-secondary-container: oklch(30% 0.08 50);
 
-    /* Accent Colors */
+    /* Accent */
     --accent-violet: oklch(47.996% 0.28252 279.173);
     --accent-pink: oklch(69.02% 0.277 332.77);
 
-    /* Surface Colors */
+    /* Surface */
     --surface: #0a0a2e;
     --surface-dim: #16213e;
     --surface-bright: #1e2a47;

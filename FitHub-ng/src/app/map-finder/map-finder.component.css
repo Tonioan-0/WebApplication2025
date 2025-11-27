@@ -219,6 +219,10 @@
   opacity: 1;
 }
 
+.chip:nth-child(3).active::before {
+  background: var(--gradient-accent);
+}
+
 .place-card {
   width: 100%;
   background: rgba(22, 33, 62, 0.75);
