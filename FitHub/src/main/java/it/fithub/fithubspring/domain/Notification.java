@@ -5,9 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
-/**
- * Notification entity - pure POJO without JPA annotations.
- */
 @Data
 @NoArgsConstructor
 public class Notification {

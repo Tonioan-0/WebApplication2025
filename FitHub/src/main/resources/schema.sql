@@ -17,7 +17,11 @@ CREATE TABLE IF NOT EXISTS location (
     longitude DOUBLE PRECISION NOT NULL,
     address VARCHAR(500) NOT NULL,
     rating DOUBLE PRECISION NOT NULL,
-    warning TEXT
+    warning TEXT,
+    search_vector tsvector GENERATED ALWAYS AS (
+        setweight(to_tsvector('italian', coalesce(name, '')), 'A') ||
+        setweight(to_tsvector('italian', coalesce(address, '')), 'B')
+    ) STORED
 );
 
 -- Notifications table
@@ -57,3 +61,6 @@ CREATE INDEX IF NOT EXISTS idx_appointment_creator ON appointment(creator_id);
 CREATE INDEX IF NOT EXISTS idx_appointment_datetime ON appointment(date_time DESC);
 CREATE INDEX IF NOT EXISTS idx_location_coords ON location(latitude, longitude);
 CREATE INDEX IF NOT EXISTS idx_location_type ON location(type);
+
+-- Full-Text Search index for locations
+CREATE INDEX IF NOT EXISTS idx_location_search_vector ON location USING GIN(search_vector);

@@ -27,4 +27,9 @@ public class LocationController {
             @RequestParam(required = false) Integer zoom) {
         return locationService.getLocationsByBounds(minLat, maxLat, minLng, maxLng, type);
     }
+
+    @GetMapping("/search")
+    public List<LocationDTO> searchLocations(@RequestParam String q) {
+        return locationService.searchLocations(q);
+    }
 }

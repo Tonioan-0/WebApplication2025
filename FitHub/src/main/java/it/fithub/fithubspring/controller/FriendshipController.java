@@ -21,8 +21,10 @@ public class FriendshipController {
 
     @PostMapping("/request/{receiverId}")
     public ResponseEntity<Void> sendFriendRequest(@PathVariable Long receiverId) {
-        // In a real app, you'd get the sender's ID from the security context
-        Long senderId = 1L; // Placeholder for the current user's ID
+        // TODO: Alessandro - Implementare il controllo della sessione utente qui
+        // TODO: Sostituire senderId hardcoded con l'ID dell'utente autenticato dalla
+
+        Long senderId = 1L;
         friendshipService.sendFriendRequest(senderId, receiverId);
         return ResponseEntity.ok().build();
     }
@@ -35,8 +37,9 @@ public class FriendshipController {
 
     @GetMapping
     public ResponseEntity<List<User>> getFriends() {
-        // In a real app, you'd get the user's ID from the security context
-        Long userId = 1L; // Placeholder for the current user's ID
+        // TODO: Alessandro - Implementare il controllo della sessione utente qui
+        // TODO: Sostituire userId hardcoded con l'ID dell'utente autenticato dalla
+        Long userId = 1L;
         return ResponseEntity.ok(friendshipService.getFriends(userId));
     }
 }

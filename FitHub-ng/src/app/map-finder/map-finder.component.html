@@ -3,11 +3,13 @@
 
   <div class="map-overlay">
     <div class="search-bar">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"
-        style="margin-right: 12px; opacity: 0.7;">
-        <path [attr.d]="svgIcons.search" />
-      </svg>
-      <input type="text" placeholder="Hinted search text" aria-label="Search for gyms or parks">
+      <input type="text" placeholder="Cerca palestre o parchi..." aria-label="Search for gyms or parks"
+        [(ngModel)]="searchQuery" (input)="onSearchInput()" (keydown.enter)="performSearchNow()">
+      <button class="search-btn" (click)="performSearchNow()" aria-label="Search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+          <path [attr.d]="svgIcons.search" />
+        </svg>
+      </button>
     </div>
 
     <div class="filter-chips">
@@ -70,4 +72,6 @@
       </ng-container>
     </div>
   </div>
+
+  <app-ai-chat-button></app-ai-chat-button>
 </div>

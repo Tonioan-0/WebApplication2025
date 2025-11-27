@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Pure JDBC implementation of User repository.
- */
 @Repository
 public class UserRepository {
 

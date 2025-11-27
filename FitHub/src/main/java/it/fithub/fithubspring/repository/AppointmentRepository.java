@@ -10,9 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Pure JDBC implementation of Appointment repository.
- */
+
 @Repository
 public class AppointmentRepository {
 

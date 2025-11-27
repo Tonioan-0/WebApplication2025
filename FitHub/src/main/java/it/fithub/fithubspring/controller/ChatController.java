@@ -18,6 +18,9 @@ public class ChatController {
 
     @PostMapping
     public ChatResponse chat(@RequestBody ChatRequest request) {
+        // TODO: Alessandro - Implementare il controllo della sessione utente qui
+        // TODO: Verificare che l'utente sia autenticato prima di permettere l'accesso
+
         return chatService.getReply(request);
     }
 }

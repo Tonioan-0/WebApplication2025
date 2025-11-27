@@ -46,4 +46,12 @@ export class LocationService {
 
         return this.http.get<Location[]>(this.apiUrl, { params });
     }
+
+    /**
+     * Search locations using Full-Text Search
+     */
+    searchLocations(query: string): Observable<Location[]> {
+        const params = new HttpParams().set('q', query);
+        return this.http.get<Location[]>(`${this.apiUrl}/search`, { params });
+    }
 }

@@ -1,13 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
-
+/* Colori di prova */
 :root {
-    /* Primary Colors (Blue) */
+    /* Primary Colors */
     --primary: oklch(51.01% 0.274 263.83);
     --primary-container: oklch(45% 0.25 263.83);
     --on-primary: #ffffff;
     --on-primary-container: oklch(85% 0.15 263.83);
 
-    /* Secondary Colors (Orange) */
+    /* Secondary Colors  */
     --secondary: oklch(72% 0.19 50);
     --secondary-container: oklch(65% 0.17 50);
     --on-secondary: #ffffff;

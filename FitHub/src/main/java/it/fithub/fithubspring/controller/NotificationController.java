@@ -20,8 +20,7 @@ public class NotificationController {
 
     @GetMapping
     public ResponseEntity<List<Notification>> getUserNotifications() {
-        // In a real app, you'd get the user's ID from the security context
-        Long userId = 1L; // Placeholder for the current user's ID
+        Long userId = 1L;
         return ResponseEntity.ok(notificationService.getUserNotifications(userId));
     }
 

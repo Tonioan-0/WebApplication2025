@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Pure JDBC implementation of Location repository.
- * No JPA/Hibernate - manual SQL queries with PreparedStatements.
- */
 @Repository
 public class LocationRepository {
 
@@ -22,9 +18,6 @@ public class LocationRepository {
                 this.dataSource = dataSource;
         }
 
-        /**
-         * Find locations within specified bounds and optionally filter by type.
-         */
         public List<Location> findByBoundsAndType(Double minLat, Double maxLat,
                         Double minLng, Double maxLng,
                         String type) {
@@ -55,9 +48,6 @@ public class LocationRepository {
                 }
         }
 
-        /**
-         * Save a location (INSERT or UPDATE).
-         */
         public Location save(Location location) {
                 if (location.getId() == null) {
                         return insert(location);
@@ -115,9 +105,6 @@ public class LocationRepository {
                 }
         }
 
-        /**
-         * Find location by ID.
-         */
         public Optional<Location> findById(Long id) {
                 String sql = "SELECT * FROM location WHERE id = ?";
 
@@ -137,9 +124,6 @@ public class LocationRepository {
                 }
         }
 
-        /**
-         * Find all locations.
-         */
         public List<Location> findAll() {
                 String sql = "SELECT * FROM location";
 
@@ -154,6 +138,65 @@ public class LocationRepository {
                         return locations;
                 } catch (SQLException e) {
                         throw new RuntimeException("Error fetching all locations", e);
+                }
+        }
+
+
+        public List<Location> searchLocations(String query) {
+                if (query == null || query.trim().isEmpty()) {
+                        return new ArrayList<>();
+                }
+
+                String tsQuery = String.join(" & ", query.trim().split("\\s+"));
+
+                String sql = "SELECT *, ts_rank(search_vector, to_tsquery('italian', ?)) AS rank " +
+                                "FROM location " +
+                                "WHERE search_vector @@ to_tsquery('italian', ?) " +
+                                "ORDER BY rank DESC, name ASC " +
+                                "LIMIT 50";
+
+                try (Connection conn = dataSource.getConnection();
+                                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                        stmt.setString(1, tsQuery);
+                        stmt.setString(2, tsQuery);
+
+                        try (ResultSet rs = stmt.executeQuery()) {
+                                List<Location> locations = new ArrayList<>();
+                                while (rs.next()) {
+                                        locations.add(mapResultSetToLocation(rs));
+                                }
+                                return locations;
+                        }
+                } catch (SQLException e) {
+                        // If FTS query fails, try simple ILIKE search as fallback
+                        return searchWithLike(query);
+                }
+        }
+
+
+        private List<Location> searchWithLike(String query) {
+                String pattern = "%" + query.trim() + "%";
+                String sql = "SELECT * FROM location " +
+                                "WHERE LOWER(name) LIKE LOWER(?) " +
+                                "OR LOWER(address) LIKE LOWER(?) " +
+                                "ORDER BY name ASC LIMIT 50";
+
+                try (Connection conn = dataSource.getConnection();
+                                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                        stmt.setString(1, pattern);
+                        stmt.setString(2, pattern);
+
+                        try (ResultSet rs = stmt.executeQuery()) {
+                                List<Location> locations = new ArrayList<>();
+                                while (rs.next()) {
+                                        locations.add(mapResultSetToLocation(rs));
+                                }
+                                return locations;
+                        }
+                } catch (SQLException e) {
+                        throw new RuntimeException("Error searching locations", e);
                 }
         }
 
@@ -173,9 +216,6 @@ public class LocationRepository {
                 }
         }
 
-        /**
-         * Map ResultSet row to Location object.
-         */
         private Location mapResultSetToLocation(ResultSet rs) throws SQLException {
                 Location location = new Location();
                 location.setId(rs.getLong("id"));

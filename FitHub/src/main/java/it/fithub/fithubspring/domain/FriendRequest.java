@@ -5,9 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
-/**
- * FriendRequest entity - pure POJO without JPA annotations.
- */
+
 @Data
 @NoArgsConstructor
 public class FriendRequest {

@@ -1,34 +1,29 @@
 :host {
-  /* FitHub Color Palette - inspired by the reference design */
   --fithub-primary-blue: oklch(51.01% 0.274 263.83);
   --fithub-electric-violet: oklch(53.18% 0.28 296.97);
   --fithub-french-violet: oklch(47.66% 0.246 305.88);
   --fithub-vivid-pink: oklch(69.02% 0.277 332.77);
   --fithub-orange: oklch(72% 0.19 50);
 
-  /* Backgrounds */
   --dark-bg: #0a0a2e;
   --dark-surface: #16213e;
   --glass-bg: rgba(22, 33, 62, 0.75);
   --glass-border: rgba(255, 255, 255, 0.1);
 
-  /* Text Colors */
   --text-white: #ffffff;
   --text-light: rgba(255, 255, 255, 0.85);
   --text-muted: rgba(255, 255, 255, 0.6);
 
-  /* Gradients - matching FitHub brand */
   --gradient-primary: linear-gradient(135deg, var(--fithub-primary-blue), var(--fithub-electric-violet));
   --gradient-accent: linear-gradient(135deg, var(--fithub-orange), var(--fithub-vivid-pink));
-  --gradient-text: linear-gradient(90deg, var(--fithub-primary-blue), var(--fithub-electric-violet));
 
-  /* Design tokens */
   --border-radius: 16px;
   --border-radius-sm: 12px;
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
   --shadow-glow: 0 0 20px rgba(81, 97, 234, 0.3);
+  --spacing-sm: 8px;
 }
 
 .map-container {
@@ -45,9 +40,9 @@
   width: 100%;
   height: 100%;
   z-index: 1;
+  background-color: #050505;
 }
 
-/* Custom Marker Styles */
 :host ::ng-deep .custom-marker {
   background: transparent;
   border: none;
@@ -88,7 +83,6 @@
   box-shadow: var(--shadow-lg), 0 0 30px rgba(255, 105, 180, 0.5);
 }
 
-/* Floating UI Elements */
 .map-overlay {
   position: absolute;
   top: 24px;
@@ -102,33 +96,18 @@
   gap: 16px;
 }
 
-/* Search Bar */
 .search-bar {
   width: 100%;
-  padding: 16px 24px;
+  padding: 12px 16px;
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   border-radius: var(--border-radius);
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-md);
   display: flex;
   align-items: center;
+  gap: var(--spacing-sm);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.search-bar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--gradient-primary);
-  opacity: 0;
-  transition: opacity 0.3s ease;
 }
 
 .search-bar:hover,
@@ -137,19 +116,14 @@
   box-shadow: var(--shadow-md), var(--shadow-glow);
 }
 
-.search-bar:focus-within::before {
-  opacity: 1;
-}
-
 .search-bar input {
-  flex-grow: 1;
+  flex: 1;
   background: transparent;
   border: none;
   outline: none;
   color: var(--text-white);
   font-size: 16px;
   font-weight: 500;
-  letter-spacing: 0.01em;
 }
 
 .search-bar input::placeholder {
@@ -157,7 +131,29 @@
   font-weight: 400;
 }
 
-/* Filter Chips */
+.search-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.search-btn:hover {
+  background: rgba(81, 97, 234, 0.15);
+  color: var(--text-white);
+}
+
+.search-btn:active {
+  transform: scale(0.95);
+}
+
 .filter-chips {
   display: flex;
   gap: 12px;
@@ -177,7 +173,6 @@
   border: 1px solid var(--glass-border);
   font-weight: 500;
   font-size: 14px;
-  letter-spacing: 0.02em;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -224,12 +219,10 @@
   opacity: 1;
 }
 
-/* Place Card */
 .place-card {
   width: 100%;
   background: rgba(22, 33, 62, 0.75);
   backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
   border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: var(--shadow-md), var(--shadow-glow);
@@ -287,7 +280,6 @@
   font-size: 20px;
   font-weight: 700;
   color: var(--text-white);
-  letter-spacing: -0.01em;
 }
 
 .place-card-subtitle {
@@ -295,7 +287,6 @@
   font-size: 14px;
   font-weight: 500;
   color: var(--text-muted);
-  letter-spacing: 0.02em;
 }
 
 .warning-badge {
@@ -309,7 +300,6 @@
   color: #ffffff;
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.01em;
   box-shadow: 0 3px 12px rgba(255, 69, 87, 0.25);
   animation: pulse-warning 2s ease-in-out infinite;
 }
@@ -336,7 +326,6 @@
   font-size: 14px;
   line-height: 1.7;
   color: var(--text-light);
-  letter-spacing: 0.01em;
 }
 
 .place-card-close {
@@ -362,16 +351,11 @@
   color: var(--text-white);
 }
 
-/* Responsive Design */
 @media screen and (max-width: 640px) {
   .map-overlay {
     left: 16px;
     top: 16px;
     max-width: calc(100% - 32px);
-  }
-
-  .search-bar {
-    padding: 14px 20px;
   }
 
   .place-card-image {

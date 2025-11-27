@@ -30,6 +30,14 @@ public class LocationService {
                 .collect(Collectors.toList());
     }
 
+    public List<LocationDTO> searchLocations(String query) {
+        List<Location> locations = locationRepository.searchLocations(query);
+
+        return locations.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     private LocationDTO convertToDTO(Location location) {
         return new LocationDTO(
                 location.getId(),

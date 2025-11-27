@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Pure JDBC implementation of Notification repository.
- */
+
 @Repository
 public class NotificationRepository {
 

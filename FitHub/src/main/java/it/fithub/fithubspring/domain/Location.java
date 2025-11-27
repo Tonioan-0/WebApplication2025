@@ -1,9 +1,5 @@
 package it.fithub.fithubspring.domain;
 
-/**
- * Location entity - represents a gym or park location.
- * Pure POJO - no JPA annotations.
- */
 public class Location {
 
     private Long id;

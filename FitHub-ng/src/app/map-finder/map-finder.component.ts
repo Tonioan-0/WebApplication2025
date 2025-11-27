@@ -1,15 +1,17 @@
 import { Component, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import * as L from 'leaflet';
-import { LocationService, Location } from '../services/location.service';
+import { LocationService, type Location } from '../services/location.service';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { SVG_ICONS } from '../shared/constants/svg-icons.constants';
+import { AiChatButtonComponent } from '../ai-chat-button/ai-chat-button.component';
 
 @Component({
   selector: 'app-map-finder',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, AiChatButtonComponent],
   templateUrl: './map-finder.component.html',
   styleUrls: ['./map-finder.component.css']
 })
@@ -19,6 +21,10 @@ export class MapFinderComponent implements AfterViewInit, OnDestroy {
   selectedLocation: Location | null = null;
   private mapMoveSubject = new Subject<void>();
   isLoading = false;
+
+  searchQuery: string = '';
+  private searchTimeout: any;
+  activeFilter: 'all' | 'gym' | 'park' = 'all';
 
   readonly svgIcons = SVG_ICONS;
 
@@ -33,7 +39,6 @@ export class MapFinderComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  // Icons made with https://yqnn.github.io/svg-path-editor/ 
   private gymIcon = L.divIcon({
     className: 'custom-marker gym-marker',
     html: `<div class="marker-pin">
@@ -57,8 +62,6 @@ export class MapFinderComponent implements AfterViewInit, OnDestroy {
     iconAnchor: [20, 40],
     popupAnchor: [0, -40]
   });
-
-  activeFilter: 'all' | 'gym' | 'park' = 'all';
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -98,18 +101,13 @@ export class MapFinderComponent implements AfterViewInit, OnDestroy {
     const bounds = this.map.getBounds();
     const zoom = this.map.getZoom();
 
-    const minLat = bounds.getSouth();
-    const maxLat = bounds.getNorth();
-    const minLng = bounds.getWest();
-    const maxLng = bounds.getEast();
-
     this.isLoading = true;
 
     this.locationService.getLocationsByBounds(
-      minLat,
-      maxLat,
-      minLng,
-      maxLng,
+      bounds.getSouth(),
+      bounds.getNorth(),
+      bounds.getWest(),
+      bounds.getEast(),
       this.activeFilter === 'all' ? undefined : this.activeFilter,
       zoom
     ).subscribe({
@@ -141,12 +139,14 @@ export class MapFinderComponent implements AfterViewInit, OnDestroy {
 
   setFilter(filter: 'all' | 'gym' | 'park'): void {
     this.activeFilter = filter;
-    this.loadMarkersInViewport();
+    if (!this.searchQuery) {
+      this.loadMarkersInViewport();
+    }
   }
 
   openInfoCard(location: Location): void {
     this.selectedLocation = location;
-    this.cdr.detectChanges(); // Trigger change detection for Leaflet events
+    this.cdr.detectChanges();
     this.map.flyTo([location.lat, location.lng], 15);
   }
 
@@ -160,10 +160,77 @@ export class MapFinderComponent implements AfterViewInit, OnDestroy {
     this.markers = [];
   }
 
+  onSearchInput(): void {
+    clearTimeout(this.searchTimeout);
+
+    if (!this.searchQuery || this.searchQuery.trim().length < 2) {
+      this.loadMarkersInViewport();
+      return;
+    }
+
+    this.searchTimeout = setTimeout(() => {
+      this.performSearch();
+    }, 500);
+  }
+
+  performSearchNow(): void {
+    clearTimeout(this.searchTimeout);
+
+    if (!this.searchQuery || this.searchQuery.trim().length < 2) {
+      this.loadMarkersInViewport();
+      return;
+    }
+
+    this.performSearch();
+  }
+
+  private performSearch(): void {
+    const query = this.searchQuery.trim();
+
+    this.locationService.searchLocations(query).subscribe({
+      next: (locations) => {
+        this.clearMarkers();
+        this.addSearchMarkers(locations);
+      },
+      error: (error) => {
+        console.error('Search error:', error);
+      }
+    });
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    clearTimeout(this.searchTimeout);
+    this.loadMarkersInViewport();
+  }
+
+  private addSearchMarkers(locations: Location[]): void {
+    locations.forEach((location: Location) => {
+      const icon = location.type === 'gym' ? this.gymIcon : this.parkIcon;
+      const marker = L.marker([location.lat, location.lng], { icon })
+        .addTo(this.map!);
+
+      marker.on('click', (e) => {
+        L.DomEvent.stopPropagation(e);
+        this.openInfoCard(location);
+      });
+
+      this.markers.push(marker);
+    });
+
+    if (locations.length > 0) {
+      const bounds = L.latLngBounds(
+        locations.map(loc => [loc.lat, loc.lng] as L.LatLngTuple)
+      );
+      this.map?.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }
+
   ngOnDestroy(): void {
     if (this.map) {
       this.map.remove();
     }
     this.mapMoveSubject.complete();
+    clearTimeout(this.searchTimeout);
   }
 }

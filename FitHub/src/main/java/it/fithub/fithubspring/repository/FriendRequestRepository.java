@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Pure JDBC implementation of FriendRequest repository.
- */
+
 @Repository
 public class FriendRequestRepository {
 

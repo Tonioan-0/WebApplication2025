@@ -18,6 +18,9 @@ public class AppointmentController {
 
     @PostMapping
     public ResponseEntity<Void> createAppointment(@RequestBody AppointmentRequest request) {
+        // TODO: Alessandro - Implementare il controllo della sessione utente qui
+        // TODO: Sostituire userId hardcoded con l'ID dell'utente autenticato dalla
+        // sessione
         // In a real app, you'd get the user's ID from the security context
         Long userId = 1L; // Placeholder for the current user's ID
         appointmentService.createAppointment(userId, request.location(), request.dateTime());
