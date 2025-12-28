@@ -1,0 +1,77 @@
+<div class="map-container">
+  <div id="map"></div>
+
+  <div class="map-overlay">
+    <div class="search-bar">
+      <input type="text" placeholder="Cerca palestre o parchi..." aria-label="Search for gyms or parks"
+        [(ngModel)]="searchQuery" (input)="onSearchInput()" (keydown.enter)="performSearchNow()">
+      <button class="search-btn" (click)="performSearchNow()" aria-label="Search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+          <path [attr.d]="svgIcons.search" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="filter-chips">
+      <div class="chip" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+          <path [attr.d]="svgIcons.all" />
+        </svg>
+        All
+      </div>
+      <div class="chip" [class.active]="activeFilter === 'gym'" (click)="setFilter('gym')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+          <path [attr.d]="svgIcons.gym" />
+        </svg>
+        Gym
+      </div>
+      <div class="chip" [class.active]="activeFilter === 'park'" (click)="setFilter('park')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+          <path [attr.d]="svgIcons.park" />
+        </svg>
+        Park
+      </div>
+    </div>
+
+    <div class="place-card" [class.visible]="selectedLocation">
+      <ng-container *ngIf="selectedLocation">
+        <div class="place-card-image">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48" height="48">
+            <path [attr.d]="svgIcons.image" />
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+            <path [attr.d]="svgIcons.location" />
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+            <path [attr.d]="svgIcons.gift" />
+          </svg>
+        </div>
+
+        <div class="place-card-content">
+          <h2 class="place-card-title">{{ selectedLocation.name }}</h2>
+          <p class="place-card-subtitle">{{ selectedLocation.type === 'gym' ? 'Fitness Center' : 'Outdoor Park' }}</p>
+
+          <div class="warning-badge" *ngIf="selectedLocation.warning">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+              <path [attr.d]="svgIcons.warning" />
+            </svg>
+            {{ selectedLocation.warning }}
+          </div>
+
+          <p class="place-card-description">
+            {{ selectedLocation.address }} - Discover this amazing {{ selectedLocation.type }} with a rating of {{
+            selectedLocation.rating }} stars.
+            Perfect for your fitness journey and outdoor activities.
+          </p>
+          <button class="place-card-close" (click)="closeInfoCard()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path [attr.d]="svgIcons.close" />
+            </svg>
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <app-ai-chat-button></app-ai-chat-button>
+</div>

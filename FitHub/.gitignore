@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Test Configuration (contains API keys) ###
+src/test/resources/application-test.properties

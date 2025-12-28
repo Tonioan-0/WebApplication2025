@@ -1,0 +1,66 @@
+<button class="chat-fab" (click)="toggleChat()" [class.open]="isOpen">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+        <path [attr.d]="svgIcons.geminiSparkle" />
+    </svg>
+</button>
+
+<div class="chat-overlay" *ngIf="isOpen" (click)="toggleChat()"></div>
+
+<div class="chat-dialog" [class.open]="isOpen">
+    <div class="chat-header">
+        <div class="header-content">
+            <div class="ai-avatar">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                    <path [attr.d]="svgIcons.geminiSparkle" />
+                </svg>
+            </div>
+            <div class="header-text">
+                <h3>AI Assistant</h3>
+                <span class="status">Online</span>
+            </div>
+        </div>
+        <button class="close-btn" (click)="toggleChat()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path [attr.d]="svgIcons.close" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="messages-container">
+        <div *ngFor="let msg of messages" class="message" [class.user-message]="msg.isUser"
+            [class.ai-message]="!msg.isUser">
+            <div class="message-content" *ngIf="msg.isUser">
+                {{ msg.text }}
+            </div>
+            <div class="message-content markdown-content" *ngIf="!msg.isUser" [innerHTML]="msg.text | markdown">
+            </div>
+        </div>
+
+        <div *ngIf="isLoading" class="message ai-message">
+            <div class="message-content loading">
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-banner">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                <path [attr.d]="svgIcons.error" />
+            </svg>
+            {{ errorMessage }}
+        </div>
+    </div>
+
+    <div class="input-container">
+        <textarea rows="1" [(ngModel)]="userInput" (keydown)="onKeyDown($event)" placeholder="Ask me anything..."
+            [disabled]="isLoading" class="chat-input"></textarea>
+        <button class="send-btn" (click)="sendMessage()" [disabled]="!userInput.trim() || isLoading">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path [attr.d]="svgIcons.send" />
+            </svg>
+        </button>
+    </div>
+</div>
