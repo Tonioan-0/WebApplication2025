@@ -1,0 +1,214 @@
+<div class="landing-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-icon">Hub</span>
+            FitHub
+        </div>
+        <div class="nav-links" [class.active]="isMenuOpen">
+            <a href="#features" (click)="isMenuOpen = false">Features</a>
+            <a href="#about" (click)="isMenuOpen = false">About</a>
+            <a href="#success" (click)="isMenuOpen = false">Success Stories</a>
+        </div>
+        <div class="nav-actions">
+            <button class="btn-text">Login</button>
+            <button class="btn-primary">Join Now</button>
+            <button class="mobile-toggle" (click)="toggleMenu()">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-badge">
+            <span>⚡ Transform Your Fitness Journey</span>
+        </div>
+        <h1>Your Ultimate <span class="gradient-text">Fitness Hub</span></h1>
+        <p class="hero-subtext">
+            Discover outdoor workout parks, track your progress with AI coaching,
+            connect with fitness partners, and achieve your goals with gamified motivation.
+        </p>
+        <div class="hero-buttons">
+            <button class="btn-primary-lg">Start Your Journey →</button>
+            <button class="btn-outline-lg">Explore Features</button>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-container">
+            <div class="stat-item">
+                <h3>10K+</h3>
+                <p>Active Members</p>
+            </div>
+            <div class="stat-item">
+                <h3>500+</h3>
+                <p>Workout Spots</p>
+            </div>
+            <div class="stat-item">
+                <h3>1M+</h3>
+                <p>Workouts Tracked</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="section features-section">
+        <div class="section-header">
+            <h2>Find Your Perfect <span class="text-blue">Workout Spot</span></h2>
+            <p>Discover outdoor workout parks (Parchetti) and gyms near you. Never miss a workout opportunity, wherever
+                you are.</p>
+        </div>
+
+        <div class="grid-4">
+            <div class="card feature-card">
+                <div class="icon-box blue-soft">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="icon">
+                        <path
+                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                    </svg>
+                </div>
+                <h3>Interactive Map</h3>
+                <p>Browse an interactive map showing all outdoor workout parks and gyms in your area with real-time
+                    availability.</p>
+            </div>
+
+            <div class="card feature-card">
+                <div class="icon-box orange-soft">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="icon">
+                        <path
+                            d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                    </svg>
+                </div>
+                <h3>Smart Search</h3>
+                <p>Filter by equipment type, amenities, ratings, and distance to find the perfect spot for your workout
+                    style.</p>
+            </div>
+
+            <div class="card feature-card">
+                <div class="icon-box blue-soft">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="icon">
+                        <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" />
+                    </svg>
+                </div>
+                <h3>Quick Navigation</h3>
+                <p>Get instant directions to your chosen location and save your favorite spots for quick access.</p>
+            </div>
+
+            <div class="card feature-card">
+                <div class="icon-box orange-soft">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="icon">
+                        <path
+                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
+                </div>
+                <h3>Community Ratings</h3>
+                <p>Read reviews and ratings from other users to choose the best locations for your fitness goals.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Goals/About Section -->
+    <section id="about" class="section goals-section">
+        <div class="goals-content">
+            <div class="goals-text">
+                <h2>Empowering Your <br><span class="gradient-text-orange">Fitness Goals</span></h2>
+                <p>FitHub is more than just a fitness app. We're a community-driven platform designed to make fitness
+                    accessible, enjoyable, and sustainable for everyone.</p>
+                <p>Whether you're a beginner taking your first steps or an athlete pushing your limits, we provide the
+                    tools, guidance, and motivation you need to succeed.</p>
+            </div>
+
+            <div class="goals-cards">
+                <div class="card goal-card">
+                    <div class="icon-circle blue-circle">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="icon-sm">
+                            <path
+                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>Personalized Plans</h4>
+                        <p class="sm-text">AI-powered workout plans tailored to your fitness level and goals.</p>
+                    </div>
+                </div>
+
+                <div class="card goal-card">
+                    <div class="icon-circle orange-circle">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="icon-sm">
+                            <path
+                                d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>Community Support</h4>
+                        <p class="sm-text">Connect with training partners and share your journey with others.</p>
+                    </div>
+                </div>
+
+                <div class="card goal-card">
+                    <div class="icon-circle blue-circle">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="icon-sm">
+                            <path
+                                d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 16c-2.33 0-7-1.17-7-3.5V11h14v4.5c0 2.33-4.67 3.5-7 3.5z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>Gamified Experience</h4>
+                        <p class="sm-text">Track streaks, earn achievements, and stay motivated every day.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="success" class="section testimonials-section">
+        <div class="section-header">
+            <h2>Real People, Real <span class="gradient-text">Results</span></h2>
+            <p>Join thousands who have transformed their lives with FitHub</p>
+        </div>
+
+        <div class="grid-3">
+            <div class="card testimonial-card">
+                <div class="quote-icon">“</div>
+                <p class="quote-text">"FitHub helped me find outdoor workout spots I never knew existed. The community
+                    support kept me motivated every single day."</p>
+                <div class="user-info">
+                    <div class="avatar img-1"></div>
+                    <div>
+                        <h5>Sarah Martinez</h5>
+                        <span class="user-badge blue">Lost 30 lbs in 4 months</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card testimonial-card">
+                <div class="quote-icon">“</div>
+                <p class="quote-text">"The AI coach and workout plans were game-changes. I went from couch to marathon
+                    in 6 months!"</p>
+                <div class="user-info">
+                    <div class="avatar img-2"></div>
+                    <div>
+                        <h5>Marcus Johnson</h5>
+                        <span class="user-badge orange">Completed first marathon</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card testimonial-card">
+                <div class="quote-icon">“</div>
+                <p class="quote-text">"The daily streak feature is addictive! Finding training partners through the app
+                    made fitness fun again."</p>
+                <div class="user-info">
+                    <div class="avatar img-3"></div>
+                    <div>
+                        <h5>Elena Rodriguez</h5>
+                        <span class="user-badge blue">90-day streak holder</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 FitHub. All rights reserved.</p>
+    </footer>
+</div>
