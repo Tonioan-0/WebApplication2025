@@ -13,6 +13,16 @@ export const routes: Routes = [
     title: 'FitHub - Find Your Spot'
   },
   {
+    path: 'login',
+    loadComponent: () => import('./auth/login/login').then(m => m.LoginComponent),
+    title: 'FitHub - Login'
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./auth/register/register').then(m => m.RegisterComponent),
+    title: 'FitHub - Join Now'
+  },
+  {
     path: 'map-finder',
     redirectTo: 'map',
     pathMatch: 'full'
