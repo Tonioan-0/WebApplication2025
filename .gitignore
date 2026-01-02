@@ -1,0 +1,11 @@
+# IDE and editor files
+.idea/
+.vscode/
+*.iml
+
+# Build directories
+tools/
+
+# OS files
+.DS_Store
+Thumbs.db
