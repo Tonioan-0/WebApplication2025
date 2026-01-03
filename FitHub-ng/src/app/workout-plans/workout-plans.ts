@@ -116,9 +116,12 @@ export class WorkoutPlans implements OnInit {
   }
 
   // ---------- EXERCISE IMAGES ----------
-  getExerciseImage(exerciseName: string): string {
+  getExerciseImage(exercise: ExercisePreset): string {
+    if (exercise.path) {
+      return exercise.path;
+    }
+
     const nameMap: Record<string, string> = {
-      // Originali
       'panca piana': 'panca-piana',
       'squat': 'squat',
       'stacco da terra': 'stacco-da-terra',
@@ -127,7 +130,6 @@ export class WorkoutPlans implements OnInit {
       'military press': 'military-press',
       'leg press': 'leg-press',
       'plank': 'plank',
-      // Nuovi esercizi
       'push up': 'push-ups',
       'push ups': 'push-ups',
       'piegamenti': 'push-ups',
@@ -155,7 +157,7 @@ export class WorkoutPlans implements OnInit {
       'crunch': 'crunch',
       'addominali': 'crunch'
     };
-    const key = exerciseName.toLowerCase();
+    const key = exercise.name.toLowerCase();
     const filename = nameMap[key] || 'default';
     return `assets/exercises/${filename}.png`;
   }

@@ -16,7 +16,7 @@ public class ExercisesRepository {
 
     public List<ExercisePresetDto> findAll() {
         String sql = """
-                  SELECT id, name, muscle_group, equipment
+                  SELECT id, name, muscle_group, equipment, path
                   FROM exercise_preset
                   ORDER BY name ASC
                 """;
@@ -25,6 +25,7 @@ public class ExercisesRepository {
                 rs.getLong("id"),
                 rs.getString("name"),
                 rs.getString("muscle_group"),
-                rs.getString("equipment")));
+                rs.getString("equipment"),
+                rs.getString("path")));
     }
 }

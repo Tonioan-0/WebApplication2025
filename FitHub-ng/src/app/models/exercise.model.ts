@@ -3,4 +3,5 @@ export interface ExercisePreset {
   name: string;
   muscleGroup?: string;
   equipment?: string;
+  path?: string;
 }
