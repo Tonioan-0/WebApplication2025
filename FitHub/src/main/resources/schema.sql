@@ -64,3 +64,44 @@ CREATE INDEX IF NOT EXISTS idx_location_type ON location(type);
 
 -- Full-Text Search index for locations
 CREATE INDEX IF NOT EXISTS idx_location_search_vector ON location USING GIN(search_vector);
+
+-- =========================
+-- Workout Plan (Scheda)
+-- =========================
+
+CREATE TABLE IF NOT EXISTS exercise_preset (
+  id BIGSERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  muscle_group VARCHAR(120),
+  equipment VARCHAR(120)
+);
+
+CREATE TABLE IF NOT EXISTS workout_plan (
+  id BIGSERIAL PRIMARY KEY,
+  user_id BIGINT NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS workout_day (
+  id BIGSERIAL PRIMARY KEY,
+  plan_id BIGINT NOT NULL REFERENCES workout_plan(id) ON DELETE CASCADE,
+  day_of_week VARCHAR(16) NOT NULL, -- MONDAY, TUESDAY, etc.
+  title VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS workout_item (
+  id BIGSERIAL PRIMARY KEY,
+  day_id BIGINT NOT NULL REFERENCES workout_day(id) ON DELETE CASCADE,
+  exercise_id BIGINT NOT NULL REFERENCES exercise_preset(id),
+  position INT NOT NULL,
+  sets INT NOT NULL,
+  reps INT NOT NULL,
+  note TEXT
+);
+
+-- Workout Plan indexes
+CREATE INDEX IF NOT EXISTS idx_workout_plan_user_dates ON workout_plan(user_id, start_date, end_date);
+CREATE INDEX IF NOT EXISTS idx_workout_day_plan ON workout_day(plan_id);
+CREATE INDEX IF NOT EXISTS idx_workout_item_day_pos ON workout_item(day_id, position);

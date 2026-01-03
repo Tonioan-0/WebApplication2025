@@ -24,3 +24,28 @@ INSERT INTO location (name, type, latitude, longitude, address, rating, warning)
 ('Parco della Caffarella', 'park', 41.8550, 12.5150, 'Via della Caffarella, Roma', 4.6, NULL),
 ('Villa Torlonia', 'park', 41.9150, 12.5080, 'Via Nomentana, Roma', 4.5, NULL),
 ('Parco di Villa Glori', 'park', 41.9280, 12.4750, 'Piazzale del Partigiano, Roma', 4.4, NULL);
+
+-- Exercise Presets (Esercizi preimpostati)
+INSERT INTO exercise_preset (name, muscle_group, equipment) VALUES
+-- Originali
+('Panca piana', 'Petto', 'Bilanciere'),
+('Squat', 'Gambe', 'Bilanciere'),
+('Stacco da terra', 'Schiena', 'Bilanciere'),
+('Lat machine', 'Dorsali', 'Macchina'),
+('Curl manubri', 'Bicipiti', 'Manubri'),
+('Military press', 'Spalle', 'Bilanciere'),
+('Leg press', 'Gambe', 'Macchina'),
+('Plank', 'Core', 'Corpo libero'),
+-- Nuovi esercizi
+('Push up', 'Petto', 'Corpo libero'),
+('Pull up', 'Dorsali', 'Sbarra'),
+('Dips', 'Tricipiti', 'Parallele'),
+('Affondi', 'Gambe', 'Corpo libero'),
+('Croci manubri', 'Petto', 'Manubri'),
+('Rematore', 'Dorsali', 'Bilanciere'),
+('Alzate laterali', 'Spalle', 'Manubri'),
+('French press', 'Tricipiti', 'Bilanciere'),
+('Calf raises', 'Polpacci', 'Macchina'),
+('Leg curl', 'Femorali', 'Macchina'),
+('Leg extension', 'Quadricipiti', 'Macchina'),
+('Crunch', 'Addominali', 'Corpo libero');
