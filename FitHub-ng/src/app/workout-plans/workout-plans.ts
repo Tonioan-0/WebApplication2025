@@ -45,7 +45,6 @@ export class WorkoutPlans implements OnInit {
   tab: 'EDITOR' | 'ACTIVE' | 'EXPIRED' = 'EDITOR';
 
   // Stato modifica/dettagli
-  editingPlanId: number | null = null;  // scheda attiva in modifica
   detailPlanId: number | null = null;   // scheda scaduta con dettagli aperti
 
   saving = false;
@@ -294,13 +293,7 @@ export class WorkoutPlans implements OnInit {
     items.forEach((it, idx) => (it.position = idx));
   }
 
-  resetEditor() {
-    this.planTitle = 'Scheda Allenamento';
-    this.startDate = this.todayISO();
-    this.endDate = this.todayISO();
-    const days: DayOfWeek[] = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
-    days.forEach(d => (this.dayItemsMap[d] = []));
-  }
+
 
   // ---------- HELPER per visualizzazione schede salvate ----------
   getItemsByDay(plan: WorkoutPlan, day: DayOfWeek): WorkoutPlanItem[] {
@@ -321,7 +314,6 @@ export class WorkoutPlans implements OnInit {
     this.planTitle = plan.title;
     this.startDate = plan.startDate;
     this.endDate = plan.endDate;
-    this.editingPlanId = plan.id!;
 
     // Reset e popola i giorni
     const days: DayOfWeek[] = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
@@ -340,10 +332,7 @@ export class WorkoutPlans implements OnInit {
     this.selectedDay = this.getDaysWithItems(plan)[0] || 'MONDAY';
   }
 
-  cancelEdit() {
-    this.editingPlanId = null;
-    this.resetEditor();
-  }
+
 
   // ---------- DETTAGLI SCHEDA SCADUTA ----------
   toggleDetails(planId: number) {
