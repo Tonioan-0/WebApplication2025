@@ -79,22 +79,17 @@ CREATE TABLE IF NOT EXISTS exercise_preset (
 CREATE TABLE IF NOT EXISTS workout_plan (
   id BIGSERIAL PRIMARY KEY,
   user_id BIGINT NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL DEFAULT 'Scheda',
   start_date DATE NOT NULL,
   end_date DATE NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS workout_day (
-  id BIGSERIAL PRIMARY KEY,
-  plan_id BIGINT NOT NULL REFERENCES workout_plan(id) ON DELETE CASCADE,
-  day_of_week VARCHAR(16) NOT NULL, -- MONDAY, TUESDAY, etc.
-  title VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS workout_item (
   id BIGSERIAL PRIMARY KEY,
-  day_id BIGINT NOT NULL REFERENCES workout_day(id) ON DELETE CASCADE,
+  plan_id BIGINT NOT NULL REFERENCES workout_plan(id) ON DELETE CASCADE,
   exercise_id BIGINT NOT NULL REFERENCES exercise_preset(id),
+  day_of_week VARCHAR(16) NOT NULL,
   position INT NOT NULL,
   sets INT NOT NULL,
   reps INT NOT NULL,
@@ -103,5 +98,5 @@ CREATE TABLE IF NOT EXISTS workout_item (
 
 -- Workout Plan indexes
 CREATE INDEX IF NOT EXISTS idx_workout_plan_user_dates ON workout_plan(user_id, start_date, end_date);
-CREATE INDEX IF NOT EXISTS idx_workout_day_plan ON workout_day(plan_id);
-CREATE INDEX IF NOT EXISTS idx_workout_item_day_pos ON workout_item(day_id, position);
+CREATE INDEX IF NOT EXISTS idx_workout_item_plan_day ON workout_item(plan_id, day_of_week, position);
+

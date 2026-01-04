@@ -10,11 +10,17 @@
   </header>
 
   <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+  <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
 
   <!-- ===================== EDITOR ===================== -->
   <section *ngIf="tab==='EDITOR'" class="editor">
 
     <div class="meta">
+      <div class="field title-field">
+        <label>Titolo Scheda</label>
+        <input type="text" [(ngModel)]="planTitle" placeholder="Es: Scheda Massa, Definizione...">
+      </div>
+
       <div class="field">
         <label>Inizio</label>
         <input type="date" [(ngModel)]="startDate" [min]="todayISO()">
@@ -25,22 +31,24 @@
         <input type="date" [(ngModel)]="endDate" [min]="startDate">
       </div>
 
-      <div class="field">
+      <div class="field day-selector-field">
         <label>Giorno</label>
-        <select [(ngModel)]="selectedDay">
-          <option value="MONDAY">Lunedì</option>
-          <option value="TUESDAY">Martedì</option>
-          <option value="WEDNESDAY">Mercoledì</option>
-          <option value="THURSDAY">Giovedì</option>
-          <option value="FRIDAY">Venerdì</option>
-          <option value="SATURDAY">Sabato</option>
-          <option value="SUNDAY">Domenica</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Titolo giornata</label>
-        <input type="text" [(ngModel)]="dayPlanMap[selectedDay].title" placeholder="Es: Push / Gambe / Full-body...">
+        <div class="day-circles">
+          <button class="day-circle" [class.selected]="selectedDay === 'MONDAY'"
+            [class.has-items]="dayItemsMap['MONDAY'].length > 0" (click)="selectedDay = 'MONDAY'">L</button>
+          <button class="day-circle" [class.selected]="selectedDay === 'TUESDAY'"
+            [class.has-items]="dayItemsMap['TUESDAY'].length > 0" (click)="selectedDay = 'TUESDAY'">M</button>
+          <button class="day-circle" [class.selected]="selectedDay === 'WEDNESDAY'"
+            [class.has-items]="dayItemsMap['WEDNESDAY'].length > 0" (click)="selectedDay = 'WEDNESDAY'">M</button>
+          <button class="day-circle" [class.selected]="selectedDay === 'THURSDAY'"
+            [class.has-items]="dayItemsMap['THURSDAY'].length > 0" (click)="selectedDay = 'THURSDAY'">G</button>
+          <button class="day-circle" [class.selected]="selectedDay === 'FRIDAY'"
+            [class.has-items]="dayItemsMap['FRIDAY'].length > 0" (click)="selectedDay = 'FRIDAY'">V</button>
+          <button class="day-circle" [class.selected]="selectedDay === 'SATURDAY'"
+            [class.has-items]="dayItemsMap['SATURDAY'].length > 0" (click)="selectedDay = 'SATURDAY'">S</button>
+          <button class="day-circle" [class.selected]="selectedDay === 'SUNDAY'"
+            [class.has-items]="dayItemsMap['SUNDAY'].length > 0" (click)="selectedDay = 'SUNDAY'">D</button>
+        </div>
       </div>
     </div>
 
@@ -74,13 +82,13 @@
       <!-- RIGHT: day plan -->
       <main class="panel">
         <div class="panel-header">
-          <h3>Giornata: {{ dayPlanMap[selectedDay].title }}</h3>
-          <span class="hint">Trascina qui gli esercizi oppure clicca “Aggiungi”.</span>
+          <h3>{{ getDayLabel(selectedDay) }}</h3>
+          <span class="hint">Trascina qui gli esercizi oppure clicca "Aggiungi".</span>
         </div>
 
         <div id="dayDropList" cdkDropList class="day-list" (cdkDropListDropped)="dropToDay($event)"
-          [cdkDropListData]="currentDayPlan.items">
-          <div class="day-item" *ngFor="let item of currentDayPlan.items; let idx=index" cdkDrag>
+          [cdkDropListData]="currentDayItems">
+          <div class="day-item" *ngFor="let item of currentDayItems; let idx=index" cdkDrag>
             <div class="item-head">
               <div class="item-title">
                 {{ item.exercise?.name || ('Esercizio #' + item.exerciseId) }}
@@ -112,7 +120,7 @@
             </div>
           </div>
 
-          <div class="empty" *ngIf="currentDayPlan.items.length === 0">
+          <div class="empty" *ngIf="currentDayItems.length === 0">
             Nessun esercizio ancora. Trascina dalla lista a sinistra.
           </div>
         </div>
@@ -130,18 +138,70 @@
   <section *ngIf="tab==='ACTIVE'" class="list">
     <h2>Schede attive</h2>
 
-    <div class="plan-card" *ngFor="let p of activePlans">
-      <div class="plan-row">
-        <strong>ID #{{ p.id }}</strong>
-        <span>{{ p.startDate }} → {{ p.endDate }}</span>
+    <div class="plan-card active-card" *ngFor="let p of activePlans">
+      <div class="plan-header">
+        <div class="plan-info">
+          <strong class="plan-title">{{ p.title }}</strong>
+          <span class="plan-dates">{{ p.startDate }} → {{ p.endDate }}</span>
+        </div>
+        <div class="plan-actions-header">
+          <button class="btn-edit" (click)="editPlan(p)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+            Modifica
+          </button>
+          <button class="danger" (click)="deletePlan(p.id!)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            </svg>
+            Elimina
+          </button>
+        </div>
       </div>
 
-      <div class="plan-days">
-        <span class="pill" *ngFor="let d of p.days">{{ d.title }}</span>
-      </div>
-
-      <div class="plan-actions">
-        <button class="danger" (click)="deletePlan(p.id!)">Elimina</button>
+      <!-- Esercizi espansi per ogni giorno -->
+      <div class="plan-exercises">
+        <div class="day-section" *ngFor="let day of getDaysWithItems(p)">
+          <h4 class="day-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            {{ getDayLabel(day) }}
+          </h4>
+          <div class="exercise-grid">
+            <div class="exercise-card" *ngFor="let item of getItemsByDay(p, day)">
+              <div class="exercise-image">
+                <img [src]="getItemImage(item)" [alt]="getItemName(item)">
+              </div>
+              <div class="exercise-details">
+                <div class="exercise-name">{{ getItemName(item) }}</div>
+                <div class="exercise-stats">
+                  <span class="stat">{{ item.sets }} serie</span>
+                  <span class="stat">{{ item.reps }} reps</span>
+                </div>
+                <div class="exercise-note" *ngIf="item.note">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                  </svg>
+                  {{ item.note }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -152,18 +212,61 @@
   <section *ngIf="tab==='EXPIRED'" class="list">
     <h2>Schede scadute</h2>
 
-    <div class="plan-card" *ngFor="let p of expiredPlans">
+    <div class="plan-card expired-card" *ngFor="let p of expiredPlans">
       <div class="plan-row">
-        <strong>ID #{{ p.id }}</strong>
+        <strong>{{ p.title }}</strong>
         <span>{{ p.startDate }} → {{ p.endDate }}</span>
       </div>
 
       <div class="plan-days">
-        <span class="pill" *ngFor="let d of p.days">{{ d.title }}</span>
+        <span class="pill" *ngFor="let day of getDaysWithItems(p)">{{ getDayLabel(day) }} ({{ getItemsByDay(p,
+          day).length }})</span>
       </div>
 
       <div class="plan-actions">
-        <button class="danger" (click)="deletePlan(p.id!)">Elimina</button>
+        <button class="btn-details" (click)="toggleDetails(p.id!)">
+          <svg *ngIf="detailPlanId !== p.id" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+          <svg *ngIf="detailPlanId === p.id" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15" />
+          </svg>
+          {{ detailPlanId === p.id ? 'Nascondi' : 'Dettagli' }}
+        </button>
+        <button class="danger" (click)="deletePlan(p.id!)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          </svg>
+          Elimina
+        </button>
+      </div>
+
+      <!-- Dettagli esercizi (collapsible) -->
+      <div class="plan-details" *ngIf="detailPlanId === p.id">
+        <div class="day-section" *ngFor="let day of getDaysWithItems(p)">
+          <h4 class="day-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            {{ getDayLabel(day) }}
+          </h4>
+          <div class="exercise-list-compact">
+            <div class="exercise-item" *ngFor="let item of getItemsByDay(p, day)">
+              <img class="exercise-thumb" [src]="getItemImage(item)" [alt]="getItemName(item)">
+              <span class="exercise-name-compact">{{ getItemName(item) }}</span>
+              <span class="exercise-stats-compact">{{ item.sets }}x{{ item.reps }}</span>
+              <span class="exercise-note-compact" *ngIf="item.note">{{ item.note }}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

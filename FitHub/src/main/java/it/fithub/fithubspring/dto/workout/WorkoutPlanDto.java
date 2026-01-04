@@ -8,13 +8,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record WorkoutPlanDto(
-                Long id,
+        Long id,
 
-                @NotNull @Min(1) Long userId,
+        @NotNull @Min(1) Long userId,
 
-                @NotNull LocalDate startDate,
+        @NotEmpty String title,
 
-                @NotNull LocalDate endDate,
+        @NotNull LocalDate startDate,
 
-                @NotEmpty List<WorkoutDayDto> days) {
+        @NotNull LocalDate endDate,
+
+        @NotNull List<WorkoutItemDto> items) {
 }

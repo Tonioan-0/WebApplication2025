@@ -4,7 +4,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.fithub.fithubspring.dto.workout.WorkoutDayDto;
 import it.fithub.fithubspring.dto.workout.WorkoutItemDto;
 import it.fithub.fithubspring.dto.workout.WorkoutPlanDto;
 
@@ -24,38 +23,31 @@ public class WorkoutPlansRepository {
     @Transactional
     public WorkoutPlanDto create(WorkoutPlanDto plan) {
         Long planId = jdbc.queryForObject(
-                "INSERT INTO workout_plan (user_id, start_date, end_date) VALUES (?, ?, ?) RETURNING id",
+                "INSERT INTO workout_plan (user_id, title, start_date, end_date) VALUES (?, ?, ?, ?) RETURNING id",
                 Long.class,
                 plan.userId(),
+                plan.title(),
                 Date.valueOf(plan.startDate()),
                 Date.valueOf(plan.endDate()));
 
-        for (WorkoutDayDto day : plan.days()) {
-            Long dayId = jdbc.queryForObject(
-                    "INSERT INTO workout_day (plan_id, day_of_week, title) VALUES (?, ?, ?) RETURNING id",
-                    Long.class,
+        for (WorkoutItemDto item : plan.items()) {
+            jdbc.update(
+                    "INSERT INTO workout_item (plan_id, exercise_id, day_of_week, position, sets, reps, note) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     planId,
-                    day.dayOfWeek(),
-                    day.title());
-
-            for (WorkoutItemDto item : day.items()) {
-                jdbc.update(
-                        "INSERT INTO workout_item (day_id, exercise_id, position, sets, reps, note) VALUES (?, ?, ?, ?, ?, ?)",
-                        dayId,
-                        item.exerciseId(),
-                        item.position(),
-                        item.sets(),
-                        item.reps(),
-                        item.note());
-            }
+                    item.exerciseId(),
+                    item.dayOfWeek(),
+                    item.position(),
+                    item.sets(),
+                    item.reps(),
+                    item.note());
         }
 
-        return new WorkoutPlanDto(planId, plan.userId(), plan.startDate(), plan.endDate(), plan.days());
+        return new WorkoutPlanDto(planId, plan.userId(), plan.title(), plan.startDate(), plan.endDate(), plan.items());
     }
 
     public List<WorkoutPlanDto> findActive(Long userId, LocalDate referenceDate) {
         String sql = """
-                  SELECT id, user_id, start_date, end_date
+                  SELECT id, user_id, title, start_date, end_date
                   FROM workout_plan
                   WHERE user_id = ?
                     AND start_date <= ?
@@ -87,47 +79,38 @@ public class WorkoutPlansRepository {
         List<WorkoutPlanDto> out = new ArrayList<>();
         for (Long planId : planIds) {
             var header = jdbc.queryForObject(
-                    "SELECT id, user_id, start_date, end_date FROM workout_plan WHERE id = ? AND user_id = ?",
+                    "SELECT id, user_id, title, start_date, end_date FROM workout_plan WHERE id = ? AND user_id = ?",
                     (rs, i) -> new Object[] {
                             rs.getLong("id"),
                             rs.getLong("user_id"),
+                            rs.getString("title"),
                             rs.getDate("start_date").toLocalDate(),
                             rs.getDate("end_date").toLocalDate()
                     },
                     planId, userId);
 
-            @SuppressWarnings("unchecked")
-            LocalDate start = (LocalDate) header[2];
-            LocalDate end = (LocalDate) header[3];
+            String title = (String) header[2];
+            LocalDate start = (LocalDate) header[3];
+            LocalDate end = (LocalDate) header[4];
 
-            List<WorkoutDayDto> days = jdbc.query(
-                    "SELECT id, day_of_week, title FROM workout_day WHERE plan_id = ? ORDER BY id ASC",
-                    (rs, i) -> {
-                        long dayId = rs.getLong("id");
-                        String dow = rs.getString("day_of_week");
-                        String title = rs.getString("title");
-
-                        List<WorkoutItemDto> items = jdbc.query(
-                                """
-                                        SELECT id, exercise_id, position, sets, reps, note
-                                        FROM workout_item
-                                        WHERE day_id = ?
-                                        ORDER BY position ASC
-                                        """,
-                                (rsi, j) -> new WorkoutItemDto(
-                                        rsi.getLong("id"),
-                                        rsi.getLong("exercise_id"),
-                                        rsi.getInt("position"),
-                                        rsi.getInt("sets"),
-                                        rsi.getInt("reps"),
-                                        rsi.getString("note")),
-                                dayId);
-
-                        return new WorkoutDayDto(dow, title, items);
-                    },
+            List<WorkoutItemDto> items = jdbc.query(
+                    """
+                            SELECT id, exercise_id, day_of_week, position, sets, reps, note
+                            FROM workout_item
+                            WHERE plan_id = ?
+                            ORDER BY day_of_week, position ASC
+                            """,
+                    (rs, i) -> new WorkoutItemDto(
+                            rs.getLong("id"),
+                            rs.getLong("exercise_id"),
+                            rs.getString("day_of_week"),
+                            rs.getInt("position"),
+                            rs.getInt("sets"),
+                            rs.getInt("reps"),
+                            rs.getString("note")),
                     planId);
 
-            out.add(new WorkoutPlanDto(planId, userId, start, end, days));
+            out.add(new WorkoutPlanDto(planId, userId, title, start, end, items));
         }
         return out;
     }

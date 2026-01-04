@@ -4,15 +4,17 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public record WorkoutItemDto(
-                Long id,
+        Long id,
 
-                @NotNull @Min(1) Long exerciseId,
+        @NotNull @Min(1) Long exerciseId,
 
-                @NotNull @Min(0) Integer position,
+        @NotNull String dayOfWeek,
 
-                @NotNull @Min(1) Integer sets,
+        @NotNull @Min(0) Integer position,
 
-                @NotNull @Min(1) Integer reps,
+        @NotNull @Min(1) Integer sets,
 
-                String note) {
+        @NotNull @Min(1) Integer reps,
+
+        String note) {
 }

@@ -1,4 +1,9 @@
 -- Sample location data for Rome
+
+-- Default user for demo (required for workout plans)
+INSERT INTO app_user (id, username, email) VALUES
+(1, 'demo', 'demo@fithub.it')
+ON CONFLICT (id) DO NOTHING;
 -- Gyms
 INSERT INTO location (name, type, latitude, longitude, address, rating, warning) VALUES
 ('FitHub Central Gym', 'gym', 41.902782, 12.496366, 'Via del Corso, 1, Roma', 4.8, NULL),

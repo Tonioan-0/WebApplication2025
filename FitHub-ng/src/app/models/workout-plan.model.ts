@@ -5,26 +5,22 @@ export type DayOfWeek =
   | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';
 
 export interface WorkoutPlanItem {
-  id?: number;                 // id nel DB (opzionale)
+  id?: number;
   exerciseId: number;
   exercise?: ExercisePreset;   // valorizzato lato UI
-  position: number;            // ordine nella giornata
+  dayOfWeek: DayOfWeek;        // giorno della settimana
+  position: number;            // ordine nel giorno
   sets: number;                // serie
   reps: number;                // ripetizioni
   note?: string;               // post-it
 }
 
-export interface WorkoutDayPlan {
-  dayOfWeek: DayOfWeek;
-  title: string;
-  items: WorkoutPlanItem[];
-}
-
 export interface WorkoutPlan {
   id?: number;
-  userId: number;              // per ora obbligatorio (anche fisso a 1)
+  userId: number;
+  title: string;               // titolo della scheda
   startDate: string;           // YYYY-MM-DD
   endDate: string;             // YYYY-MM-DD
-  days: WorkoutDayPlan[];
+  items: WorkoutPlanItem[];    // tutti gli esercizi
   createdAt?: string;
 }
