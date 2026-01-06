@@ -7,6 +7,10 @@
     min-height: 100vh;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 /* Utilities */
 .landing-container {
     width: 100%;

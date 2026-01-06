@@ -6,9 +6,9 @@
             FitHub
         </div>
         <div class="nav-links" [class.active]="isMenuOpen">
-            <a href="#features" (click)="isMenuOpen = false">Features</a>
-            <a href="#about" (click)="isMenuOpen = false">About</a>
-            <a href="#success" (click)="isMenuOpen = false">Success Stories</a>
+            <a (click)="scrollToSection('features')">Features</a>
+            <a (click)="scrollToSection('about')">About</a>
+            <a (click)="scrollToSection('success')">Success Stories</a>
         </div>
         <div class="nav-actions">
             <button class="btn-text">Login</button>
