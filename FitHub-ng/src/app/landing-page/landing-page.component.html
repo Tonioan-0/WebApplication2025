@@ -11,8 +11,8 @@
             <a (click)="scrollToSection('success')">Success Stories</a>
         </div>
         <div class="nav-actions">
-            <button class="btn-text">Login</button>
-            <button class="btn-primary">Join Now</button>
+            <button class="btn-text" routerLink="/login">Login</button>
+            <button class="btn-primary" routerLink="/register">Join Now</button>
             <button class="mobile-toggle" (click)="toggleMenu()">☰</button>
         </div>
     </nav>
@@ -28,8 +28,8 @@
             connect with fitness partners, and achieve your goals with gamified motivation.
         </p>
         <div class="hero-buttons">
-            <button class="btn-primary-lg">Start Your Journey →</button>
-            <button class="btn-outline-lg">Explore Features</button>
+            <button class="btn-primary-lg" routerLink="/register">Start Your Journey →</button>
+            <button class="btn-outline-lg" (click)="scrollToSection('features')">Explore Features</button>
         </div>
 
         <!-- Stats -->
