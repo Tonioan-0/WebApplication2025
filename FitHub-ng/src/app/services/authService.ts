@@ -19,4 +19,10 @@ export class AuthService {
 
         return this.http.post(`${this.apiUrl}/register`, registerData);
     }
+
+    login(email: string, password: string): Observable<any> {
+        return this.http.post(`${this.apiUrl}/login`, { email, password }, {
+            withCredentials: true // Important for setting the cookie
+        });
+    }
 }
