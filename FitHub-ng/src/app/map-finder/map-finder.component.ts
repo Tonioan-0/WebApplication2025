@@ -103,6 +103,14 @@ export class MapFinderComponent implements AfterViewInit, OnDestroy {
 
     this.isLoading = true;
 
+    console.log('Fetching locations for bounds:', {
+      south: bounds.getSouth(),
+      north: bounds.getNorth(),
+      west: bounds.getWest(),
+      east: bounds.getEast(),
+      zoom
+    });
+
     this.locationService.getLocationsByBounds(
       bounds.getSouth(),
       bounds.getNorth(),
@@ -112,6 +120,7 @@ export class MapFinderComponent implements AfterViewInit, OnDestroy {
       zoom
     ).subscribe({
       next: (locations) => {
+        console.log('API Response - Locations found:', locations.length, locations);
         this.addMarkers(locations);
         this.isLoading = false;
       },

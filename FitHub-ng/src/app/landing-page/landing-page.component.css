@@ -468,10 +468,8 @@ footer {
         top: 100%;
         left: 0;
         width: 100%;
-        background: rgba(10, 10, 10);
+        background: #0a0a0a;
         padding: 1rem;
-        z-index: 999;
-        isolation: isolate;
         border-bottom: 1px solid #333;
     }
 
