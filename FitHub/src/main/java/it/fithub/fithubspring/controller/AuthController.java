@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import it.fithub.fithubspring.security.JwtUtil;
 
@@ -108,5 +109,21 @@ public class AuthController {
         public String getError() {
             return error;
         }
+    }
+
+    @GetMapping("/check")
+    public ResponseEntity<?> checkAuth(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("auth_token".equals(cookie.getName())) {
+                    String username = jwtUtil.validateToken(cookie.getValue());
+                    if (username != null) {
+                        return ResponseEntity.ok(new RegisterResponse("Authenticated", username));
+                    }
+                }
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
