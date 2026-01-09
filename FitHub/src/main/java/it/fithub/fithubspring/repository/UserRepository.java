@@ -133,6 +133,25 @@ public class UserRepository {
         }
     }
 
+    public Optional<User> findByEmail(String email) {
+        String sql = "SELECT * FROM app_user WHERE email = ?";
+
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapResultSetToUser(rs));
+                }
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching user by email", e);
+        }
+    }
+
     public void deleteById(Long id) {
         String sql = "DELETE FROM app_user WHERE id = ?";
 

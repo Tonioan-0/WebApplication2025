@@ -8,7 +8,7 @@ public class RegisterRequest {
     public RegisterRequest() {
     }
 
-    public void registerRequest(String username, String email, String password) {
+    public RegisterRequest(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
