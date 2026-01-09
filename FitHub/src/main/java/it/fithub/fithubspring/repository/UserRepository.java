@@ -18,6 +18,38 @@ public class UserRepository {
         this.dataSource = dataSource;
     }
 
+    public boolean existsByUsername(String username) {
+        String sql = "SELECT COUNT(*) FROM app_user WHERE username = ?";
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking username existence", e);
+        }
+        return false;
+    }
+
+    public boolean existsByEmail(String email) {
+        String sql = "SELECT COUNT(*) FROM app_user WHERE email = ?";
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking email existence", e);
+        }
+        return false;
+    }
+
     public User save(User user) {
         if (user.getId() == null) {
             return insert(user);
@@ -27,13 +59,14 @@ public class UserRepository {
     }
 
     private User insert(User user) {
-        String sql = "INSERT INTO app_user (username, email) VALUES (?, ?) RETURNING id";
+        String sql = "INSERT INTO app_user (username, email, password) VALUES (?, ?, ?) RETURNING id";
 
         try (Connection conn = dataSource.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
+            stmt.setString(3, user.getPassword());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -47,14 +80,15 @@ public class UserRepository {
     }
 
     private User update(User user) {
-        String sql = "UPDATE app_user SET username = ?, email = ? WHERE id = ?";
+        String sql = "UPDATE app_user SET username = ?, email = ?, password = ? WHERE id = ?";
 
         try (Connection conn = dataSource.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
-            stmt.setLong(3, user.getId());
+            stmt.setString(3, user.getPassword());
+            stmt.setLong(4, user.getId());
 
             stmt.executeUpdate();
             return user;
@@ -117,6 +151,7 @@ public class UserRepository {
         user.setId(rs.getLong("id"));
         user.setUsername(rs.getString("username"));
         user.setEmail(rs.getString("email"));
+        user.setPassword(rs.getString("password"));
         return user;
     }
 }
