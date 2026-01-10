@@ -332,8 +332,6 @@ export class WorkoutPlans implements OnInit {
     this.selectedDay = this.getDaysWithItems(plan)[0] || 'MONDAY';
   }
 
-
-
   // ---------- DETTAGLI SCHEDA SCADUTA ----------
   toggleDetails(planId: number) {
     if (this.detailPlanId === planId) {
