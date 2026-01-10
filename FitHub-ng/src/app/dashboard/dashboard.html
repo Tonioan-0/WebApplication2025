@@ -1,14 +1,18 @@
-<div class="dashboard-container" [class.collapsed]="sidebarCollapsed">
+<div class="dashboard-container" [class.collapsed]="sidebarCollapsed" [class.mobile-menu-open]="mobileMenuOpen">
+
+    <!-- Overlay mobile -->
+    <div class="mobile-overlay" *ngIf="mobileMenuOpen" (click)="toggleMobileMenu()"></div>
+
     <aside class="sidebar">
         <div class="sidebar-header">
-            <div class="logo">
-                <div class="logo-icon" *ngIf="!sidebarCollapsed">
+            <div class="logo" *ngIf="!sidebarCollapsed">
+                <div class="logo-icon">
                     <img src="favicon.ico" alt="FitHub Logo"
                         style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
                 </div>
-                <span class="logo-text" *ngIf="!sidebarCollapsed">FitHub</span>
+                <span class="logo-text">FitHub</span>
             </div>
-            <button class="collapse-btn" (click)="toggleSidebar()">
+            <button class="collapse-btn" (click)="toggleMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                     <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
                 </svg>
@@ -16,63 +20,58 @@
         </div>
 
         <nav class="sidebar-nav">
-            <a routerLink="/dashboard" class="nav-item" routerLinkActive="" [routerLinkActiveOptions]="{exact: true}">
+            <a routerLink="/dashboard" class="nav-item" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path [attr.d]="icons.dashboard" />
                 </svg>
                 <span *ngIf="!sidebarCollapsed">Dashboard</span>
             </a>
-            <a routerLink="/workouts" class="nav-item">
-                <svg version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"
-                    fill="currentColor">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                        <g>
-                            <path class="st0"
-                                d="M141.698,141.549H79.077c-8.488,0-15.37,6.882-15.37,15.362v198.179c0,8.479,6.882,15.362,15.37,15.362h62.622 c8.489,0,15.371-6.883,15.371-15.362V156.911C157.07,148.431,150.187,141.549,141.698,141.549z">
-                            </path>
-                            <path class="st0"
-                                d="M32.374,189.734H12.803C5.736,189.734,0,195.47,0,202.537v106.925c0,7.068,5.736,12.803,12.803,12.803h19.571 c7.067,0,12.803-5.736,12.803-12.803V202.537C45.177,195.47,39.441,189.734,32.374,189.734z">
-                            </path>
-                            <rect x="177.69" y="228.894" class="st0" width="156.62" height="54.212"></rect>
-                            <path class="st0"
-                                d="M432.922,141.549h-62.621c-8.488,0-15.371,6.882-15.371,15.362v198.179c0,8.479,6.882,15.362,15.371,15.362 h62.621c8.488,0,15.371-6.883,15.371-15.362V156.911C448.293,148.431,441.411,141.549,432.922,141.549z">
-                            </path>
-                            <path class="st0"
-                                d="M499.197,189.734h-19.57c-7.068,0-12.803,5.736-12.803,12.803v106.925c0,7.068,5.736,12.803,12.803,12.803 h19.57c7.068,0,12.803-5.736,12.803-12.803V202.537C512,195.47,506.264,189.734,499.197,189.734z">
-                            </path>
-                        </g>
+            <a routerLink="/workouts" class="nav-item" (click)="closeMobileMenu()">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+                    <g>
+                        <path class="st0"
+                            d="M141.698,141.549H79.077c-8.488,0-15.37,6.882-15.37,15.362v198.179c0,8.479,6.882,15.362,15.37,15.362h62.622 c8.489,0,15.371-6.883,15.371-15.362V156.911C157.07,148.431,150.187,141.549,141.698,141.549z">
+                        </path>
+                        <path class="st0"
+                            d="M32.374,189.734H12.803C5.736,189.734,0,195.47,0,202.537v106.925c0,7.068,5.736,12.803,12.803,12.803h19.571 c7.067,0,12.803-5.736,12.803-12.803V202.537C45.177,195.47,39.441,189.734,32.374,189.734z">
+                        </path>
+                        <rect x="177.69" y="228.894" class="st0" width="156.62" height="54.212"></rect>
+                        <path class="st0"
+                            d="M432.922,141.549h-62.621c-8.488,0-15.371,6.882-15.371,15.362v198.179c0,8.479,6.882,15.362,15.371,15.362 h62.621c8.488,0,15.371-6.883,15.371-15.362V156.911C448.293,148.431,441.411,141.549,432.922,141.549z">
+                        </path>
+                        <path class="st0"
+                            d="M499.197,189.734h-19.57c-7.068,0-12.803,5.736-12.803,12.803v106.925c0,7.068,5.736,12.803,12.803,12.803 h19.57c7.068,0,12.803-5.736,12.803-12.803V202.537C512,195.47,506.264,189.734,499.197,189.734z">
+                        </path>
                     </g>
                 </svg>
                 <span *ngIf="!sidebarCollapsed">Workout Hub</span>
             </a>
-            <a routerLink="/map" class="nav-item">
+            <a routerLink="/map" class="nav-item" (click)="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path [attr.d]="icons.location" />
                 </svg>
                 <span *ngIf="!sidebarCollapsed">Map & Locations</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="#" class="nav-item" (click)="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path [attr.d]="icons.nutrition" />
                 </svg>
                 <span *ngIf="!sidebarCollapsed">Nutrition Center</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="#" class="nav-item" (click)="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path [attr.d]="icons.community" />
                 </svg>
                 <span *ngIf="!sidebarCollapsed">Community</span>
             </a>
-            <a href="#" class="nav-item ai-coach">
+            <a href="#" class="nav-item ai-coach" (click)="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path [attr.d]="icons.geminiSparkle" />
                 </svg>
                 <span *ngIf="!sidebarCollapsed">AI Coach</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="#" class="nav-item" (click)="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path [attr.d]="icons.profile" />
                 </svg>
@@ -83,8 +82,14 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Top Header -->
         <header class="top-header">
+
+            <button class="mobile-menu-btn" (click)="toggleMenu()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                </svg>
+            </button>
+
             <div class="streak-badge">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"
                     class="fire-icon">
