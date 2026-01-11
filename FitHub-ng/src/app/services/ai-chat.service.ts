@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface ChatMessage {
     message: string;
@@ -15,7 +16,7 @@ export interface ChatResponse {
     providedIn: 'root'
 })
 export class AiChatService {
-    private apiUrl = 'http://localhost:8081/api/chat';
+    private apiUrl = `${environment.apiUrl}/chat`;
 
     constructor(private http: HttpClient) { }
 

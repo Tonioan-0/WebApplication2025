@@ -1,21 +1,21 @@
-import { Component, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as L from 'leaflet';
 import { LocationService, type Location } from '../services/location.service';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { SVG_ICONS } from '../shared/constants/svg-icons.constants';
-import { AiChatButtonComponent } from '../ai-chat-button/ai-chat-button.component';
 
 @Component({
   selector: 'app-map-finder',
   standalone: true,
-  imports: [CommonModule, FormsModule, AiChatButtonComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './map-finder.component.html',
   styleUrls: ['./map-finder.component.css']
 })
-export class MapFinderComponent implements AfterViewInit, OnDestroy {
+export class MapFinderComponent implements OnInit, AfterViewInit, OnDestroy {
   private map!: L.Map;
   private markers: L.Marker[] = [];
   selectedLocation: Location | null = null;
@@ -28,14 +28,44 @@ export class MapFinderComponent implements AfterViewInit, OnDestroy {
 
   readonly svgIcons = SVG_ICONS;
 
+  isSelectionMode = false;
+  selectedLocationData: string | null = null;
+  private tempMarker: L.Marker | null = null;
+  private lastTapTime = 0;
+
   constructor(
     private cdr: ChangeDetectorRef,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.mapMoveSubject.pipe(
       debounceTime(300)
     ).subscribe(() => {
       this.loadMarkersInViewport();
+    });
+  }
+
+  ngOnInit(): void {
+    this.route.data.subscribe(data => {
+      this.isSelectionMode = data['selectionMode'] === true;
+    });
+
+    this.route.queryParams.subscribe(params => {
+      if (params['lat'] && params['lng']) {
+        const lat = parseFloat(params['lat']);
+        const lng = parseFloat(params['lng']);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          setTimeout(() => {
+            if (this.map) {
+              this.map.setView([lat, lng], 16);
+            }
+          }, 100);
+        }
+      } else if (params['location']) {
+        this.searchQuery = params['location'];
+        setTimeout(() => this.performSearchNow(), 100);
+      }
     });
   }
 
@@ -80,8 +110,18 @@ export class MapFinderComponent implements AfterViewInit, OnDestroy {
       maxZoom: 19
     }).addTo(this.map);
 
-    this.map.on('click', () => {
-      this.closeInfoCard();
+    this.map.on('click', (e: L.LeafletMouseEvent) => {
+      const now = Date.now();
+      if (this.isSelectionMode && now - this.lastTapTime < 300) {
+        this.addTemporaryPin(e.latlng.lat, e.latlng.lng);
+      } else {
+        this.closeInfoCard();
+        if (this.isSelectionMode) {
+          this.selectedLocationData = null;
+          this.cdr.detectChanges();
+        }
+      }
+      this.lastTapTime = now;
     });
 
     this.map.on('moveend', () => {
@@ -93,6 +133,38 @@ export class MapFinderComponent implements AfterViewInit, OnDestroy {
     });
 
     this.loadMarkersInViewport();
+  }
+
+  private addTemporaryPin(lat: number, lng: number): void {
+    if (this.tempMarker) {
+      this.map.removeLayer(this.tempMarker);
+    }
+    const tempIcon = L.divIcon({
+      className: 'custom-marker temp-marker',
+      html: `<div class="marker-pin temp-pin">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path d="${SVG_ICONS.location}"/>
+              </svg>
+            </div>`,
+      iconSize: [40, 40],
+      iconAnchor: [20, 40]
+    });
+    this.tempMarker = L.marker([lat, lng], { icon: tempIcon }).addTo(this.map);
+    this.selectedLocationData = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+    this.cdr.detectChanges();
+  }
+
+  selectLocationForAppointment(location: Location): void {
+    this.selectedLocationData = location.name;
+    this.cdr.detectChanges();
+  }
+
+  returnToAppointment(): void {
+    if (this.selectedLocationData) {
+      this.router.navigate(['/dashboard/community'], {
+        queryParams: { selectedLocation: this.selectedLocationData }
+      });
+    }
   }
 
   private loadMarkersInViewport(): void {
@@ -141,6 +213,9 @@ export class MapFinderComponent implements AfterViewInit, OnDestroy {
         .on('click', (e) => {
           L.DomEvent.stopPropagation(e);
           this.openInfoCard(location);
+          if (this.isSelectionMode) {
+            this.selectLocationForAppointment(location);
+          }
         });
       this.markers.push(marker);
     });
@@ -222,6 +297,9 @@ export class MapFinderComponent implements AfterViewInit, OnDestroy {
       marker.on('click', (e) => {
         L.DomEvent.stopPropagation(e);
         this.openInfoCard(location);
+        if (this.isSelectionMode) {
+          this.selectLocationForAppointment(location);
+        }
       });
 
       this.markers.push(marker);

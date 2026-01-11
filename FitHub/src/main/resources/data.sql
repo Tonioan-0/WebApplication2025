@@ -24,3 +24,29 @@ INSERT INTO location (name, type, latitude, longitude, address, rating, warning)
 ('Parco della Caffarella', 'park', 41.8550, 12.5150, 'Via della Caffarella, Roma', 4.6, NULL),
 ('Villa Torlonia', 'park', 41.9150, 12.5080, 'Via Nomentana, Roma', 4.5, NULL),
 ('Parco di Villa Glori', 'park', 41.9280, 12.4750, 'Piazzale del Partigiano, Roma', 4.4, NULL);
+
+-- Users (password is 'password123' hashed - for testing we use plain text)
+INSERT INTO app_user (id, username, email) VALUES
+(1, 'Marco Rossi', 'marco@fithub.com'),
+(2, 'Giulia Bianchi', 'giulia@fithub.com'),
+(3, 'Alessandro Verdi', 'alessandro@fithub.com'),
+(4, 'Sara Romano', 'sara@fithub.com')
+ON CONFLICT (id) DO NOTHING;
+
+-- Reset sequence to avoid conflicts
+SELECT setval('app_user_id_seq', (SELECT MAX(id) FROM app_user));
+
+-- Friend request from Giulia to Marco (pending)
+INSERT INTO friend_request (sender_id, receiver_id, status, timestamp) VALUES
+(2, 1, 'PENDING', NOW())
+ON CONFLICT DO NOTHING;
+
+-- Already accepted friendship between Marco and Alessandro
+INSERT INTO friend_request (sender_id, receiver_id, status, timestamp) VALUES
+(1, 3, 'ACCEPTED', NOW() - INTERVAL '5 days')
+ON CONFLICT DO NOTHING;
+
+-- Appointment created by Marco (User 1) with Giulia (User 2) at Colle Oppio Park
+INSERT INTO appointment (location, date_time, creator_id) VALUES
+('Colle Oppio Park', NOW() + INTERVAL '2 days', 1)
+ON CONFLICT DO NOTHING;

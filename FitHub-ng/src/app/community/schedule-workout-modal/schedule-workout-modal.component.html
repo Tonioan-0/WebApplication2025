@@ -1,0 +1,56 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Schedule Workout</h2>
+            <button class="close-btn" (click)="onClose()">✕</button>
+        </div>
+
+        <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="title">Workout Title</label>
+                <input type="text" id="title" [(ngModel)]="workoutTitle" name="title" maxlength="32">
+            </div>
+
+            <div class="form-group">
+                <label>Workout Type</label>
+                <div class="type-options">
+                    <button type="button" *ngFor="let type of workoutTypes" class="type-btn"
+                        [class.selected]="workoutType === type" (click)="workoutType = type">
+                        {{ type }}
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" [(ngModel)]="workoutDate" name="date">
+                </div>
+
+                <div class="form-group">
+                    <label for="time">Time</label>
+                    <input type="time" id="time" [(ngModel)]="workoutTime" name="time">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Location</label>
+                <button type="button" class="btn-pick-location" (click)="openMapPicker()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20"
+                        height="20">
+                        <path [attr.d]="svgIcons.map" />
+                    </svg>
+                    <span *ngIf="!location">Pick a place on map</span>
+                    <span *ngIf="location" class="selected-location">{{ location }}</span>
+                </button>
+            </div>
+
+
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" (click)="onClose()">Cancel</button>
+                <button type="submit" class="btn-save">Schedule Workout</button>
+            </div>
+        </form>
+    </div>
+</div>

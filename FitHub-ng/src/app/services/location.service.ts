@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Location {
     id: number;
@@ -17,8 +18,7 @@ export interface Location {
     providedIn: 'root'
 })
 export class LocationService {
-    // TODO: Non so se va messo nelle variabili d'ambiente, da chiedere al professore
-    private apiUrl = 'http://localhost:8081/api/locations';
+    private apiUrl = `${environment.apiUrl}/locations`;
 
     constructor(private http: HttpClient) { }
 
