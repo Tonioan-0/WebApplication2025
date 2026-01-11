@@ -3,6 +3,10 @@ package it.fithub.fithubspring.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
+import java.util.List;
+import it.fithub.fithubspring.domain.community.Appointment;
 
 @Data
 @NoArgsConstructor
@@ -13,4 +17,9 @@ public class User {
     private String username;
     private String email;
     private String password;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private List<Appointment> appointments;
 }

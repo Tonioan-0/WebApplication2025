@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface Friend {
@@ -47,6 +48,8 @@ export interface Appointment {
 })
 export class CommunityService {
     private readonly apiUrl = environment.apiUrl;
+    private refreshAppointmentsSubject = new Subject<void>();
+    public refreshAppointments$ = this.refreshAppointmentsSubject.asObservable();
 
     constructor(private http: HttpClient) { }
 
@@ -79,15 +82,21 @@ export class CommunityService {
     }
 
     createAppointment(request: AppointmentRequest): Observable<void> {
-        return this.http.post<void>(`${this.apiUrl}/appointments`, request);
+        return this.http.post<void>(`${this.apiUrl}/appointments`, request).pipe(
+            tap(() => this.refreshAppointmentsSubject.next())
+        );
     }
 
     updateAppointment(id: number, request: AppointmentRequest): Observable<void> {
-        return this.http.put<void>(`${this.apiUrl}/appointments/${id}`, request);
+        return this.http.put<void>(`${this.apiUrl}/appointments/${id}`, request).pipe(
+            tap(() => this.refreshAppointmentsSubject.next())
+        );
     }
 
     deleteAppointment(id: number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/appointments/${id}`);
+        return this.http.delete<void>(`${this.apiUrl}/appointments/${id}`).pipe(
+            tap(() => this.refreshAppointmentsSubject.next())
+        );
     }
 
     unfriend(friendId: number): Observable<void> {

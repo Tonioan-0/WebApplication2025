@@ -11,24 +11,18 @@ import it.fithub.fithubspring.dto.RegisterRequest;
 import it.fithub.fithubspring.service.UserService;
 import it.fithub.fithubspring.domain.User;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.util.Map;
-import it.fithub.fithubspring.security.JwtUtil;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
     private final UserService userService;
-    private final JwtUtil jwtUtil;
 
-    public AuthController(UserService userService, JwtUtil jwtUtil) {
+    public AuthController(UserService userService) {
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
@@ -37,7 +31,7 @@ public class AuthController {
             User user = userService.register(request);
 
             return ResponseEntity.ok(
-                    new RegisterResponse("Registration successful", user.getUsername()));
+                    new AuthResponse("Registration successful", user.getUsername()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -50,24 +44,17 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> request, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> request, HttpSession session) {
         try {
             String email = request.get("email");
             String password = request.get("password");
 
             User user = userService.login(email, password);
-            String token = jwtUtil.generateToken(user.getUsername());
 
-            // Create HttpOnly Cookie
-            Cookie cookie = new Cookie("auth_token", token);
-            cookie.setHttpOnly(true);
-            cookie.setSecure(false); // Set to true in production (HTTPS)
-            cookie.setPath("/");
-            cookie.setMaxAge(24 * 60 * 60); // 1 day
+            // Store user in session
+            session.setAttribute("user", user);
 
-            response.addCookie(cookie);
-
-            return ResponseEntity.ok(new RegisterResponse("Login successful", user.getUsername()));
+            return ResponseEntity.ok(new AuthResponse("Login successful", user.getUsername()));
 
         } catch (IllegalArgumentException e) {
             return ResponseEntity
@@ -80,11 +67,26 @@ public class AuthController {
         }
     }
 
-    static class RegisterResponse {
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok(new AuthResponse("Logout successful", null));
+    }
+
+    @GetMapping("/check")
+    public ResponseEntity<?> checkAuth(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            return ResponseEntity.ok(new AuthResponse("Authenticated", user.getUsername()));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    static class AuthResponse {
         private String message;
         private String username;
 
-        public RegisterResponse(String message, String username) {
+        public AuthResponse(String message, String username) {
             this.message = message;
             this.username = username;
         }
@@ -108,21 +110,5 @@ public class AuthController {
         public String getError() {
             return error;
         }
-    }
-
-    @GetMapping("/check")
-    public ResponseEntity<?> checkAuth(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("auth_token".equals(cookie.getName())) {
-                    String username = jwtUtil.validateToken(cookie.getValue());
-                    if (username != null) {
-                        return ResponseEntity.ok(new RegisterResponse("Authenticated", username));
-                    }
-                }
-            }
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

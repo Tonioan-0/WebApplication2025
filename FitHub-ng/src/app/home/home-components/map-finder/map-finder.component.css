@@ -1,47 +1,19 @@
-:host {
-  --fithub-primary-blue: oklch(51.01% 0.274 263.83);
-  --fithub-electric-violet: oklch(53.18% 0.28 296.97);
-  --fithub-french-violet: oklch(47.66% 0.246 305.88);
-  --fithub-vivid-pink: oklch(69.02% 0.277 332.77);
-  --fithub-orange: oklch(72% 0.19 50);
-
-  --dark-bg: #0a0a2e;
-  --dark-surface: #16213e;
-  --glass-bg: rgba(22, 33, 62, 0.75);
-  --glass-border: rgba(255, 255, 255, 0.1);
-
-  --text-white: #ffffff;
-  --text-light: rgba(255, 255, 255, 0.85);
-  --text-muted: rgba(255, 255, 255, 0.6);
-
-  --gradient-primary: linear-gradient(135deg, var(--fithub-primary-blue), var(--fithub-electric-violet));
-  --gradient-accent: linear-gradient(135deg, var(--fithub-orange), var(--fithub-vivid-pink));
-
-  --border-radius: 16px;
-  --border-radius-sm: 12px;
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --shadow-glow: 0 0 20px rgba(81, 97, 234, 0.3);
-  --spacing-sm: 8px;
-}
+/* Map-specific styles only */
 
 .map-container {
   position: relative;
   width: 100%;
   height: calc(100vh - 80px);
-  /* Account for header height */
-  z-index: 1;
-  background-color: var(--dark-bg);
+  background-color: var(--background);
 }
 
 #map {
   width: 100%;
   height: 100%;
-  z-index: 1;
-  background-color: #050505;
+  background-color: var(--background);
 }
 
+/* Custom Markers */
 :host ::ng-deep .custom-marker {
   background: transparent;
   border: none;
@@ -56,63 +28,56 @@
   background: var(--gradient-primary);
   border-radius: 50% 50% 50% 0;
   transform: rotate(-45deg);
-  box-shadow: var(--shadow-md), var(--shadow-glow);
-  position: relative;
+  box-shadow: var(--shadow-2), var(--elevation-1);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--transition);
 }
 
 :host ::ng-deep .marker-pin:hover {
   transform: rotate(-45deg) scale(1.1);
-  box-shadow: var(--shadow-lg), 0 0 30px rgba(81, 97, 234, 0.5);
+  box-shadow: var(--shadow-3), var(--elevation-2);
 }
 
 :host ::ng-deep .marker-pin svg {
   transform: rotate(45deg);
-  color: var(--text-white);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  color: var(--on-primary);
 }
 
 :host ::ng-deep .park-marker .marker-pin {
-  background: var(--gradient-accent);
-  box-shadow: var(--shadow-md), 0 0 20px rgba(255, 105, 180, 0.3);
+  background: var(--gradient-secondary);
 }
 
-:host ::ng-deep .park-marker .marker-pin:hover {
-  box-shadow: var(--shadow-lg), 0 0 30px rgba(255, 105, 180, 0.5);
+:host ::ng-deep .temp-marker .marker-pin {
+  background: var(--gradient-error);
 }
 
+:host ::ng-deep .user-marker .marker-pin {
+  background: var(--gradient-success);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Map Overlay */
 .map-overlay {
   position: absolute;
   top: 24px;
   left: 24px;
-  z-index: 1001;
+  z-index: 900;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  gap: 16px;
   width: 90%;
   max-width: 340px;
-  gap: 16px;
 }
 
 .search-bar {
-  width: 100%;
   padding: 12px 16px;
+  display: flex;
+  gap: var(--spacing-sm);
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border-radius: var(--border-radius);
   border: 1px solid var(--glass-border);
-  box-shadow: var(--shadow-md);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.search-bar:hover,
-.search-bar:focus-within {
-  border-color: rgba(81, 97, 234, 0.3);
-  box-shadow: var(--shadow-md), var(--shadow-glow);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
 }
 
 .search-bar input {
@@ -120,120 +85,62 @@
   background: transparent;
   border: none;
   outline: none;
-  color: var(--text-white);
+  color: var(--on-surface);
   font-size: 16px;
-  font-weight: 500;
 }
 
 .search-bar input::placeholder {
-  color: var(--text-muted);
-  font-weight: 400;
+  color: var(--on-surface-muted);
 }
 
 .search-btn {
   background: transparent;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
+  color: var(--on-surface-muted);
   padding: 8px;
-  border-radius: var(--border-radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  flex-shrink: 0;
+  border-radius: var(--radius-md);
 }
 
 .search-btn:hover {
   background: rgba(81, 97, 234, 0.15);
-  color: var(--text-white);
-}
-
-.search-btn:active {
-  transform: scale(0.95);
+  color: var(--on-surface);
 }
 
 .filter-chips {
   display: flex;
   gap: 12px;
-  flex-wrap: wrap;
   padding: 4px;
 }
 
 .chip {
   padding: 10px 18px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  color: var(--text-light);
+  color: var(--on-surface-variant);
   border-radius: 24px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  white-space: nowrap;
-  border: 1px solid var(--glass-border);
-  font-weight: 500;
   font-size: 14px;
-  position: relative;
-  overflow: hidden;
   display: flex;
   align-items: center;
   gap: 6px;
-}
-
-.chip svg {
-  opacity: 0.8;
-}
-
-.chip::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--gradient-primary);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: -1;
-}
-
-.chip:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-  border-color: rgba(81, 97, 234, 0.3);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
 }
 
 .chip.active {
-  color: var(--text-white);
-  font-weight: 600;
-  border: 1px solid transparent;
-  box-shadow: var(--shadow-md), var(--shadow-glow);
-  transform: translateY(-2px);
+  color: var(--on-primary);
+  background: var(--gradient-secondary);
 }
 
-.chip.active::before {
-  opacity: 1;
-}
-
-.chip.active svg {
-  opacity: 1;
-}
-
-.chip:nth-child(3).active::before {
-  background: var(--gradient-accent);
-}
-
+/* Location Card */
 .place-card {
-  width: 100%;
-  background: rgba(22, 33, 62, 0.75);
+  background: var(--glass-bg);
   backdrop-filter: blur(30px);
-  border-radius: var(--border-radius);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-md), var(--shadow-glow);
+  box-shadow: var(--shadow-2), var(--elevation-1);
+  border: 1px solid var(--glass-border);
   transform: translateY(120%);
   opacity: 0;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   margin-top: 8px;
-  border: 1px solid var(--glass-border);
 }
 
 .place-card.visible {
@@ -244,33 +151,11 @@
 .place-card-image {
   width: 100%;
   height: 180px;
-  background: linear-gradient(135deg,
-      rgba(81, 97, 234, 0.15) 0%,
-      rgba(255, 130, 67, 0.15) 100%);
+  background: linear-gradient(135deg, rgba(81, 97, 234, 0.15), rgba(255, 130, 67, 0.15));
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 16px;
-  position: relative;
-  overflow: hidden;
-}
-
-.place-card-image::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(81, 97, 234, 0.2) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(255, 130, 67, 0.2) 0%, transparent 50%);
-}
-
-.place-card-image svg {
-  color: rgba(255, 255, 255, 0.3);
-  position: relative;
-  z-index: 1;
 }
 
 .place-card-content {
@@ -282,14 +167,13 @@
   margin: 0 0 8px 0;
   font-size: 20px;
   font-weight: 700;
-  color: var(--text-white);
+  color: var(--on-surface);
 }
 
 .place-card-subtitle {
   margin: 0 0 16px 0;
   font-size: 14px;
-  font-weight: 500;
-  color: var(--text-muted);
+  color: var(--on-surface-muted);
 }
 
 .warning-badge {
@@ -297,38 +181,25 @@
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  background: linear-gradient(135deg, #ff6b35 0%, #ff4757 100%);
-  border-radius: 12px;
+  background: var(--gradient-error);
+  border-radius: var(--radius-md);
   margin-bottom: 16px;
-  color: #ffffff;
   font-size: 13px;
   font-weight: 600;
   box-shadow: 0 3px 12px rgba(255, 69, 87, 0.25);
-  animation: pulse-warning 2s ease-in-out infinite;
+  color: #fff;
 }
 
-.warning-badge svg {
-  flex-shrink: 0;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
-}
-
-@keyframes pulse-warning {
-
-  0%,
-  100% {
-    box-shadow: 0 3px 12px rgba(255, 69, 87, 0.25);
-  }
-
-  50% {
-    box-shadow: 0 3px 16px rgba(255, 69, 87, 0.4);
-  }
-}
-
-.place-card-description {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--text-light);
+.warning-remove-btn {
+  background: rgba(255, 69, 87, 0.15);
+  color: #ff4757;
+  border: 1px solid rgba(255, 69, 87, 0.3);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-top: 12px;
+  display: inline-flex;
+  gap: 6px;
 }
 
 .place-card-close {
@@ -339,105 +210,200 @@
   height: 32px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
-  border: none;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  color: var(--text-light);
+  color: var(--on-surface);
 }
 
 .place-card-close:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: rotate(90deg);
-  color: var(--text-white);
 }
 
-@media screen and (max-width: 640px) {
-  .map-overlay {
-    left: 16px;
-    top: 16px;
-    max-width: calc(100% - 32px);
-  }
-
-  .place-card-image {
-    height: 160px;
-  }
-
-  .place-card-content {
-    padding: 20px;
-  }
-
-  .place-card-title {
-    font-size: 18px;
-  }
+/* Buttons */
+.location-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  color: var(--on-surface);
+  box-shadow: var(--shadow-2);
+  margin-right: 12px;
+  flex-shrink: 0;
 }
 
-/* Selection Mode Bottom Bar */
+.location-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Selection Bottom Bar */
 .selection-bottom-bar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
+  padding: 16px 24px;
+  text-align: center;
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
   border-top: 1px solid var(--glass-border);
-  padding: 16px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1002;
-  animation: slideUpBar 0.3s ease;
-}
-
-@keyframes slideUpBar {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  z-index: 1000;
+  animation: slideUp var(--transition);
 }
 
 .selection-hint {
-  color: var(--text-muted);
+  color: var(--on-surface-muted);
   font-size: 14px;
-  font-weight: 500;
-  text-align: center;
 }
 
 .btn-return {
   background: var(--gradient-primary);
-  color: var(--text-white);
-  border: none;
   padding: 12px 32px;
   border-radius: 24px;
-  font-size: 15px;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-md), var(--shadow-glow);
+  box-shadow: var(--shadow-2), var(--elevation-1);
+  color: var(--on-primary);
 }
 
 .btn-return:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg), 0 0 30px rgba(81, 97, 234, 0.5);
+  box-shadow: var(--shadow-3), var(--elevation-2);
 }
 
-.btn-return:active {
-  transform: translateY(0);
+/* Create Modal */
+.modal-content {
+  background: var(--surface-dim);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp var(--transition);
 }
 
-/* Temp Marker */
-:host ::ng-deep .temp-marker .marker-pin {
-  background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
-  box-shadow: var(--shadow-md), 0 0 20px rgba(255, 107, 107, 0.4);
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-:host ::ng-deep .temp-marker .marker-pin:hover {
-  box-shadow: var(--shadow-lg), 0 0 30px rgba(255, 107, 107, 0.6);
+.modal-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  margin: 0;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: var(--on-surface-variant);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all var(--transition);
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--on-surface-variant);
+  margin-bottom: 0.25rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  background: var(--surface-bright);
+  border: 1px solid var(--outline);
+  border-radius: 8px;
+  padding: 0.5rem;
+  color: var(--on-surface);
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.coords-info {
+  padding: 12px 16px;
+  background: var(--surface-bright);
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-md);
+  color: var(--on-surface-muted);
+  font-size: 14px;
+  font-family: 'Courier New', monospace;
+  margin: 0;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.btn-cancel,
+.btn-save {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-cancel {
+  background: var(--surface-bright);
+  color: var(--on-surface);
+}
+
+.btn-save {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-save:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+}
+
+@media (max-width: 640px) {
+  .map-overlay {
+    max-width: calc(100% - 32px);
+  }
+
+  .location-btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .create-modal {
+    padding: 24px;
+  }
 }

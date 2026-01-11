@@ -13,6 +13,14 @@
     </div>
 
     <div class="filter-chips">
+      <!-- My Location Button Moved Here -->
+      <button class="location-btn" (click)="getUserLocation()" title="My Location" *ngIf="!isSelectionMode">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+          <path
+            d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
+        </svg>
+      </button>
+
       <div class="chip" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
           <path [attr.d]="svgIcons.all" />
@@ -63,6 +71,15 @@
             selectedLocation.rating }} stars.
             Perfect for your fitness journey and outdoor activities.
           </p>
+
+          <button class="warning-remove-btn" *ngIf="selectedLocation.warning"
+            (click)="removeWarningFromLocation(selectedLocation.id)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+              <path [attr.d]="svgIcons.close" />
+            </svg>
+            Remove Warning
+          </button>
+
           <button class="place-card-close" (click)="closeInfoCard()">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
               <path [attr.d]="svgIcons.close" />
@@ -71,6 +88,8 @@
         </div>
       </ng-container>
     </div>
+
+
   </div>
 
   <div class="selection-bottom-bar" *ngIf="isSelectionMode">
@@ -80,6 +99,48 @@
     <button class="btn-return" *ngIf="selectedLocationData" (click)="returnToAppointment()">
       Return to appointment
     </button>
+  </div>
+
+  <!-- Create Location Modal -->
+  <div class="modal-backdrop" *ngIf="showCreateModal" (click)="closeCreateModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Add New Location</h2>
+        <button class="close-btn" (click)="closeCreateModal()">✕</button>
+      </div>
+
+      <form (ngSubmit)="submitNewLocation()">
+        <div class="form-group">
+          <label for="locationName">Name *</label>
+          <input type="text" id="locationName" [(ngModel)]="newLocation.name" name="name" required
+            placeholder="e.g., Gold's Gym">
+        </div>
+
+        <div class="form-group">
+          <label for="locationType">Type *</label>
+          <select id="locationType" [(ngModel)]="newLocation.type" name="type" required>
+            <option value="gym">Gym</option>
+            <option value="park">Park</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="locationAddress">Address *</label>
+          <input type="text" id="locationAddress" [(ngModel)]="newLocation.address" name="address" required
+            placeholder="e.g., 123 Main Street, Rome">
+        </div>
+
+        <div class="form-group">
+          <label>Coordinates</label>
+          <p class="coords-info">{{ newLocation.lat.toFixed(6) }}, {{ newLocation.lng.toFixed(6) }}</p>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeCreateModal()">Cancel</button>
+          <button type="submit" class="btn-save">Create Location</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <!-- <app-ai-chat-button *ngIf="!isSelectionMode"></app-ai-chat-button> -->

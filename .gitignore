@@ -1,13 +1,70 @@
+# --- GLOBAL ---
 # IDE and editor files
 .idea/
 .vscode/
 *.iml
-
-# Build directories
-tools/
+*.iws
+*.ipr
+.project
+.classpath
+.factorypath
+.settings/
+.springBeans
+.sts4-cache
+.apt_generated
+*.launch
+*.sublime-workspace
 
 # OS files
 .DS_Store
 Thumbs.db
 
+# Logs
+*.log
+maven_log.txt
+run_log.txt
+npm-debug.log
+yarn-error.log
+libpeerconnection.log
+testem.log
 
+
+
+# --- BACKEND (FitHub) ---
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### NetBeans ###
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### Test Configuration ###
+FitHub/src/test/resources/application-test.properties
+
+# --- FRONTEND (FitHub-ng) ---
+# Compiled output
+FitHub-ng/dist/
+FitHub-ng/tmp/
+FitHub-ng/out-tsc/
+FitHub-ng/bazel-out/
+
+# Node
+node_modules/
+
+# Miscellaneous
+.angular
+.sass-cache/
+connect.lock
+coverage/
+typings/
+__screenshots__/
+.c9/

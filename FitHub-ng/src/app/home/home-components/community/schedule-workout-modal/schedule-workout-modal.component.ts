@@ -91,7 +91,7 @@ export class ScheduleWorkoutModalComponent implements OnInit, OnChanges, OnDestr
 
     openMapPicker(): void {
         this.navigatingToMap = true;
-        this.router.navigate(['/map/select']);
+        this.router.navigate(['/home/map/select']);
     }
 
     onSubmit(): void {

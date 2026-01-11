@@ -85,10 +85,9 @@ export class ManageFriendsComponent implements OnInit {
         this.isSearching = true;
         this.communityService.searchUsers(query).subscribe({
             next: (users) => {
-                // Exclude already friends and self (TODO: get real user id from auth)
+                // Exclude already friends (backend will handle current user exclusion)
                 const friendIds = new Set(this.friends.map(f => f.id));
-                const currentUserId = 1; // TODO: get from auth service
-                this.searchResults = users.filter(u => !friendIds.has(u.id) && u.id !== currentUserId);
+                this.searchResults = users.filter(u => !friendIds.has(u.id));
                 this.isSearching = false;
             },
             error: () => {

@@ -33,6 +33,20 @@ export class MapFinderComponent implements OnInit, AfterViewInit, OnDestroy {
   private tempMarker: L.Marker | null = null;
   private lastTapTime = 0;
 
+  // Geolocation
+  userLocation: { lat: number; lng: number } | null = null;
+  private userLocationMarker: L.Marker | null = null;
+
+  // Create new location
+  showCreateModal = false;
+  newLocation = {
+    name: '',
+    type: 'gym' as 'gym' | 'park',
+    address: '',
+    lat: 0,
+    lng: 0
+  };
+
   constructor(
     private cdr: ChangeDetectorRef,
     private locationService: LocationService,
@@ -132,6 +146,13 @@ export class MapFinderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.mapMoveSubject.next();
     });
 
+    // Double click to create location
+    this.map.on('dblclick', (e: L.LeafletMouseEvent) => {
+      if (!this.isSelectionMode) {
+        this.openCreateModal(e.latlng.lat, e.latlng.lng);
+      }
+    });
+
     this.loadMarkersInViewport();
   }
 
@@ -161,7 +182,7 @@ export class MapFinderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   returnToAppointment(): void {
     if (this.selectedLocationData) {
-      this.router.navigate(['/dashboard/community'], {
+      this.router.navigate(['/home/community'], {
         queryParams: { selectedLocation: this.selectedLocationData }
       });
     }
@@ -311,6 +332,149 @@ export class MapFinderComponent implements OnInit, AfterViewInit, OnDestroy {
       );
       this.map?.fitBounds(bounds, { padding: [50, 50] });
     }
+  }
+
+  // Geolocation methods
+  getUserLocation(): void {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+      return;
+    }
+
+    // Options to avoid using Google's geolocation API
+    const options = {
+      enableHighAccuracy: false, // Use network-based location instead of GPS
+      timeout: 10000, // 10 seconds timeout
+      maximumAge: 300000 // Accept cached position up to 5 minutes old
+    };
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        this.userLocation = { lat, lng };
+        this.centerOnUserLocation();
+      },
+      (error) => {
+        console.error('Error getting location:', error);
+        let errorMessage = 'Unable to retrieve your location. ';
+
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage += 'Please enable location permissions in your browser settings.';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage += 'Location information is unavailable. Try using the search function instead.';
+            break;
+          case error.TIMEOUT:
+            errorMessage += 'The request to get your location timed out.';
+            break;
+          default:
+            errorMessage += 'An unknown error occurred.';
+        }
+
+        alert(errorMessage);
+      },
+      options
+    );
+  }
+
+  private centerOnUserLocation(): void {
+    if (!this.userLocation || !this.map) return;
+
+    this.map.flyTo([this.userLocation.lat, this.userLocation.lng], 15);
+
+    // Remove old user location marker if exists
+    if (this.userLocationMarker) {
+      this.map.removeLayer(this.userLocationMarker);
+    }
+
+    // Add new user location marker
+    const userIcon = L.divIcon({
+      className: 'custom-marker user-marker',
+      html: `<div class="marker-pin user-pin">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path d="${SVG_ICONS.person}"/>
+              </svg>
+            </div>`,
+      iconSize: [40, 40],
+      iconAnchor: [20, 40]
+    });
+
+    this.userLocationMarker = L.marker([this.userLocation.lat, this.userLocation.lng], { icon: userIcon })
+      .addTo(this.map);
+  }
+
+  // Create new location methods
+  openCreateModal(lat?: number, lng?: number): void {
+    const center = this.map.getCenter();
+    this.newLocation = {
+      name: '',
+      type: 'gym',
+      address: '',
+      lat: lat || center.lat,
+      lng: lng || center.lng
+    };
+    this.showCreateModal = true;
+    this.cdr.detectChanges();
+  }
+
+  closeCreateModal(): void {
+    this.showCreateModal = false;
+    this.cdr.detectChanges();
+  }
+
+  submitNewLocation(): void {
+    if (!this.newLocation.name || !this.newLocation.address) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    const locationData = {
+      name: this.newLocation.name,
+      type: this.newLocation.type,
+      address: this.newLocation.address,
+      lat: this.newLocation.lat,
+      lng: this.newLocation.lng,
+      rating: 0,
+      warning: undefined
+    };
+
+    this.locationService.createLocation(locationData).subscribe({
+      next: (newLocation) => {
+        console.log('Location created:', newLocation);
+        this.closeCreateModal();
+        this.loadMarkersInViewport();
+        // Center on new location
+        this.map.flyTo([newLocation.lat, newLocation.lng], 16);
+      },
+      error: (error) => {
+        console.error('Error creating location:', error);
+        alert('Failed to create location. Please try again.');
+      }
+    });
+  }
+
+  // Warning management
+  removeWarningFromLocation(locationId: number): void {
+    if (!confirm('Are you sure you want to remove this warning?')) {
+      return;
+    }
+
+    this.locationService.removeWarning(locationId).subscribe({
+      next: () => {
+        console.log('Warning removed');
+        if (this.selectedLocation) {
+          this.selectedLocation.warning = undefined;
+          this.cdr.detectChanges();
+        }
+        this.loadMarkersInViewport();
+      },
+      error: (error) => {
+        console.error('Error removing warning:', error);
+        alert('Failed to remove warning. Please try again.');
+      }
+    });
   }
 
   ngOnDestroy(): void {

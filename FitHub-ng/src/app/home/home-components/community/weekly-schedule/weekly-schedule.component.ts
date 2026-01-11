@@ -1,7 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CommunityService, Appointment } from '../../../../services/community.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-weekly-schedule',
@@ -10,23 +11,36 @@ import { CommunityService, Appointment } from '../../../../services/community.se
     templateUrl: './weekly-schedule.component.html',
     styleUrl: './weekly-schedule.component.css'
 })
-export class WeeklyScheduleComponent implements OnInit {
+export class WeeklyScheduleComponent implements OnInit, OnDestroy {
     currentDate = new Date();
     selectedDate = new Date();
     weekDays: { name: string; date: number; fullDate: Date; hasEvent: boolean; eventColor?: string }[] = [];
     appointments: Appointment[] = [];
     filteredAppointments: Appointment[] = [];
+    private refreshSubscription: Subscription | undefined;
 
     @Output() editAppointment = new EventEmitter<Appointment>();
 
     constructor(
         private router: Router,
-        private communityService: CommunityService
+        private communityService: CommunityService,
+        private cdr: ChangeDetectorRef
     ) { }
 
     ngOnInit(): void {
         this.generateWeekDays();
         this.loadAppointments();
+
+        // Auto-refresh when appointments change
+        this.refreshSubscription = this.communityService.refreshAppointments$.subscribe(() => {
+            this.loadAppointments();
+        });
+    }
+
+    ngOnDestroy(): void {
+        if (this.refreshSubscription) {
+            this.refreshSubscription.unsubscribe();
+        }
     }
 
     loadAppointments(): void {
@@ -35,6 +49,7 @@ export class WeeklyScheduleComponent implements OnInit {
                 this.appointments = appointments;
                 this.filterAppointmentsForSelectedDate();
                 this.markDaysWithEvents();
+                this.cdr.detectChanges();
             },
             error: (err) => console.error('Error loading appointments:', err)
         });
@@ -146,12 +161,10 @@ export class WeeklyScheduleComponent implements OnInit {
     }
 
     onDeleteAppointment(appointment: Appointment): void {
-        if (confirm('Delete this appointment?')) {
-            this.communityService.deleteAppointment(appointment.id).subscribe({
-                next: () => this.loadAppointments(),
-                error: (err) => console.error('Error deleting appointment:', err)
-            });
-        }
+        this.communityService.deleteAppointment(appointment.id).subscribe({
+            next: () => this.loadAppointments(),
+            error: (err) => console.error('Error deleting appointment:', err)
+        });
     }
 
     onEditAppointment(appointment: Appointment): void {

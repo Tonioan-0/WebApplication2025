@@ -10,12 +10,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Database configuration for pure JDBC connections using Singleton pattern.
- * Creates a single DataSource instance following classic singleton design
- * pattern
- * with lazy initialization and double-checked locking.
- */
 @Configuration
 public class DatabaseConfig {
 

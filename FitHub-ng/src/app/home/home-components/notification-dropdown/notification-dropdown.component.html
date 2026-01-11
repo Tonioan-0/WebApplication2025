@@ -1,0 +1,39 @@
+<div class="notification-container">
+    <button class="notification-bell" (click)="toggleDropdown()" [class.has-notifications]="unreadCount > 0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+            <path [attr.d]="svgIcons.notification" />
+        </svg>
+        <span class="notification-badge" *ngIf="unreadCount > 0">{{ unreadCount > 9 ? '9+' : unreadCount }}</span>
+    </button>
+
+    <div class="notification-dropdown" *ngIf="isOpen">
+        <div class="dropdown-header">
+            <h3>Notifications</h3>
+            <span class="notification-count" *ngIf="unreadCount > 0">{{ unreadCount }} new</span>
+        </div>
+
+        <div class="notification-list" *ngIf="notifications.length > 0">
+            <div class="notification-item" *ngFor="let notification of notifications"
+                [class.unread]="!notification.isRead" (click)="markAsRead(notification)">
+                <div class="notification-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20"
+                        height="20">
+                        <path [attr.d]="getNotificationIcon(notification.type)" />
+                    </svg>
+                </div>
+                <div class="notification-content">
+                    <p class="notification-message">{{ notification.message }}</p>
+                    <span class="notification-time">{{ getRelativeTime(notification.timestamp) }}</span>
+                </div>
+                <div class="unread-indicator" *ngIf="!notification.isRead"></div>
+            </div>
+        </div>
+
+        <div class="empty-state" *ngIf="notifications.length === 0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48" height="48">
+                <path [attr.d]="svgIcons.notification" />
+            </svg>
+            <p>No notifications yet</p>
+        </div>
+    </div>
+</div>

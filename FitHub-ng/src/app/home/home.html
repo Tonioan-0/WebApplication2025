@@ -96,13 +96,7 @@
             </div>
 
             <div class="user-profile">
-                <div class="notification-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20"
-                        height="20">
-                        <path [attr.d]="icons.notification" />
-                    </svg>
-                    <span class="notification-dot"></span>
-                </div>
+                <app-notification-dropdown></app-notification-dropdown>
             </div>
         </header>
         <router-outlet></router-outlet>

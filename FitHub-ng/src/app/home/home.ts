@@ -4,11 +4,12 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { SVG_ICONS } from '../shared/constants/svg-icons.constants';
 import { AuthService } from '../services/authService';
 import { AiChatButtonComponent } from './home-components/ai-chat-button/ai-chat-button.component';
+import { NotificationDropdownComponent } from './home-components/notification-dropdown/notification-dropdown.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, AiChatButtonComponent],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, AiChatButtonComponent, NotificationDropdownComponent],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

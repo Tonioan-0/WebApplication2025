@@ -1,8 +1,8 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AiChatService } from '../services/ai-chat.service';
-import { SVG_ICONS } from '../shared/constants/svg-icons.constants';
+import { AiChatService, ChatResponse } from '../../../services/ai-chat.service';
+import { SVG_ICONS } from '../../../shared/constants/svg-icons.constants';
 import { MarkdownPipe } from './markdown.pipe';
 
 interface Message {
@@ -58,7 +58,7 @@ export class AiChatButtonComponent {
         this.errorMessage = null;
 
         this.chatService.sendMessage(userMessage).subscribe({
-            next: (response) => {
+            next: (response: ChatResponse) => {
                 this.messages.push({
                     text: response.reply,
                     isUser: false,
@@ -67,7 +67,7 @@ export class AiChatButtonComponent {
                 this.isLoading = false;
                 this.cdr.detectChanges();
             },
-            error: (error) => {
+            error: (error: Error) => {
                 this.errorMessage = error.message;
                 this.isLoading = false;
                 this.cdr.detectChanges();

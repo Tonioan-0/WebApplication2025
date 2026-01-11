@@ -1,4 +1,7 @@
-/* Colori di prova */
+/* =========================================
+   FitHub - Global Styles & Utilities
+   ========================================= */
+
 :root {
     /* Primary */
     --primary: oklch(46.486% 0.21 264.175);
@@ -6,7 +9,7 @@
     --on-primary: #ffffff;
     --on-primary-container: oklch(85% 0.15 263.83);
 
-    /* Secondary  */
+    /* Secondary */
     --secondary: oklch(72% 0.19 50);
     --secondary-container: oklch(65% 0.17 50);
     --on-secondary: #ffffff;
@@ -22,12 +25,13 @@
     --surface-bright: #150827;
     --on-surface: #ffffff;
     --on-surface-variant: rgba(255, 255, 255, 0.85);
+    --on-surface-muted: rgba(255, 255, 255, 0.6);
 
     /* Background */
     --background: #0a0219;
     --on-background: #ffffff;
 
-    /* Outline & Borders */
+    /* Borders */
     --outline: rgba(255, 255, 255, 0.1);
     --outline-variant: rgba(255, 255, 255, 0.05);
 
@@ -35,13 +39,19 @@
     --gradient-primary: linear-gradient(135deg, var(--primary), var(--accent-violet));
     --gradient-secondary: linear-gradient(135deg, var(--secondary), var(--accent-pink));
     --gradient-surface: linear-gradient(135deg, var(--surface-dim), var(--surface-bright));
+    --gradient-error: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+    --gradient-success: linear-gradient(135deg, #4caf50, #45a049);
+
+    /* Glass */
+    --glass-bg: rgba(46, 22, 62, 0.75);
+    --glass-border: rgba(46, 22, 62, 0.1);
 
     /* Shadows */
     --shadow-1: 0 2px 8px rgba(0, 0, 0, 0.2);
     --shadow-2: 0 4px 20px rgba(0, 0, 0, 0.3);
     --shadow-3: 0 8px 32px rgba(0, 0, 0, 0.4);
-    --elevation-1: 0 0 20px rgba(81, 97, 234, 0.3);
-    --elevation-2: 0 0 30px rgba(81, 97, 234, 0.5);
+    --elevation-1: 0 0 20px rgba(70, 38, 83, 0.3);
+    --elevation-2: 0 0 30px rgba(136, 42, 165, 0.5);
 
     /* Spacing */
     --spacing-xs: 4px;
@@ -50,21 +60,27 @@
     --spacing-lg: 24px;
     --spacing-xl: 32px;
 
-    /* Border Radius */
+    /* Radius */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
     --radius-xl: 24px;
     --radius-full: 9999px;
+
+    /* Transitions */
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-* {
+/* ========================================= Base ========================================= */
+
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
 }
 
 body {
-    margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
         'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
         sans-serif;
@@ -74,15 +90,105 @@ body {
     color: var(--on-background);
 }
 
-/* =========================================
-   Global Utilities
-   ========================================= */
+button {
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    transition: all var(--transition);
+}
+
+/* ========================================= Animations ========================================= */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* ========================================= Utilities ========================================= */
+
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--outline);
+    border-radius: var(--radius-full);
+}
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeIn var(--transition);
+}
+
 .section {
     padding: 6rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
+.w-100 {
+    width: 100%;
+}
+
+/* Text Utilities */
 .text-blue {
     color: #3b82f6;
 }
@@ -101,21 +207,19 @@ body {
     background-clip: text;
 }
 
-/* =========================================
-   Buttons & Inputs
-   ========================================= */
-button {
-    cursor: pointer;
-    border: none;
-    font-family: inherit;
-    transition: all 0.3s ease;
+.sm-text {
+    font-size: 0.9rem;
+    color: #888;
+    margin: 0;
 }
+
+/* ========================================= Buttons ========================================= */
 
 .btn-primary {
     background: #3b82f6;
     color: white;
-    padding: 0.6rem 1.2rem;
-    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
     font-weight: 600;
 }
 
@@ -153,9 +257,77 @@ button {
     border-color: #e0e0e0;
 }
 
-/* =========================================
-   Navigation
-   ========================================= */
+/* ========================================= Forms ========================================= */
+
+.form-input,
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-sm);
+    color: var(--on-surface);
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: all var(--transition);
+    box-sizing: border-box;
+}
+
+.form-input:focus,
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(81, 97, 234, 0.1);
+}
+
+.form-input::placeholder {
+    color: var(--on-surface-muted);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--on-surface);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    color: var(--on-surface-variant);
+    margin: 0;
+}
+
+.forgot-link {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.forgot-link:hover {
+    color: var(--secondary);
+}
+
+/* ========================================= Navigation ========================================= */
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -169,7 +341,7 @@ button {
     width: 100%;
     z-index: 1000;
     box-sizing: border-box;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--outline-variant);
 }
 
 .logo {
@@ -181,7 +353,6 @@ button {
 }
 
 .logo-icon {
-
     color: white;
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
@@ -218,9 +389,8 @@ button {
     font-size: 1.5rem;
 }
 
-/* =========================================
-   Hero Component
-   ========================================= */
+/* ========================================= Hero ========================================= */
+
 .hero {
     padding: 9rem 1rem 6rem;
     text-align: center;
@@ -267,9 +437,8 @@ h1 {
     margin-bottom: 4rem;
 }
 
-/* =========================================
-   Stats Component
-   ========================================= */
+/* ========================================= Stats ========================================= */
+
 .stats-container {
     display: flex;
     gap: 4rem;
@@ -295,12 +464,10 @@ h1 {
     letter-spacing: 0.05em;
 }
 
-/* =========================================
-   Features & Cards
-   ========================================= */
+/* ========================================= Sections & Cards ========================================= */
+
 .section-header {
     text-align: center;
-    margin-bottom: 4rem;
 }
 
 .section-header h2 {
@@ -329,10 +496,15 @@ h1 {
 
 .card {
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-lg);
     padding: 2rem;
-    transition: transform 0.3s ease, border-color 0.3s ease;
+    transition: all var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
 }
 
 .feature-card:hover {
@@ -344,6 +516,21 @@ h1 {
 .feature-card:nth-child(4):hover {
     border-color: rgba(249, 115, 22, 0.4);
 }
+
+.feature-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.feature-card p {
+    color: #a0a0a0;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* ========================================= Icons ========================================= */
 
 .icon-box {
     width: 48px;
@@ -360,6 +547,11 @@ h1 {
     height: 24px;
 }
 
+.icon-sm {
+    width: 24px;
+    height: 24px;
+}
+
 .blue-soft {
     background: rgba(59, 130, 246, 0.1);
     color: #60a5fa;
@@ -368,30 +560,6 @@ h1 {
 .orange-soft {
     background: rgba(249, 115, 22, 0.1);
     color: #fb923c;
-}
-
-.feature-card h3 {
-    font-size: 1.25rem;
-    margin-bottom: 0.75rem;
-    font-weight: 600;
-}
-
-.feature-card p {
-    color: #a0a0a0;
-    line-height: 1.5;
-    font-size: 0.95rem;
-    margin: 0;
-}
-
-/* =========================================
-   Goals & Lists
-   ========================================= */
-.goal-card {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 1.5rem;
-    background: #0f1011;
 }
 
 .icon-circle {
@@ -413,9 +581,14 @@ h1 {
     color: #f97316;
 }
 
-.icon-sm {
-    width: 24px;
-    height: 24px;
+/* ========================================= Goals ========================================= */
+
+.goal-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: #0f1011;
 }
 
 .goal-card h4 {
@@ -423,15 +596,8 @@ h1 {
     font-size: 1.1rem;
 }
 
-.sm-text {
-    font-size: 0.9rem;
-    color: #888;
-    margin: 0;
-}
+/* ========================================= Testimonials ========================================= */
 
-/* =========================================
-   Testimonials & Users
-   ========================================= */
 .quote-icon {
     font-size: 4rem;
     color: #333;
@@ -450,7 +616,7 @@ h1 {
 .user-info {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 .avatar {
@@ -495,9 +661,64 @@ h1 {
     color: #fb923c;
 }
 
-/* =========================================
-   Footer
-   ========================================= */
+/* ========================================= Auth Forms ========================================= */
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.auth-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 400px;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-2);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-header h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    color: var(--on-surface);
+}
+
+.auth-header p {
+    color: var(--on-surface-variant);
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--on-surface-variant);
+    font-size: 0.95rem;
+}
+
+.auth-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* ========================================= Footer ========================================= */
+
 footer {
     text-align: center;
     padding: 3rem;
@@ -505,9 +726,8 @@ footer {
     border-top: 1px solid #222;
 }
 
-/* =========================================
-   Responsive Global Styles
-   ========================================= */
+/* ========================================= Responsive ========================================= */
+
 @media (max-width: 768px) {
     .nav-links {
         display: none;
@@ -554,125 +774,4 @@ footer {
     .section-header h2 {
         font-size: 2rem;
     }
-}
-
-/* =========================================
-   Auth Forms
-   ========================================= */
-.auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 2rem;
-}
-
-.auth-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-lg);
-    padding: 2.5rem;
-    width: 100%;
-    max-width: 400px;
-    backdrop-filter: blur(10px);
-    box-shadow: var(--shadow-2);
-}
-
-.auth-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.auth-header h2 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin: 0 0 0.5rem;
-    color: var(--on-surface);
-}
-
-.auth-header p {
-    color: var(--on-surface-variant);
-    margin: 0;
-    font-size: 0.95rem;
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--on-surface);
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-input[type="email"],
-input[type="password"],
-input[type="text"] {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius-sm);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--outline);
-    color: var(--on-surface);
-    font-family: inherit;
-    font-size: 0.95rem;
-    transition: border-color 0.2s;
-    box-sizing: border-box;
-}
-
-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.form-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    font-size: 0.9rem;
-}
-
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    color: var(--on-surface-variant);
-    margin: 0;
-}
-
-.forgot-link {
-    color: var(--primary);
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-.forgot-link:hover {
-    color: var(--secondary);
-}
-
-.w-100 {
-    width: 100%;
-}
-
-.auth-footer {
-    text-align: center;
-    margin-top: 2rem;
-    color: var(--on-surface-variant);
-    font-size: 0.95rem;
-}
-
-.auth-footer a {
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.auth-footer a:hover {
-    text-decoration: underline;
 }
