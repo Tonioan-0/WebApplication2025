@@ -1,0 +1,140 @@
+.friends-card {
+    background: var(--surface-dim);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.friends-header {
+    margin-bottom: 0.75rem;
+}
+
+.friends-header h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--on-surface);
+    margin: 0;
+}
+
+.search-box {
+    display: flex;
+    background: var(--surface-bright);
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.search-box input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--on-surface);
+}
+
+.section-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin: 0.75rem 0 0.5rem;
+}
+
+.request-item,
+.friend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--surface-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.avatar-placeholder {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.user-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--on-surface);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-email {
+    font-size: 0.75rem;
+    color: var(--on-surface-variant);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.request-actions {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.btn-accept,
+.btn-reject {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-accept {
+    background: var(--primary);
+    color: #fff;
+}
+
+.btn-reject {
+    background: var(--surface-bright);
+    color: var(--on-surface-variant);
+}
+
+.btn-add {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.sent-badge {
+    border-radius: 6px;
+    font-size: 0.8rem;
+}
+
+.empty-state,
+.loading-state {
+    text-align: center;
+    padding: 1rem;
+    color: var(--on-surface-variant);
+    font-size: 0.85rem;
+}
+
+.requests-section {
+    border-bottom: 1px solid var(--outline);
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+}

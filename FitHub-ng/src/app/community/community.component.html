@@ -1,0 +1,26 @@
+<div class="community-container">
+    <header class="community-header">
+        <div class="header-text">
+            <h1>Community & Scheduling</h1>
+            <p>Plan workouts with friends and stay accountable together.</p>
+        </div>
+        <button class="btn-schedule" (click)="openScheduleModal()">
+            <span class="plus-icon">+</span>
+            Schedule Workout
+        </button>
+    </header>
+
+    <div class="community-grid">
+        <div class="left-column">
+            <app-weekly-schedule #weeklySchedule (editAppointment)="onEditAppointment($event)"></app-weekly-schedule>
+        </div>
+
+        <div class="right-column">
+            <app-manage-friends></app-manage-friends>
+        </div>
+    </div>
+</div>
+
+<app-schedule-workout-modal *ngIf="showScheduleModal" [initialLocation]="selectedLocation"
+    [editingAppointment]="editingAppointment" (close)="closeScheduleModal()" (scheduled)="onWorkoutScheduled()">
+</app-schedule-workout-modal>

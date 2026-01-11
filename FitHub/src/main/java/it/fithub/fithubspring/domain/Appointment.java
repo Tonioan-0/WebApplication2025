@@ -12,11 +12,15 @@ import java.time.LocalDateTime;
 public class Appointment {
 
     private Long id;
+    private String title;
+    private String type;
     private String location;
     private LocalDateTime dateTime;
     private User creator;
 
-    public Appointment(String location, LocalDateTime dateTime, User creator) {
+    public Appointment(String title, String type, String location, LocalDateTime dateTime, User creator) {
+        this.title = title;
+        this.type = type;
         this.location = location;
         this.dateTime = dateTime;
         this.creator = creator;

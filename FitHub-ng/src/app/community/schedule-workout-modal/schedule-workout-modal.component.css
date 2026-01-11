@@ -1,0 +1,193 @@
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--surface-dim);
+    border-radius: 12px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 450px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.modal-header h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--on-surface);
+    margin: 0;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: var(--on-surface-variant);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--on-surface-variant);
+    margin-bottom: 0.25rem;
+}
+
+.form-group input {
+    width: 100%;
+    background: var(--surface-bright);
+    border: 1px solid var(--outline);
+    border-radius: 8px;
+    padding: 0.5rem;
+    color: var(--on-surface);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.type-options {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.type-btn {
+    background: var(--surface-bright);
+    border: 1px solid var(--outline);
+    color: var(--on-surface-variant);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.type-btn.selected {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+.friends-select {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 140px;
+    overflow-y: auto;
+}
+
+.friend-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: var(--surface-bright);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.friend-option.selected {
+    background: rgba(81, 97, 234, 0.2);
+    border: 1px solid var(--primary);
+}
+
+.friend-option span:not(.avatar-placeholder) {
+    flex: 1;
+    font-size: 0.9rem;
+    color: var(--on-surface);
+}
+
+.avatar-placeholder {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--surface-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--primary);
+    flex-shrink: 0;
+}
+
+.check-mark {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.btn-cancel,
+.btn-save {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-cancel {
+    background: var(--surface-bright);
+    color: var(--on-surface);
+}
+
+.btn-save {
+    background: var(--primary);
+    color: #fff;
+}
+
+.btn-pick-location {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--surface-bright);
+    border: 1px dashed var(--primary);
+    border-radius: 8px;
+    color: var(--on-surface-variant);
+    cursor: pointer;
+}
+
+.btn-pick-location:hover {
+    background: rgba(81, 97, 234, 0.1);
+}
+
+.btn-pick-location svg {
+    color: var(--primary);
+}
+
+.btn-pick-location .selected-location {
+    color: var(--on-surface);
+    font-weight: 500;
+}

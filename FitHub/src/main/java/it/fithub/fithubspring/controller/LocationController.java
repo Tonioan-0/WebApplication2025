@@ -8,7 +8,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/locations")
-@CrossOrigin(origins = "http://localhost:4200") // Angular dev server
 public class LocationController {
 
     private final LocationService locationService;

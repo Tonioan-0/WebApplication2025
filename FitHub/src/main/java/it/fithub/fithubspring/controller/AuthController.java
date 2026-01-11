@@ -3,7 +3,7 @@ package it.fithub.fithubspring.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -22,7 +22,6 @@ import it.fithub.fithubspring.security.JwtUtil;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true") // Allow credentials for cookie
 public class AuthController {
     private final UserService userService;
     private final JwtUtil jwtUtil;

@@ -1,0 +1,93 @@
+<div class="friends-card">
+    <div class="friends-header">
+        <h2>Manage Friends</h2>
+    </div>
+
+    <div class="search-box">
+
+        <input type="text" placeholder="Search friends or find new..." [(ngModel)]="searchQuery" (input)="onSearch()">
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="loading">
+        <span>Loading...</span>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-state" *ngIf="error && !loading">
+        <span>{{ error }}</span>
+    </div>
+
+    <!-- Pending Requests Section -->
+    <div class="requests-section" *ngIf="pendingRequests.length > 0 && !searchQuery">
+        <div class="section-header">
+            <span class="section-title">FRIEND REQUESTS</span>
+        </div>
+
+        <div class="request-item" *ngFor="let request of pendingRequests">
+            <div class="user-avatar">
+                <span class="avatar-placeholder">{{ request.senderUsername.charAt(0).toUpperCase() }}</span>
+            </div>
+            <div class="user-info">
+                <span class="user-name">{{ request.senderUsername }}</span>
+            </div>
+            <div class="request-actions">
+                <button class="btn-accept" (click)="acceptRequest(request)">✓</button>
+                <button class="btn-reject" (click)="rejectRequest(request)">✕</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Friends List -->
+    <div class="friends-list" *ngIf="!loading && !error">
+        <div class="section-header" *ngIf="filteredFriends.length > 0">
+            <span class="section-title">YOUR FRIENDS</span>
+        </div>
+
+        <div class="friend-item" *ngFor="let friend of filteredFriends">
+            <div class="user-avatar">
+                <span class="avatar-placeholder">{{ friend.username.charAt(0).toUpperCase() }}</span>
+            </div>
+            <div class="user-info">
+                <span class="user-name">{{ friend.username }}</span>
+                <span class="user-email">{{ friend.email }}</span>
+            </div>
+            <div class="friend-actions">
+                <button class="btn-unfriend" (click)="unfriend(friend)" title="Remove friend">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18"
+                        height="18">
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="empty-state" *ngIf="filteredFriends.length === 0 && !searchQuery">
+            <span>No friends yet. Search to add some!</span>
+        </div>
+    </div>
+
+    <!-- Search Results (new users) -->
+    <div class="search-results" *ngIf="searchResults.length > 0">
+        <div class="section-header">
+            <span class="section-title">ADD NEW FRIENDS</span>
+        </div>
+
+        <div class="friend-item" *ngFor="let user of searchResults">
+            <div class="user-avatar">
+                <span class="avatar-placeholder">{{ user.username.charAt(0).toUpperCase() }}</span>
+            </div>
+            <div class="user-info">
+                <span class="user-name">{{ user.username }}</span>
+                <span class="user-email">{{ user.email }}</span>
+            </div>
+            <button class="btn-add" *ngIf="!isSentRequest(user.id)" (click)="sendRequest(user)">Add</button>
+            <span class="sent-badge" *ngIf="isSentRequest(user.id)">Sent</span>
+        </div>
+    </div>
+
+    <div class="searching-state" *ngIf="isSearching">
+        <span>Searching...</span>
+    </div>
+</div>

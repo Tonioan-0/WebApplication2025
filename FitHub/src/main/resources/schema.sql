@@ -5,7 +5,8 @@
 CREATE TABLE IF NOT EXISTS app_user (
     id BIGSERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255)
 );
 
 -- Locations table (gyms and parks)
@@ -46,10 +47,16 @@ CREATE TABLE IF NOT EXISTS friend_request (
 -- Appointments table
 CREATE TABLE IF NOT EXISTS appointment (
     id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(32),
+    type VARCHAR(20),
     location VARCHAR(255) NOT NULL,
     date_time TIMESTAMP NOT NULL,
     creator_id BIGINT NOT NULL REFERENCES app_user(id) ON DELETE CASCADE
 );
+
+-- Ensure title column exists (migration for existing DB)
+ALTER TABLE appointment ADD COLUMN IF NOT EXISTS title VARCHAR(32);
+ALTER TABLE appointment ADD COLUMN IF NOT EXISTS type VARCHAR(20);
 
 -- Performance indexes
 CREATE INDEX IF NOT EXISTS idx_notification_user_read ON notification(user_id, is_read);

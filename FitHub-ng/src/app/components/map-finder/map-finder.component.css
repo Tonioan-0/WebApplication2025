@@ -374,3 +374,71 @@
     font-size: 18px;
   }
 }
+
+/* Selection Mode Bottom Bar */
+.selection-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--glass-border);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1002;
+  animation: slideUpBar 0.3s ease;
+}
+
+@keyframes slideUpBar {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.selection-hint {
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.btn-return {
+  background: var(--gradient-primary);
+  color: var(--text-white);
+  border: none;
+  padding: 12px 32px;
+  border-radius: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+}
+
+.btn-return:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(81, 97, 234, 0.5);
+}
+
+.btn-return:active {
+  transform: translateY(0);
+}
+
+/* Temp Marker */
+:host ::ng-deep .temp-marker .marker-pin {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+  box-shadow: var(--shadow-md), 0 0 20px rgba(255, 107, 107, 0.4);
+}
+
+:host ::ng-deep .temp-marker .marker-pin:hover {
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(255, 107, 107, 0.6);
+}

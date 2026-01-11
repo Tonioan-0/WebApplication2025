@@ -1,6 +1,9 @@
 package it.fithub.fithubspring.controller;
 
+import it.fithub.fithubspring.domain.FriendRequest;
 import it.fithub.fithubspring.domain.User;
+import it.fithub.fithubspring.dto.FriendDTO;
+import it.fithub.fithubspring.dto.FriendRequestDTO;
 import it.fithub.fithubspring.service.FriendshipService;
 
 import org.springframework.http.ResponseEntity;
@@ -10,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/friends")
-@CrossOrigin(origins = "http://localhost:4200")
 public class FriendshipController {
 
     private final FriendshipService friendshipService;
@@ -21,9 +23,7 @@ public class FriendshipController {
 
     @PostMapping("/request/{receiverId}")
     public ResponseEntity<Void> sendFriendRequest(@PathVariable Long receiverId) {
-        // TODO: Alessandro - Implementare il controllo della sessione utente qui
-        // TODO: Sostituire senderId hardcoded con l'ID dell'utente autenticato dalla
-
+        // TODO: Get from authenticated session
         Long senderId = 1L;
         friendshipService.sendFriendRequest(senderId, receiverId);
         return ResponseEntity.ok().build();
@@ -35,11 +35,52 @@ public class FriendshipController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/reject/{requestId}")
+    public ResponseEntity<Void> rejectFriendRequest(@PathVariable Long requestId) {
+        friendshipService.rejectFriendRequest(requestId);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
-    public ResponseEntity<List<User>> getFriends() {
-        // TODO: Alessandro - Implementare il controllo della sessione utente qui
-        // TODO: Sostituire userId hardcoded con l'ID dell'utente autenticato dalla
+    public ResponseEntity<List<FriendDTO>> getFriends() {
+        // TODO: Get from authenticated session
         Long userId = 1L;
-        return ResponseEntity.ok(friendshipService.getFriends(userId));
+        List<User> friends = friendshipService.getFriends(userId);
+        List<FriendDTO> dtos = friends.stream()
+                .map(u -> new FriendDTO(u.getId(), u.getUsername(), u.getEmail()))
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/requests")
+    public ResponseEntity<List<FriendRequestDTO>> getPendingRequests() {
+        // TODO: Get from authenticated session
+        Long userId = 1L;
+        List<FriendRequest> requests = friendshipService.getPendingRequests(userId);
+        List<FriendRequestDTO> dtos = requests.stream()
+                .map(r -> new FriendRequestDTO(
+                        r.getId(),
+                        r.getSender().getId(),
+                        r.getSender().getUsername(),
+                        r.getTimestamp().toString()))
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<FriendDTO>> searchUsers(@RequestParam String query) {
+        List<User> users = friendshipService.searchUsers(query);
+        List<FriendDTO> dtos = users.stream()
+                .map(u -> new FriendDTO(u.getId(), u.getUsername(), u.getEmail()))
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    @DeleteMapping("/{friendId}")
+    public ResponseEntity<Void> unfriend(@PathVariable Long friendId) {
+        // TODO: Get from authenticated session
+        Long userId = 1L;
+        friendshipService.unfriend(userId, friendId);
+        return ResponseEntity.ok().build();
     }
 }

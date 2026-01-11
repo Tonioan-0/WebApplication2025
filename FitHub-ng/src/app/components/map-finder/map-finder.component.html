@@ -73,5 +73,14 @@
     </div>
   </div>
 
-  <app-ai-chat-button></app-ai-chat-button>
+  <div class="selection-bottom-bar" *ngIf="isSelectionMode">
+    <span class="selection-hint" *ngIf="!selectedLocationData">
+      Select a mark or double tap to add a temporary pin
+    </span>
+    <button class="btn-return" *ngIf="selectedLocationData" (click)="returnToAppointment()">
+      Return to appointment
+    </button>
+  </div>
+
+  <!-- <app-ai-chat-button *ngIf="!isSelectionMode"></app-ai-chat-button> -->
 </div>
