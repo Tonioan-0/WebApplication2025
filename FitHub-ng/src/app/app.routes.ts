@@ -17,9 +17,21 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'dashboard/community',
+    loadComponent: () => import('./community/community.component').then(m => m.CommunityComponent),
+    title: 'FitHub - Community & Scheduling',
+    canActivate: [authGuard]
+  },
+  {
     path: 'map',
     component: MapFinderComponent,
     title: 'FitHub - Find Your Spot'
+  },
+  {
+    path: 'map/select',
+    component: MapFinderComponent,
+    title: 'FitHub - Select Location',
+    data: { selectionMode: true }
   },
   {
     path: 'login',

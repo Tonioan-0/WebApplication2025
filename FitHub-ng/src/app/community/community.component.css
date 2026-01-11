@@ -1,0 +1,59 @@
+.community-container {
+    padding: 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.community-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.header-text h1 {
+    color: var(--on-surface);
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.header-text p {
+    color: var(--on-surface-variant);
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0;
+}
+
+.btn-schedule {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-schedule:hover {
+    opacity: 0.9;
+}
+
+.plus-icon {
+    font-size: 1.2rem;
+}
+
+.community-grid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 1rem;
+}
+
+@media (max-width: 900px) {
+    .community-grid {
+        grid-template-columns: 1fr;
+    }
+}

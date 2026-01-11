@@ -60,4 +60,32 @@ public class FriendshipService {
 
                 return Stream.concat(friendsFromSentRequests.stream(), friendsFromReceivedRequests.stream()).toList();
         }
+
+        public List<FriendRequest> getPendingRequests(Long userId) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+                return friendRequestRepository.findPendingRequestsForUser(user);
+        }
+
+        public void rejectFriendRequest(Long requestId) {
+                if (friendRequestRepository.findById(requestId).isEmpty()) {
+                        throw new RuntimeException("Friend request not found with id: " + requestId);
+                }
+                friendRequestRepository.deleteById(requestId);
+        }
+
+        public List<User> searchUsers(String query) {
+                return userRepository.searchByUsername(query);
+        }
+
+        public void unfriend(Long userId, Long friendId) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+                User friend = userRepository.findById(friendId)
+                                .orElseThrow(() -> new UserNotFoundException("Friend not found with id: " + friendId));
+
+                // Delete friendship in both directions (sender->receiver and receiver->sender)
+                friendRequestRepository.deleteFriendship(user, friend);
+        }
 }
