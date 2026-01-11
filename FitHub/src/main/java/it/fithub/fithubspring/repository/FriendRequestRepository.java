@@ -167,6 +167,26 @@ public class FriendRequestRepository {
         }
     }
 
+    public List<FriendRequest> findPendingRequestsForUser(User user) {
+        String sql = "SELECT * FROM friend_request WHERE receiver_id = ? AND status = 'PENDING' ORDER BY timestamp DESC";
+
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, user.getId());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<FriendRequest> requests = new ArrayList<>();
+                while (rs.next()) {
+                    requests.add(mapResultSetToFriendRequest(rs));
+                }
+                return requests;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching pending friend requests", e);
+        }
+    }
+
     private FriendRequest mapResultSetToFriendRequest(ResultSet rs) throws SQLException {
         FriendRequest friendRequest = new FriendRequest();
         friendRequest.setId(rs.getLong("id"));
@@ -193,5 +213,24 @@ public class FriendRequestRepository {
         user.setUsername(rs.getString("username"));
         user.setEmail(rs.getString("email"));
         return user;
+    }
+
+    public void deleteFriendship(User user1, User user2) {
+        String sql = "DELETE FROM friend_request WHERE " +
+                "(sender_id = ? AND receiver_id = ? AND status = 'ACCEPTED') OR " +
+                "(sender_id = ? AND receiver_id = ? AND status = 'ACCEPTED')";
+
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, user1.getId());
+            stmt.setLong(2, user2.getId());
+            stmt.setLong(3, user2.getId());
+            stmt.setLong(4, user1.getId());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting friendship", e);
+        }
     }
 }

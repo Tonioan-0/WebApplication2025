@@ -30,15 +30,17 @@ public class AppointmentRepository {
     }
 
     private Appointment insert(Appointment appointment) {
-        String sql = "INSERT INTO appointment (location, date_time, creator_id) " +
-                "VALUES (?, ?, ?) RETURNING id";
+        String sql = "INSERT INTO appointment (title, type, location, date_time, creator_id) " +
+                "VALUES (?, ?, ?, ?, ?) RETURNING id";
 
         try (Connection conn = dataSource.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, appointment.getLocation());
-            stmt.setTimestamp(2, Timestamp.valueOf(appointment.getDateTime()));
-            stmt.setLong(3, appointment.getCreator().getId());
+            stmt.setString(1, appointment.getTitle());
+            stmt.setString(2, appointment.getType());
+            stmt.setString(3, appointment.getLocation());
+            stmt.setTimestamp(4, Timestamp.valueOf(appointment.getDateTime()));
+            stmt.setLong(5, appointment.getCreator().getId());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -52,15 +54,16 @@ public class AppointmentRepository {
     }
 
     private Appointment update(Appointment appointment) {
-        String sql = "UPDATE appointment SET location = ?, date_time = ?, creator_id = ? WHERE id = ?";
+        String sql = "UPDATE appointment SET title = ?, type = ?, location = ?, date_time = ? WHERE id = ?";
 
         try (Connection conn = dataSource.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, appointment.getLocation());
-            stmt.setTimestamp(2, Timestamp.valueOf(appointment.getDateTime()));
-            stmt.setLong(3, appointment.getCreator().getId());
-            stmt.setLong(4, appointment.getId());
+            stmt.setString(1, appointment.getTitle());
+            stmt.setString(2, appointment.getType());
+            stmt.setString(3, appointment.getLocation());
+            stmt.setTimestamp(4, Timestamp.valueOf(appointment.getDateTime()));
+            stmt.setLong(5, appointment.getId());
 
             stmt.executeUpdate();
             return appointment;
@@ -105,6 +108,26 @@ public class AppointmentRepository {
         }
     }
 
+    public List<Appointment> findByCreatorId(Long creatorId) {
+        String sql = "SELECT * FROM appointment WHERE creator_id = ? ORDER BY date_time DESC";
+
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, creatorId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Appointment> appointments = new ArrayList<>();
+                while (rs.next()) {
+                    appointments.add(mapResultSetToAppointment(rs));
+                }
+                return appointments;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching appointments by creator", e);
+        }
+    }
+
     public void deleteById(Long id) {
         String sql = "DELETE FROM appointment WHERE id = ?";
 
@@ -121,6 +144,8 @@ public class AppointmentRepository {
     private Appointment mapResultSetToAppointment(ResultSet rs) throws SQLException {
         Appointment appointment = new Appointment();
         appointment.setId(rs.getLong("id"));
+        appointment.setTitle(rs.getString("title"));
+        appointment.setType(rs.getString("type"));
         appointment.setLocation(rs.getString("location"));
         appointment.setDateTime(rs.getTimestamp("date_time").toLocalDateTime());
 

@@ -165,6 +165,26 @@ public class UserRepository {
         }
     }
 
+    public List<User> searchByUsername(String query) {
+        String sql = "SELECT * FROM app_user WHERE LOWER(username) LIKE LOWER(?) LIMIT 10";
+
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "%" + query + "%");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<User> users = new ArrayList<>();
+                while (rs.next()) {
+                    users.add(mapResultSetToUser(rs));
+                }
+                return users;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error searching users", e);
+        }
+    }
+
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
         User user = new User();
         user.setId(rs.getLong("id"));
