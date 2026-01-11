@@ -20,8 +20,8 @@
         </div>
 
         <nav class="sidebar-nav">
-            <a routerLink="/dashboard" class="nav-item" routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">
+            <a routerLink="/dashboard" class="nav-item" routerLinkActive="" [routerLinkActiveOptions]="{exact: true}"
+                (click)="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path [attr.d]="icons.dashboard" />
                 </svg>
@@ -65,12 +65,6 @@
                 </svg>
                 <span *ngIf="!sidebarCollapsed">Community</span>
             </a>
-            <a href="#" class="nav-item ai-coach" (click)="closeMobileMenu()">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                    <path [attr.d]="icons.geminiSparkle" />
-                </svg>
-                <span *ngIf="!sidebarCollapsed">AI Coach</span>
-            </a>
             <a href="#" class="nav-item" (click)="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path [attr.d]="icons.profile" />
@@ -111,5 +105,6 @@
                 </div>
             </div>
         </header>
+        <app-ai-chat-button></app-ai-chat-button>
     </main>
 </div>
