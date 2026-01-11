@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as L from 'leaflet';
-import { LocationService, type Location } from '../../services/location.service';
+import { LocationService, type Location } from '../../../services/location.service';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { SVG_ICONS } from '../../shared/constants/svg-icons.constants';
+import { SVG_ICONS } from '../../../shared/constants/svg-icons.constants';
 
 @Component({
   selector: 'app-map-finder',

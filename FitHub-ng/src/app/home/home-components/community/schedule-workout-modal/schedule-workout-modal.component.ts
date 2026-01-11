@@ -2,9 +2,9 @@ import { Component, EventEmitter, Output, Input, OnInit, OnChanges, OnDestroy, S
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CommunityService, Appointment } from '../../services/community.service';
-import { AppointmentDraftService } from '../../services/appointment-draft.service';
-import { SVG_ICONS } from '../../shared/constants/svg-icons.constants';
+import { CommunityService, Appointment } from '../../../../services/community.service';
+import { AppointmentDraftService } from '../../../../services/appointment-draft.service';
+import { SVG_ICONS } from '../../../../shared/constants/svg-icons.constants';
 
 @Component({
     selector: 'app-schedule-workout-modal',

@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CommunityService, Friend, FriendRequest } from '../../services/community.service';
-import { SVG_ICONS } from '../../shared/constants/svg-icons.constants';
+import { CommunityService, Friend, FriendRequest } from '../../../../services/community.service';
+import { SVG_ICONS } from '../../../../shared/constants/svg-icons.constants';
 
 @Component({
     selector: 'app-manage-friends',

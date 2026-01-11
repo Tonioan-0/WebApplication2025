@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { WeeklyScheduleComponent } from './weekly-schedule/weekly-schedule.component';
 import { ManageFriendsComponent } from './manage-friends/manage-friends.component';
 import { ScheduleWorkoutModalComponent } from './schedule-workout-modal/schedule-workout-modal.component';
-import { Appointment } from '../services/community.service';
+import { Appointment } from '../../../services/community.service';
 
 @Component({
     selector: 'app-community',
