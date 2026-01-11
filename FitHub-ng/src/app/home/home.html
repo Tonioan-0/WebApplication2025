@@ -20,14 +20,14 @@
         </div>
 
         <nav class="sidebar-nav">
-            <a routerLink="/dashboard" class="nav-item" routerLinkActive="" [routerLinkActiveOptions]="{exact: true}"
+            <a routerLink="/home" class="nav-item" routerLinkActive="" [routerLinkActiveOptions]="{exact: true}"
                 (click)="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path [attr.d]="icons.dashboard" />
                 </svg>
                 <span *ngIf="!sidebarCollapsed">Dashboard</span>
             </a>
-            <a routerLink="/workouts" class="nav-item" (click)="closeMobileMenu()">
+            <a routerLink="/home/workouts" class="nav-item" routerLinkActive="active" (click)="closeMobileMenu()">
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
                     <g>
                         <path class="st0"
@@ -47,25 +47,25 @@
                 </svg>
                 <span *ngIf="!sidebarCollapsed">Workout Hub</span>
             </a>
-            <a routerLink="/map" class="nav-item" (click)="closeMobileMenu()">
+            <a routerLink="/home/map" class="nav-item" routerLinkActive="active" (click)="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path [attr.d]="icons.location" />
                 </svg>
                 <span *ngIf="!sidebarCollapsed">Map & Locations</span>
             </a>
-            <a href="#" class="nav-item" (click)="closeMobileMenu()">
+            <a routerLink="/home/nutrition" class="nav-item" routerLinkActive="active" (click)="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path [attr.d]="icons.nutrition" />
                 </svg>
                 <span *ngIf="!sidebarCollapsed">Nutrition Center</span>
             </a>
-            <a href="#" class="nav-item" (click)="closeMobileMenu()">
+            <a routerLink="/home/community" class="nav-item" routerLinkActive="active" (click)="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path [attr.d]="icons.community" />
                 </svg>
                 <span *ngIf="!sidebarCollapsed">Community</span>
             </a>
-            <a href="#" class="nav-item" (click)="closeMobileMenu()">
+            <a routerLink="/home/profile" class="nav-item" routerLinkActive="active" (click)="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path [attr.d]="icons.profile" />
                 </svg>
@@ -105,6 +105,7 @@
                 </div>
             </div>
         </header>
+        <router-outlet></router-outlet>
         <app-ai-chat-button></app-ai-chat-button>
     </main>
 </div>

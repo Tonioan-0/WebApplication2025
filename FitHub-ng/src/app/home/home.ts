@@ -1,6 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { SVG_ICONS } from '../shared/constants/svg-icons.constants';
 import { AuthService } from '../services/authService';
 import { AiChatButtonComponent } from '../ai-chat-button/ai-chat-button.component';
@@ -8,7 +8,7 @@ import { AiChatButtonComponent } from '../ai-chat-button/ai-chat-button.componen
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, AiChatButtonComponent],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, AiChatButtonComponent],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
