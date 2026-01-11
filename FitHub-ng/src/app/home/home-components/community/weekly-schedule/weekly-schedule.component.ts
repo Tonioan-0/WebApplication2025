@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { CommunityService, Appointment } from '../../services/community.service';
+import { CommunityService, Appointment } from '../../../../services/community.service';
 
 @Component({
     selector: 'app-weekly-schedule',

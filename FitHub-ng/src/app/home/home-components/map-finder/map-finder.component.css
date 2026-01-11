@@ -27,11 +27,10 @@
 }
 
 .map-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 80px);
+  /* Account for header height */
   z-index: 1;
   background-color: var(--dark-bg);
 }
@@ -377,7 +376,7 @@
 
 /* Selection Mode Bottom Bar */
 .selection-bottom-bar {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;

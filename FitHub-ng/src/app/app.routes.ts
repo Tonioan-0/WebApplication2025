@@ -31,38 +31,38 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./components/dashboard/dashboard').then(m => m.DashboardComponent),
+        loadComponent: () => import('./home/home-components/dashboard/dashboard').then(m => m.DashboardComponent),
         title: 'FitHub - Dashboard'
       },
       {
         path: 'workouts',
-        loadComponent: () => import('./components/dashboard/dashboard').then(m => m.DashboardComponent),
+        loadComponent: () => import('./home/home-components/dashboard/dashboard').then(m => m.DashboardComponent),
         title: 'FitHub - Workout Hub'
       },
       {
         path: 'map',
-        loadComponent: () => import('./components/map-finder/map-finder.component').then(m => m.MapFinderComponent),
+        loadComponent: () => import('./home/home-components/map-finder/map-finder.component').then(m => m.MapFinderComponent),
         title: 'FitHub - Find Your Spot'
       },
       {
         path: 'map/select',
-        loadComponent: () => import('./components/map-finder/map-finder.component').then(m => m.MapFinderComponent),
+        loadComponent: () => import('./home/home-components/map-finder/map-finder.component').then(m => m.MapFinderComponent),
         title: 'FitHub - Select Location',
         data: { selectionMode: true }
       },
       {
         path: 'nutrition',
-        loadComponent: () => import('./components/dashboard/dashboard').then(m => m.DashboardComponent),
+        loadComponent: () => import('./home/home-components/dashboard/dashboard').then(m => m.DashboardComponent),
         title: 'FitHub - Nutrition Center'
       },
       {
         path: 'community',
-        loadComponent: () => import('./community/community.component').then(m => m.CommunityComponent),
+        loadComponent: () => import('./home/home-components/community/community.component').then(m => m.CommunityComponent),
         title: 'FitHub - Community & Scheduling'
       },
       {
         path: 'profile',
-        loadComponent: () => import('./components/dashboard/dashboard').then(m => m.DashboardComponent),
+        loadComponent: () => import('./home/home-components/dashboard/dashboard').then(m => m.DashboardComponent),
         title: 'FitHub - Profile'
       }
     ]
