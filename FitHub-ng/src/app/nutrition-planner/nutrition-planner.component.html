@@ -1,0 +1,111 @@
+<div class="container">
+  <h1>🍽️ Create your nutritional plan</h1>
+
+  <div class="search-box">
+    <input type="text"
+           [(ngModel)]="searchQuery"
+           (keydown.enter)="searchFood()"
+           (input)="onInputChange()"
+           placeholder="Search ingredient (e.g. Rice, Chicken)...">
+    <button type="button"
+            (click)="searchFood()"
+            [disabled]="isLoading">
+      @if (isLoading) {
+        ⏳...
+      } @else {
+        Search
+      }
+    </button>
+  </div>
+
+  @if (searchResults.length > 0) {
+
+    <div class="search-backdrop" (click)="closeSearch()"></div>
+
+    <div class="results-grid">
+      @for (food of searchResults; track food.name) {
+
+        <div class="result-card" (click)="selectFood(food)">
+
+          <div class="card-image"
+               [style.background-image]="'url(' + (food.image || 'https://placehold.co/300x200/png?text=No+Image') + ')'">
+          </div>
+
+          <div class="card-details">
+            <strong>{{ food.name }}</strong>
+            <div class="card-values">
+              <span>🔥 {{ food.nutriments.calories }} kcal</span>
+            </div>
+          </div>
+
+        </div>
+      }
+    </div>
+  }
+
+  @if (selectedFood) {
+    <div class="editor-panel">
+      <h3>How many grams of "{{ selectedFood.name }}"?</h3>
+
+      <div class="input-group">
+        <input type="number" [(ngModel)]="inputGrams">
+        <span>grams</span>
+      </div>
+
+      <div class="preview">
+        <p>Values for {{ inputGrams }}g:</p>
+        <ul>
+          <li>🔥 Kcal: {{ (selectedFood.nutriments.calories * inputGrams / 100) | number:'1.0-0' }}</li>
+          <li>💪 Prot: {{ (selectedFood.nutriments.proteins * inputGrams / 100) | number:'1.0-1' }}g</li>
+        </ul>
+      </div>
+
+      <button class="btn-add" (click)="addToMeal()">➕ ADD TO DISH</button>
+      <button class="btn-cancel" (click)="selectedFood = null">Cancel</button>
+    </div>
+  }
+
+  <hr>
+
+  <h2>Your Dish:</h2>
+
+  <div class="meal-grid">
+    @for (item of myMeal; track item.name; let i = $index) {
+
+      <div class="quadrant-card" [style.background-image]="'url(' + item.image + ')'">
+
+        <div class="card-overlay">
+          <button class="btn-delete" (click)="removeFromMeal(i)">✖</button>
+
+          <div class="card-content">
+            <h4>{{ item.name }}</h4>
+            <span class="grams-badge">{{ item.grams }}g</span>
+
+            <div class="macros-mini">
+              <div>🔥 {{ item.calories }}</div>
+              <div>💪 {{ item.proteins }}p</div>
+              <div>🌾 {{ item.carbs }}c</div>
+              <div>🥑 {{ item.fats }}f</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    } @empty {
+      <p class="empty-msg">The plate is empty. Find an ingredient to start!</p>
+    }
+  </div>
+
+  @if (myMeal.length > 0) {
+    <div class="totals-footer">
+      <h3>TOTAL DISH</h3>
+      <div class="macro-row">
+        <div class="macro-box">🔥 {{ totals.calories }} Kcal</div>
+        <div class="macro-box">💪 {{ totals.proteins }}g Prot</div>
+        <div class="macro-box">🌾 {{ totals.carbs }}g Carb</div>
+        <div class="macro-box">🥑 {{ totals.fats }}g Fats</div>
+      </div>
+    </div>
+  }
+
+</div>
