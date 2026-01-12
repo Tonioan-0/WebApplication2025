@@ -1,6 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { SVG_ICONS } from '../shared/constants/svg-icons.constants';
 import { AuthService } from '../services/authService';
 import { AiChatButtonComponent } from './home-components/ai-chat-button/ai-chat-button.component';
@@ -18,7 +18,19 @@ export class HomeComponent {
   sidebarCollapsed = false;
   mobileMenuOpen = false;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
+
+  logOut(): void {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        // Even on error, redirect to login
+        this.router.navigate(['/login']);
+      }
+    });
+  }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
