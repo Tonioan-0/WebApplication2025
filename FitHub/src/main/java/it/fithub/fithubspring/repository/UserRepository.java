@@ -1,6 +1,9 @@
 package it.fithub.fithubspring.repository;
 
 import it.fithub.fithubspring.domain.User;
+import it.fithub.fithubspring.domain.proxy.UserProxy;
+import it.fithub.fithubspring.repository.community.AppointmentRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -13,9 +16,11 @@ import java.util.Optional;
 public class UserRepository {
 
     private final DataSource dataSource;
+    private final AppointmentRepository appointmentRepository;
 
-    public UserRepository(DataSource dataSource) {
+    public UserRepository(DataSource dataSource, @Lazy AppointmentRepository appointmentRepository) {
         this.dataSource = dataSource;
+        this.appointmentRepository = appointmentRepository;
     }
 
     public boolean existsByUsername(String username) {
@@ -186,11 +191,14 @@ public class UserRepository {
     }
 
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
-        User user = new User();
-        user.setId(rs.getLong("id"));
+        // Use Proxy for lazy loading
+        User user = new UserProxy(rs.getLong("id"), appointmentRepository);
+        // Note: ID is already set in constructor
+
         user.setUsername(rs.getString("username"));
         user.setEmail(rs.getString("email"));
         user.setPassword(rs.getString("password"));
+        // No need to set appointments manually, proxy handles it
         return user;
     }
 }

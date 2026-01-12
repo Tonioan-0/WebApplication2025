@@ -1,0 +1,409 @@
+/* Map-specific styles only */
+
+.map-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 80px);
+  background-color: var(--background);
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+}
+
+/* Custom Markers */
+:host ::ng-deep .custom-marker {
+  background: transparent;
+  border: none;
+}
+
+:host ::ng-deep .marker-pin {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-primary);
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow: var(--shadow-2), var(--elevation-1);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+:host ::ng-deep .marker-pin:hover {
+  transform: rotate(-45deg) scale(1.1);
+  box-shadow: var(--shadow-3), var(--elevation-2);
+}
+
+:host ::ng-deep .marker-pin svg {
+  transform: rotate(45deg);
+  color: var(--on-primary);
+}
+
+:host ::ng-deep .park-marker .marker-pin {
+  background: var(--gradient-secondary);
+}
+
+:host ::ng-deep .temp-marker .marker-pin {
+  background: var(--gradient-error);
+}
+
+:host ::ng-deep .user-marker .marker-pin {
+  background: var(--gradient-success);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Map Overlay */
+.map-overlay {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 90%;
+  max-width: 340px;
+}
+
+.search-bar {
+  padding: 12px 16px;
+  display: flex;
+  gap: var(--spacing-sm);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
+}
+
+.search-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--on-surface);
+  font-size: 16px;
+}
+
+.search-bar input::placeholder {
+  color: var(--on-surface-muted);
+}
+
+.search-btn {
+  background: transparent;
+  color: var(--on-surface-muted);
+  padding: 8px;
+  border-radius: var(--radius-md);
+}
+
+.search-btn:hover {
+  background: rgba(81, 97, 234, 0.15);
+  color: var(--on-surface);
+}
+
+.filter-chips {
+  display: flex;
+  gap: 12px;
+  padding: 4px;
+}
+
+.chip {
+  padding: 10px 18px;
+  color: var(--on-surface-variant);
+  border-radius: 24px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+}
+
+.chip.active {
+  color: var(--on-primary);
+  background: var(--gradient-secondary);
+}
+
+/* Location Card */
+.place-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-2), var(--elevation-1);
+  border: 1px solid var(--glass-border);
+  transform: translateY(120%);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 8px;
+}
+
+.place-card.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.place-card-image {
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(135deg, rgba(81, 97, 234, 0.15), rgba(255, 130, 67, 0.15));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.place-card-content {
+  padding: 24px;
+  position: relative;
+}
+
+.place-card-title {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.place-card-subtitle {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  color: var(--on-surface-muted);
+}
+
+.warning-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--gradient-error);
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 3px 12px rgba(255, 69, 87, 0.25);
+  color: #fff;
+}
+
+.warning-remove-btn {
+  background: rgba(255, 69, 87, 0.15);
+  color: #ff4757;
+  border: 1px solid rgba(255, 69, 87, 0.3);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-top: 12px;
+  display: inline-flex;
+  gap: 6px;
+}
+
+.place-card-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--on-surface);
+}
+
+.place-card-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+/* Buttons */
+.location-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  color: var(--on-surface);
+  box-shadow: var(--shadow-2);
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.location-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Selection Bottom Bar */
+.selection-bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 24px;
+  text-align: center;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--glass-border);
+  z-index: 1000;
+  animation: slideUp var(--transition);
+}
+
+.selection-hint {
+  color: var(--on-surface-muted);
+  font-size: 14px;
+}
+
+.btn-return {
+  background: var(--gradient-primary);
+  padding: 12px 32px;
+  border-radius: 24px;
+  font-weight: 600;
+  box-shadow: var(--shadow-2), var(--elevation-1);
+  color: var(--on-primary);
+}
+
+.btn-return:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-3), var(--elevation-2);
+}
+
+/* Create Modal */
+.modal-content {
+  background: var(--surface-dim);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp var(--transition);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.modal-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  margin: 0;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: var(--on-surface-variant);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all var(--transition);
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--on-surface-variant);
+  margin-bottom: 0.25rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  background: var(--surface-bright);
+  border: 1px solid var(--outline);
+  border-radius: 8px;
+  padding: 0.5rem;
+  color: var(--on-surface);
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.coords-info {
+  padding: 12px 16px;
+  background: var(--surface-bright);
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-md);
+  color: var(--on-surface-muted);
+  font-size: 14px;
+  font-family: 'Courier New', monospace;
+  margin: 0;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.btn-cancel,
+.btn-save {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-cancel {
+  background: var(--surface-bright);
+  color: var(--on-surface);
+}
+
+.btn-save {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-save:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+}
+
+@media (max-width: 640px) {
+  .map-overlay {
+    max-width: calc(100% - 32px);
+  }
+
+  .location-btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .create-modal {
+    padding: 24px;
+  }
+}

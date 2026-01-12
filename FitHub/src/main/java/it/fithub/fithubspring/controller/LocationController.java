@@ -31,4 +31,14 @@ public class LocationController {
     public List<LocationDTO> searchLocations(@RequestParam String q) {
         return locationService.searchLocations(q);
     }
+
+    @PostMapping
+    public LocationDTO createLocation(@RequestBody LocationDTO locationDTO) {
+        return locationService.createLocation(locationDTO);
+    }
+
+    @DeleteMapping("/{id}/warning")
+    public void removeWarning(@PathVariable Long id) {
+        locationService.removeWarning(id);
+    }
 }

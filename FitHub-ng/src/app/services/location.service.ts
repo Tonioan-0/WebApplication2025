@@ -52,4 +52,12 @@ export class LocationService {
         const params = new HttpParams().set('q', query);
         return this.http.get<Location[]>(`${this.apiUrl}/search`, { params });
     }
+
+    createLocation(location: Partial<Location>): Observable<Location> {
+        return this.http.post<Location>(this.apiUrl, location);
+    }
+
+    removeWarning(locationId: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${locationId}/warning`);
+    }
 }

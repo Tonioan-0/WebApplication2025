@@ -38,6 +38,28 @@ public class LocationService {
                 .collect(Collectors.toList());
     }
 
+    public LocationDTO createLocation(LocationDTO dto) {
+        Location location = new Location();
+        location.setName(dto.getName());
+        location.setType(dto.getType());
+        location.setLatitude(dto.getLat());
+        location.setLongitude(dto.getLng());
+        location.setAddress(dto.getAddress());
+        location.setRating(dto.getRating() != null ? dto.getRating() : 0.0);
+        location.setWarning(dto.getWarning());
+
+        Location savedLocation = locationRepository.save(location);
+        return convertToDTO(savedLocation);
+    }
+
+    public void removeWarning(Long locationId) {
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new RuntimeException("Location not found with id: " + locationId));
+
+        location.setWarning(null);
+        locationRepository.save(location);
+    }
+
     private LocationDTO convertToDTO(Location location) {
         return new LocationDTO(
                 location.getId(),
