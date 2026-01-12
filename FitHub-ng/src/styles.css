@@ -257,6 +257,152 @@ button {
     border-color: #e0e0e0;
 }
 
+/* Gradient Primary Button */
+.btn-gradient {
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    border: none;
+    background: var(--gradient-primary);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-gradient:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Danger Button */
+.btn-danger {
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-danger:hover {
+    opacity: 0.9;
+}
+
+/* Secondary / Outline Button */
+.btn-secondary {
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--outline);
+    background: transparent;
+    color: var(--on-surface-variant);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    border-color: var(--primary);
+    color: var(--on-surface);
+}
+
+/* ========================================= Tabs ========================================= */
+
+.tabs {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.tabs button {
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-full);
+    color: var(--on-surface-variant);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.tabs button:hover {
+    border-color: var(--primary);
+    color: var(--on-surface);
+}
+
+.tabs button.active {
+    background: var(--gradient-primary);
+    border-color: transparent;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* ========================================= Pills / Badges ========================================= */
+
+.pill {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--surface-dim);
+    color: var(--on-surface-variant);
+    border: 1px solid var(--outline);
+}
+
+.pill-primary {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--primary);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* ========================================= Alerts ========================================= */
+
+.alert {
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+.alert-error, .alert.error {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.alert-success, .alert.success {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.alert-info {
+    background: var(--gradient-primary);
+}
+
+/* ========================================= Empty State ========================================= */
+
+.empty-state {
+    padding: 40px;
+    text-align: center;
+    color: var(--on-surface-muted);
+    font-size: 14px;
+}
+
 /* ========================================= Forms ========================================= */
 
 .form-input,

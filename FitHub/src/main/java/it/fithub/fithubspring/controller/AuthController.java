@@ -31,7 +31,7 @@ public class AuthController {
             User user = userService.register(request);
 
             return ResponseEntity.ok(
-                    new AuthResponse("Registration successful", user.getUsername()));
+                    new AuthResponse("Registration successful", user.getUsername(), user.getId()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -54,7 +54,7 @@ public class AuthController {
             // Store user in session
             session.setAttribute("user", user);
 
-            return ResponseEntity.ok(new AuthResponse("Login successful", user.getUsername()));
+            return ResponseEntity.ok(new AuthResponse("Login successful", user.getUsername(), user.getId()));
 
         } catch (IllegalArgumentException e) {
             return ResponseEntity
@@ -70,14 +70,14 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpSession session) {
         session.invalidate();
-        return ResponseEntity.ok(new AuthResponse("Logout successful", null));
+        return ResponseEntity.ok(new AuthResponse("Logout successful", null, null));
     }
 
     @GetMapping("/check")
     public ResponseEntity<?> checkAuth(HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user != null) {
-            return ResponseEntity.ok(new AuthResponse("Authenticated", user.getUsername()));
+            return ResponseEntity.ok(new AuthResponse("Authenticated", user.getUsername(), user.getId()));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
@@ -85,10 +85,12 @@ public class AuthController {
     static class AuthResponse {
         private String message;
         private String username;
+        private Long userId;
 
-        public AuthResponse(String message, String username) {
+        public AuthResponse(String message, String username, Long userId) {
             this.message = message;
             this.username = username;
+            this.userId = userId;
         }
 
         public String getMessage() {
@@ -97,6 +99,10 @@ public class AuthController {
 
         public String getUsername() {
             return username;
+        }
+
+        public Long getUserId() {
+            return userId;
         }
     }
 

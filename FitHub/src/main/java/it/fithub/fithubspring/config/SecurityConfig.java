@@ -27,6 +27,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/appointments/**").permitAll()
                         .requestMatchers("/api/notifications/**").permitAll()
                         .requestMatchers("/api/chat/**").permitAll()
+                        .requestMatchers("/api/exercises/**").permitAll()
+                        .requestMatchers("/api/workout-plans/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated());
         return http.build();

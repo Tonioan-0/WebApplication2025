@@ -10,7 +10,9 @@ import { environment } from '../../environments/environment';
 export class AuthService {
     private apiUrl = `${environment.apiUrl}/auth`;
     private currentUserSubject = new BehaviorSubject<string | null>(null);
+    private currentUserIdSubject = new BehaviorSubject<number | null>(null);
     public currentUser$ = this.currentUserSubject.asObservable();
+    public currentUserId$ = this.currentUserIdSubject.asObservable();
 
     constructor(private http: HttpClient) { }
 
@@ -28,22 +30,32 @@ export class AuthService {
         return this.http.post<any>(`${this.apiUrl}/login`, { email, password }, {
             withCredentials: true
         }).pipe(
-            tap(response => this.currentUserSubject.next(response.username))
+            tap(response => {
+                this.currentUserSubject.next(response.username);
+                this.currentUserIdSubject.next(response.userId);
+            })
         );
     }
 
     logout(): Observable<any> {
         return this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).pipe(
-            tap(() => this.currentUserSubject.next(null))
+            tap(() => {
+                this.currentUserSubject.next(null);
+                this.currentUserIdSubject.next(null);
+            })
         );
     }
 
     checkAuth(): Observable<boolean> {
         return this.http.get<any>(`${this.apiUrl}/check`, { withCredentials: true }).pipe(
-            tap(response => this.currentUserSubject.next(response.username)),
+            tap(response => {
+                this.currentUserSubject.next(response.username);
+                this.currentUserIdSubject.next(response.userId);
+            }),
             map(() => true),
             catchError(() => {
                 this.currentUserSubject.next(null);
+                this.currentUserIdSubject.next(null);
                 return of(false);
             })
         );
@@ -51,5 +63,9 @@ export class AuthService {
 
     getCurrentUsername(): string | null {
         return this.currentUserSubject.value;
+    }
+
+    getCurrentUserId(): number | null {
+        return this.currentUserIdSubject.value;
     }
 }

@@ -35,7 +35,7 @@ export const routes: Routes = [
       },
       {
         path: 'workouts',
-        loadComponent: () => import('./home/home-components/dashboard/dashboard').then(m => m.DashboardComponent),
+        loadComponent: () => import('./home/home-components/workout-plans/workout-plans').then(m => m.WorkoutPlans),
         title: 'FitHub - Workout Hub'
       },
       {
