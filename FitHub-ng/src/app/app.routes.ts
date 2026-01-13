@@ -51,7 +51,7 @@ export const routes: Routes = [
       },
       {
         path: 'nutrition',
-        loadComponent: () => import('./home/home-components/dashboard/dashboard').then(m => m.DashboardComponent),
+        loadComponent: () => import('./home/home-components/nutrition-planner/nutrition-planner.component').then(m => m.NutritionPlannerComponent),
         title: 'FitHub - Nutrition Center'
       },
       {
@@ -61,7 +61,7 @@ export const routes: Routes = [
       },
       {
         path: 'profile',
-        loadComponent: () => import('./home/home-components/dashboard/dashboard').then(m => m.DashboardComponent),
+        loadComponent: () => import('./home/home-components/profile/profile.component').then(m => m.ProfileComponent),
         title: 'FitHub - Profile'
       }
     ]

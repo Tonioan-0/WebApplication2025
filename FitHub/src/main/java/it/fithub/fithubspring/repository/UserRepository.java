@@ -198,7 +198,23 @@ public class UserRepository {
         user.setUsername(rs.getString("username"));
         user.setEmail(rs.getString("email"));
         user.setPassword(rs.getString("password"));
+        user.setIsPublic(rs.getBoolean("is_public"));
         // No need to set appointments manually, proxy handles it
         return user;
+    }
+
+    public void updateVisibility(Long id, boolean isPublic) {
+        String sql = "UPDATE app_user SET is_public = ? WHERE id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setBoolean(1, isPublic);
+            stmt.setLong(2, id);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating user visibility", e);
+        }
     }
 }
