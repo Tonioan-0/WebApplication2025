@@ -1,0 +1,294 @@
+<div class="section container fade-in">
+
+  <div class="section-header">
+    <span class="hero-badge">Health & Balance</span>
+    <h2>Nutrition Center</h2>
+    <p>Search for foods, build your meal plan, and save your progress to the database.</p>
+  </div>
+
+  <div class="search-wrapper">
+    <div class="search-box glass">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="searchFood()"
+        placeholder="Search for a food (e.g. Apple, Rice, Chicken...)"
+        class="form-input"
+      />
+
+      <button (click)="searchFood()" [disabled]="isLoading" class="btn-primary">
+        @if (!isLoading) {
+          <span>🔍 Search</span>
+        } @else {
+          <span>⏳ Loading...</span>
+        }
+      </button>
+
+      @if (searchResults.length > 0) {
+        <button (click)="closeSearch()" class="btn-outline-lg" style="padding: 0.75rem;">
+          ✖
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (searchResults.length > 0) {
+    <div class="search-backdrop" (click)="closeSearch()"></div>
+  }
+
+  @if (searchResults.length > 0) {
+    <div class="results-grid">
+      @for (food of searchResults; track $index) {
+        <div class="result-card" (click)="selectFood(food)">
+
+          <div
+            class="card-image"
+            [style.background-image]="'url(' + (food.image ? food.image : 'assets/placeholder-food.jpg') + ')'">
+          </div>
+
+          <div class="card-details">
+            <strong title="{{ food.name }}">{{ food.name }}</strong>
+            <div class="card-values">
+              🔥 {{ food.nutriments.calories | number:'1.0-0' }} kcal
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (selectedFood) {
+    <div class="editor-panel glass">
+      <h3>Customize: <span class="text-blue">{{ selectedFood.name }}</span></h3>
+
+      <div class="input-group">
+        <label>How many grams?</label>
+        <input type="number" [(ngModel)]="inputGrams" min="1" class="form-input" />
+        <span style="font-size: 1.2rem; font-weight: bold; color: var(--on-surface-variant)">g</span>
+      </div>
+
+      <div class="preview">
+        <ul>
+          <li>🔥 {{ (selectedFood.nutriments.calories * inputGrams / 100) | number:'1.0-0' }} kcal</li>
+          <li>🥩 {{ (selectedFood.nutriments.proteins * inputGrams / 100) | number:'1.1-1' }} P</li>
+          <li>🍞 {{ (selectedFood.nutriments.carbohydrates * inputGrams / 100) | number:'1.1-1' }} C</li>
+          <li>🥑 {{ (selectedFood.nutriments.fats * inputGrams / 100) | number:'1.1-1' }} F</li>
+        </ul>
+      </div>
+
+      <div style="margin-top: 20px; display: flex; gap: 10px;">
+        <button (click)="addToMeal()" class="btn-primary">Add to Meal</button>
+        <button (click)="selectedFood = null" class="btn-outline-lg" style="padding: 0.75rem 1.5rem; font-size: 1rem;">Cancel</button>
+      </div>
+    </div>
+  }
+
+  @if (myMeal.length > 0) {
+    <hr>
+  }
+
+  <div class="current-meal-section">
+    <div class="section-header" style="text-align: left; margin-bottom: 20px;">
+      <h3>Your Current Meal</h3>
+    </div>
+
+    @if (myMeal.length > 0) {
+      <div class="meal-grid">
+        @for (item of myMeal; track $index) {
+          <div class="quadrant-card" [style.background-image]="'url(' + item.image + ')'">
+
+            <div class="card-overlay">
+              <button class="btn-delete" (click)="removeFromMeal($index)">✖</button>
+
+              <div class="card-content">
+                <span class="grams-badge">{{ item.grams }}g</span>
+                <h4>{{ item.name }}</h4>
+
+                <div class="macros-mini">
+                  <span>{{ item.calories }} kcal</span>
+                  <span>P: {{ item.proteins }}</span>
+                  <span>C: {{ item.carbs }}</span>
+                  <span>F: {{ item.fats }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="empty-msg glass">
+        <p>Your plate is empty. Search for food above to start building your meal!</p>
+      </div>
+    }
+  </div>
+
+  @if (myMeal.length > 0) {
+    <div class="totals-footer glass">
+      <h3>Nutritional Summary</h3>
+
+      <div class="macro-row">
+        <div class="macro-box">
+          <span style="color: #ffcc00; font-size: 1.5rem;">{{ totals.calories | number:'1.0-0' }}</span>
+          <span>Kcal</span>
+        </div>
+        <div class="macro-box">
+          <span style="color: #ff6b6b; font-size: 1.5rem;">{{ totals.proteins | number:'1.0-0' }}g</span>
+          <span>Proteins</span>
+        </div>
+        <div class="macro-box">
+          <span style="color: #4ecdc4; font-size: 1.5rem;">{{ totals.carbs | number:'1.0-0' }}g</span>
+          <span>Carbs</span>
+        </div>
+        <div class="macro-box">
+          <span style="color: #ffe66d; font-size: 1.5rem;">{{ totals.fats | number:'1.0-0' }}g</span>
+          <span>Fats</span>
+        </div>
+      </div>
+
+      <button (click)="openSaveModal()" class="btn-save-db">💾 Save Meal to Diary</button>
+    </div>
+  }
+
+  <div class="history-section">
+    <div class="section-header">
+      <h3>Meal History</h3>
+    </div>
+
+    <div class="history-list">
+      @for (meal of mealHistory; track meal.id) {
+        <div class="history-card">
+
+          <div class="history-header">
+            <div>
+              <h4>{{ meal.name }}</h4>
+              <span>{{ meal.dateEaten | date:'dd MMM yyyy, HH:mm' }}</span>
+            </div>
+
+            <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
+              <span style="font-weight: bold; color: var(--primary);">{{ meal.totalCalories }} kcal</span>
+
+              <button class="btn-outline-lg"
+                      style="padding: 5px 15px; font-size: 0.8rem;"
+                      (click)="toggleDetails(meal.id)">
+                @if (expandedMealId === meal.id) { 🔼 Hide } @else { 🔽 Show }
+              </button>
+            </div>
+          </div>
+
+          @if (expandedMealId === meal.id) {
+            <div class="history-details fade-in" style="margin-top: 15px; border-top: 1px solid var(--outline); padding-top: 15px;">
+
+              <div class="meal-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));">
+
+                @for (item of meal.items; track item.id) {
+                  <div class="quadrant-card" [style.background-image]="'url(' + (item.imageUrl || 'assets/placeholder-food.jpg') + ')'" style="height: 180px;">
+
+                    <div class="card-overlay">
+
+                      <div style="position: absolute; top: 5px; right: 5px; display: flex; gap: 5px;">
+                        <button class="btn-delete" style="position: static;" (click)="askDeleteItem(item.id!)">🗑️</button>
+                      </div>
+
+                      <div class="card-content">
+
+                        @if (editingItemId === item.id) {
+                          <div class="edit-box" style="margin-bottom: 5px; background: rgba(0,0,0,0.8); padding: 5px; border-radius: 8px;">
+                            <input type="number" [value]="item.grams" #gramsInput class="form-input" style="padding: 2px 5px; width: 60px; text-align: center; height: 30px;" />
+                            <button class="btn-primary" style="padding: 2px 8px; font-size: 0.8rem; margin-left: 5px;"
+                                    (click)="updateItemInBackend(item, +gramsInput.value)">OK</button>
+                          </div>
+                        } @else {
+                          <div (click)="startEditing(item)" style="cursor: pointer; display: inline-block;" title="Click to edit grams">
+                            <span class="grams-badge">{{ item.grams }}g ✏️</span>
+                          </div>
+                        }
+
+                        <h4 style="font-size: 1rem;">{{ item.foodName }}</h4>
+
+                        <div class="macros-mini" style="font-size: 0.75rem;">
+                          <span>{{ item.calories }} kcal</span>
+                          <span>P:{{ item.proteins | number:'1.0-0' }}</span>
+                          <span>C:{{ item.carbs | number:'1.0-0' }}</span>
+                          <span>F:{{ item.fats | number:'1.0-0' }}</span>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                }
+
+              </div>
+            </div>
+          }
+          <button class="btn-delete-meal" (click)="askDeleteConfirmation(meal.id)" title="Delete entire meal">
+            🗑️ Delete Meal
+          </button>
+        </div>
+      } @empty {
+        <div class="empty-msg glass">
+          No meals saved yet.
+        </div>
+      }
+    </div>
+  </div>
+  @if (showDeleteModal) {
+    <div class="modal-backdrop fade-in">
+      <div class="modal-box glass">
+        <h3>⚠️ Delete Meal?</h3>
+        <p>Are you sure you want to delete this entire meal?<br>This action cannot be undone.</p>
+
+        <div class="modal-actions">
+          <button class="btn-outline-lg" (click)="closeModal()">Cancel</button>
+          <button class="btn-danger" (click)="confirmDelete()">Yes, Delete</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (showDeleteItemModal) {
+    <div class="modal-backdrop fade-in">
+      <div class="modal-box glass">
+        <h3>⚠️ Remove Item?</h3>
+        <p>Are you sure you want to remove this food from your history?</p>
+
+        <div class="modal-actions">
+          <button class="btn-outline-lg" (click)="closeModal()">Cancel</button>
+          <button class="btn-danger" (click)="confirmDeleteItem()">Yes, Remove</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (showSaveModal) {
+    <div class="modal-backdrop fade-in">
+      <div class="modal-box glass">
+        <h3>💾 Name Your Meal</h3>
+        <p>Give this meal a name to find it easily later.</p>
+
+        <div style="margin: 20px 0;">
+          <input type="text" [(ngModel)]="mealNameInput" class="form-input" placeholder="e.g. Breakfast, Post-Workout..." style="text-align: center; font-size: 1.1rem;">
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-outline-lg" (click)="closeModal()">Cancel</button>
+          <button class="btn-primary" (click)="confirmSaveMeal()">Save Meal</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (alertMessage) {
+    <div class="modal-backdrop fade-in" style="z-index: 3000;">
+      <div class="modal-box glass" style="max-width: 350px;">
+
+        @if (alertType === 'success') { <h3 style="color: #4caf50;">Success</h3> }
+        @if (alertType === 'error') { <h3 style="color: #ff6b6b;">Error</h3> }
+        @if (alertType === 'warning') { <h3 style="color: #ffcc00;">Warning</h3> }
+
+        <p style="font-size: 1.1rem;">{{ alertMessage }}</p>
+
+        <button class="btn-primary" (click)="closeAlert()">OK</button>
+      </div>
+    </div>
+  }
+</div>
