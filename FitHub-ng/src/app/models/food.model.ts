@@ -8,3 +8,22 @@ export interface FoodProduct {
     fats: number;          // fat_100g
   };
 }
+
+export interface SavedMealItem {
+  id: number;
+  foodName: string;
+  imageUrl?: string;
+  grams: number;
+  calories: number;
+  proteins: number;
+  carbs: number;
+  fats: number;
+}
+
+export interface SavedMeal {
+  id: number;
+  name: string;
+  totalCalories: number;
+  dateEaten: string;
+  items: SavedMealItem[];
+}

@@ -51,7 +51,7 @@ export const routes: Routes = [
       },
       {
         path: 'nutrition',
-        loadComponent: () => import('./home/home-components/dashboard/dashboard').then(m => m.DashboardComponent),
+        loadComponent: () => import('./nutrition-planner/nutrition-planner.component').then(m => m.NutritionPlannerComponent),
         title: 'FitHub - Nutrition Center'
       },
       {
