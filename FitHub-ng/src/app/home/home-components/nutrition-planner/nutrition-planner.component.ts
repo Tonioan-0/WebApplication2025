@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { FoodService } from '../services/food.service';
-import { FoodProduct, SavedMeal } from '../models/food.model';
-import { MealService } from '../services/meal.service';
+import { FoodService } from '../../../services/food.service';
+import { FoodProduct, SavedMeal } from '../../../models/food.model';
+import { MealService } from '../../../services/meal.service';
 
 @Component({
   selector: 'app-nutrition-planner',
