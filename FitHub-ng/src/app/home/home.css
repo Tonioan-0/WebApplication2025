@@ -14,16 +14,6 @@
     transition: all 0.3s ease;
 }
 
-.logout-btn {
-    background: transparent;
-    border-color: red;
-    border-radius: var(--radius-sm);
-    border: 1px solid red;
-    color: red;
-    cursor: pointer;
-    padding: 4px;
-}
-
 /* Sidebar */
 .sidebar {
     width: var(--sidebar-width);
@@ -138,6 +128,7 @@
     padding: 0 40px;
     border-bottom: 1px solid var(--outline);
 }
+
 /*----INIAZIO STREAK BADGE----*/
 .streak-badge {
     background: var(--surface-dim);
@@ -158,6 +149,7 @@
 .streak-icon.frozen {
     color: #64B5F6;
 }
+
 .streak-badge.frozen {
     border-color: rgba(100, 181, 246, 0.3);
 }
@@ -166,6 +158,7 @@
 .streak-icon.fire-small {
     color: #FF9800;
 }
+
 .streak-badge.fire-small {
     border-color: rgba(255, 152, 0, 0.3);
 }
@@ -175,6 +168,7 @@
     color: #FF5722;
     filter: drop-shadow(0 0 4px rgba(255, 87, 34, 0.5));
 }
+
 .streak-badge.fire-medium {
     border-color: rgba(255, 87, 34, 0.3);
 }
@@ -185,16 +179,19 @@
     filter: drop-shadow(0 0 8px rgba(233, 30, 99, 0.5));
     animation: pulse 1.5s ease-in-out infinite;
 }
+
 .streak-badge.fire-large {
     border-color: rgba(233, 30, 99, 0.3);
 }
 
 /* STELLA (streak 25-49) */
 .streak-icon.star {
-    color: #D500F9; /* Vivid Purple */
+    color: #D500F9;
+    /* Vivid Purple */
     filter: drop-shadow(0 0 8px rgba(213, 0, 249, 0.6));
     animation: shine 2s ease-in-out infinite;
 }
+
 .streak-badge.star {
     border-color: rgba(213, 0, 249, 0.5);
     background: linear-gradient(135deg, rgba(74, 20, 140, 0.2), rgba(213, 0, 249, 0.2));
@@ -207,45 +204,78 @@
     filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7));
     animation: trophy-pulse 2s ease-in-out infinite;
 }
+
 .streak-badge.trophy {
     border-color: rgba(255, 215, 0, 0.5);
     background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(255, 215, 0, 0.2));
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
-@keyframes shine {
-    0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7)); }
-    50% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 1)); }
-}
-@keyframes trophy-pulse {
-    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(213, 0, 249, 0.6)); }
-    50% { transform: scale(1.2) rotate(10deg); filter: drop-shadow(0 0 15px rgba(213, 0, 249, 0.9)); }
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
 }
 
-.streak-info { /*contenitore streak*/
+@keyframes shine {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 1));
+    }
+}
+
+@keyframes trophy-pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 8px rgba(213, 0, 249, 0.6));
+    }
+
+    50% {
+        transform: scale(1.2) rotate(10deg);
+        filter: drop-shadow(0 0 15px rgba(213, 0, 249, 0.9));
+    }
+}
+
+.streak-info {
+    /*contenitore streak*/
     display: flex;
     flex-direction: column;
     font-size: 12px;
 }
-.streak-label { /*etichetta streak*/
+
+.streak-label {
+    /*etichetta streak*/
     color: var(--on-surface-variant);
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-.streak-value { /*valore streak*/
+
+.streak-value {
+    /*valore streak*/
     color: var(--secondary);
     font-weight: 600;
 }
+
 /*----FINE STREAK BADGE----*/
 .user-profile {
     display: flex;
     align-items: center;
     gap: 20px;
 }
+
 .notification-icon {
     position: relative;
     color: var(--on-surface-variant);
@@ -418,11 +448,12 @@ h1 {
     }
 
     /*Solo Icona per Streak*/
-    .streak-badge { 
+    .streak-badge {
         display: flex;
         padding: 8px;
         gap: 0;
     }
+
     .streak-info {
         display: none;
     }

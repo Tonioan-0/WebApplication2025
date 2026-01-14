@@ -15,15 +15,15 @@
     <div class="stats-grid">
         <div class="stat-card">
             <h3>Allenamenti Settimana</h3>
-            <p class="stat-value">12</p>
+            <p class="stat-value">{{ weeklyWorkouts }}</p>
         </div>
         <div class="stat-card">
             <h3>Calorie Bruciate</h3>
-            <p class="stat-value">2,450</p>
+            <p class="stat-value">{{ caloriesBurned | number }}</p>
         </div>
         <div class="stat-card">
             <h3>Minuti Attivi</h3>
-            <p class="stat-value">340</p>
+            <p class="stat-value">{{ activeMinutes }}</p>
         </div>
     </div>
 </div>
