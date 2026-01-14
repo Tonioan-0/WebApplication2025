@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict wVBmce96FKnGdq5BrqinlSRLTszoe07mPWM307Ygn7eQSmeGfcJX8vuDLlSQNCc
+\restrict cpQw0I67b1DN6wNXaJxTwIAtondcknnIlyLZ7QTgVO9OJEyqw4hCmkg7BYhtzU3
 
 -- Dumped from database version 18.1
 -- Dumped by pg_dump version 18.1
@@ -31,7 +31,12 @@ CREATE TABLE public.app_user (
     id bigint NOT NULL,
     email character varying(255) NOT NULL,
     username character varying(255) NOT NULL,
-    password character varying(255)
+    password character varying(255),
+    is_public boolean DEFAULT false,
+    current_streak integer DEFAULT 0,
+    weekly_workouts_done integer DEFAULT 0,
+    week_start_date date,
+    last_workout_date date
 );
 
 
@@ -325,8 +330,12 @@ ALTER TABLE ONLY public.workout_plan ALTER COLUMN id SET DEFAULT nextval('public
 -- Data for Name: app_user; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.app_user (id, email, username, password) FROM stdin;
-
+COPY public.app_user (id, email, username, password, is_public, current_streak, weekly_workouts_done, week_start_date, last_workout_date) FROM stdin;
+8	simone@gmail.com	simone	$2a$10$N9qo8uLOickgx2ZMRZoMy.MqDxOr8pWn/nw0gS.S4/3.g3M/3vGCa	f	50	0	\N	\N
+1	demo@fithub.it	demo	$2a$10$N9qo8uLOickgx2ZMRZoMy.MqDxOr8pWn/nw0gS.S4/3.g3M/3vGCa	f	50	0	\N	\N
+9	nuovo@test.com	nuovoutente	$2a$10$dXJ3SW6G7P50lGmMkkmwe.t8.r9g3XwLZoEHmM4v6b6f1CJAB0o9m	f	50	0	\N	\N
+11	test@test.com	Test User	$2a$10$nB37uVf31g.Wz2aPf1d9iucb58alWwFl4F6ex82/f83fBgIbR3.SO	f	50	1	2026-01-12	2026-01-13
+10	nuovouser123@test.com	nuovouser	$2a$10$FkdZLPdIRl8fi9VGPwKX7OjCfZT7.ysmZs.92N842mDoG9B8ncd.a	f	50	2	2026-01-12	2026-01-14
 \.
 
 
@@ -342,28 +351,28 @@ COPY public.appointment (id, title, type, location, date_time, creator_id) FROM 
 -- Data for Name: exercise_preset; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.exercise_preset ("name",muscle_group,equipment,"path") VALUES
-	 ('Calf raises','Polpacci','Corpo libero','assets/exercises/calf-raises.png'),
-	 ('Croci manubri','Petto','Manubri','assets/exercises/croci-manubri.png'),
-	 ('Crunch','Addominali','Corpo libero','assets/exercises/crunch.png'),
-	 ('Curl manubri','Bicipiti','Manubri','assets/exercises/curl-manubri.png'),
-	 ('Dips','Tricipiti','Parallele','assets/exercises/dips.png'),
-	 ('French press','Tricipiti','Bilanciere','assets/exercises/french-press.png'),
-	 ('Lat machine','Dorsali','Macchina','assets/exercises/lat-machine.png'),
-	 ('Leg curl','Femorali','Macchina','assets/exercises/leg-curl.png'),
-	 ('Leg extension','Quadricipiti','Macchina','assets/exercises/leg-extension.png'),
-	 ('Leg press','Gambe','Macchina','assets/exercises/leg-press.png');
-INSERT INTO public.exercise_preset ("name",muscle_group,equipment,"path") VALUES
-	 ('Military press','Spalle','Bilanciere','assets/exercises/military-press.png'),
-	 ('Panca piana','Petto','Bilanciere','assets/exercises/panca-piana.png'),
-	 ('Plank','Core','Corpo libero','assets/exercises/plank.png'),
-	 ('Pull up','Dorsali','Sbarra','assets/exercises/pull-ups.png'),
-	 ('Push up','Petto','Corpo libero','assets/exercises/push-ups.png'),
-	 ('Rematore','Dorsali','Bilanciere','assets/exercises/rematore.png'),
-	 ('Squat','Gambe','Bilanciere','assets/exercises/squat.png'),
-	 ('Stacco da terra','Schiena','Bilanciere','assets/exercises/stacco-da-terra.png'),
-	 ('Affondi','Gambe','Corpo libero','../../../assets/exercises/affondi.png'),
-	 ('Alzate laterali','Spalle','Manubri','../assets/exercises/alzate-laterali.png');
+COPY public.exercise_preset (id, name, muscle_group, equipment, path) FROM stdin;
+17	Calf raises	Polpacci	Corpo libero	assets/exercises/calf-raises.png
+13	Croci manubri	Petto	Manubri	assets/exercises/croci-manubri.png
+20	Crunch	Addominali	Corpo libero	assets/exercises/crunch.png
+5	Curl manubri	Bicipiti	Manubri	assets/exercises/curl-manubri.png
+11	Dips	Tricipiti	Parallele	assets/exercises/dips.png
+16	French press	Tricipiti	Bilanciere	assets/exercises/french-press.png
+4	Lat machine	Dorsali	Macchina	assets/exercises/lat-machine.png
+18	Leg curl	Femorali	Macchina	assets/exercises/leg-curl.png
+19	Leg extension	Quadricipiti	Macchina	assets/exercises/leg-extension.png
+7	Leg press	Gambe	Macchina	assets/exercises/leg-press.png
+6	Military press	Spalle	Bilanciere	assets/exercises/military-press.png
+1	Panca piana	Petto	Bilanciere	assets/exercises/panca-piana.png
+8	Plank	Core	Corpo libero	assets/exercises/plank.png
+10	Pull up	Dorsali	Sbarra	assets/exercises/pull-ups.png
+9	Push up	Petto	Corpo libero	assets/exercises/push-ups.png
+14	Rematore	Dorsali	Bilanciere	assets/exercises/rematore.png
+2	Squat	Gambe	Bilanciere	assets/exercises/squat.png
+3	Stacco da terra	Schiena	Bilanciere	assets/exercises/stacco-da-terra.png
+12	Affondi	Gambe	Corpo libero	../../../assets/exercises/affondi.png
+15	Alzate laterali	Spalle	Manubri	../assets/exercises/alzate-laterali.png
+\.
 
 
 --
@@ -379,7 +388,66 @@ COPY public.friend_request (id, status, "timestamp", receiver_id, sender_id) FRO
 --
 
 COPY public.location (id, address, latitude, longitude, name, rating, type, warning) FROM stdin;
-
+1	Via del Corso, 1, Roma	41.902782	12.496366	FitHub Central Gym	4.8	gym	\N
+2	Piazza del Colosseo, 1, Roma	41.8986	12.5083	Colosseum Fitness	4.5	gym	Lat Machine broken
+3	Piazza della Rotonda, Roma	41.907	12.475	Pantheon Gym & Spa	4.9	gym	\N
+4	Via della Lungaretta, Roma	41.889	12.471	Trastevere CrossFit	4.6	gym	\N
+5	Via Galvani, Roma	41.8765	12.478	Testaccio Boxing Club	4.7	gym	Dips Bar broken
+6	Via Cola di Rienzo, Roma	41.9065	12.4565	Prati Fitness Center	4.4	gym	\N
+7	Via Cavour, Roma	41.8955	12.501	Esquilino Gym	4.3	gym	\N
+8	Via dei Serpenti, Roma	41.8945	12.492	Monti Strength Studio	4.8	gym	\N
+9	Via Marsala, Roma	41.901	12.5025	Termini Wellness	4.2	gym	Pull-up bar needs maintenance
+10	Piazza Campo de Fiori, Roma	41.8954	12.4724	Campo de Fiori Gym	4.5	gym	\N
+11	Piazzale Napoleone I, Roma	41.9109	12.4818	Villa Borghese Park	4.7	park	\N
+12	Piazza di Santa Maria, Roma	41.8929	12.4825	Trastevere Workout Park	4.3	park	\N
+13	Via di Santa Sabina, Roma	41.885	12.488	Aventine Hill Park	4.6	park	Running track under repair
+14	Via Aurelia Antica, Roma	41.885	12.45	Villa Pamphili	4.8	park	\N
+15	Via Salaria, Roma	41.9325	12.5	Villa Ada Park	4.7	park	\N
+16	Via Lemonia, Roma	41.855	12.545	Parco degli Acquedotti	4.9	park	\N
+17	Viale del Monte Oppio, Roma	41.8925	12.4975	Colle Oppio Park	4.4	park	\N
+18	Via della Caffarella, Roma	41.855	12.515	Parco della Caffarella	4.6	park	\N
+19	Via Nomentana, Roma	41.915	12.508	Villa Torlonia	4.5	park	\N
+20	Piazzale del Partigiano, Roma	41.928	12.475	Parco di Villa Glori	4.4	park	\N
+21	Via del Corso, 1, Roma	41.902782	12.496366	FitHub Central Gym	4.8	gym	\N
+22	Piazza del Colosseo, 1, Roma	41.8986	12.5083	Colosseum Fitness	4.5	gym	Lat Machine broken
+23	Piazza della Rotonda, Roma	41.907	12.475	Pantheon Gym & Spa	4.9	gym	\N
+24	Via della Lungaretta, Roma	41.889	12.471	Trastevere CrossFit	4.6	gym	\N
+25	Via Galvani, Roma	41.8765	12.478	Testaccio Boxing Club	4.7	gym	Dips Bar broken
+26	Via Cola di Rienzo, Roma	41.9065	12.4565	Prati Fitness Center	4.4	gym	\N
+27	Via Cavour, Roma	41.8955	12.501	Esquilino Gym	4.3	gym	\N
+28	Via dei Serpenti, Roma	41.8945	12.492	Monti Strength Studio	4.8	gym	\N
+29	Via Marsala, Roma	41.901	12.5025	Termini Wellness	4.2	gym	Pull-up bar needs maintenance
+30	Piazza Campo de Fiori, Roma	41.8954	12.4724	Campo de Fiori Gym	4.5	gym	\N
+31	Piazzale Napoleone I, Roma	41.9109	12.4818	Villa Borghese Park	4.7	park	\N
+32	Piazza di Santa Maria, Roma	41.8929	12.4825	Trastevere Workout Park	4.3	park	\N
+33	Via di Santa Sabina, Roma	41.885	12.488	Aventine Hill Park	4.6	park	Running track under repair
+34	Via Aurelia Antica, Roma	41.885	12.45	Villa Pamphili	4.8	park	\N
+35	Via Salaria, Roma	41.9325	12.5	Villa Ada Park	4.7	park	\N
+36	Via Lemonia, Roma	41.855	12.545	Parco degli Acquedotti	4.9	park	\N
+37	Viale del Monte Oppio, Roma	41.8925	12.4975	Colle Oppio Park	4.4	park	\N
+38	Via della Caffarella, Roma	41.855	12.515	Parco della Caffarella	4.6	park	\N
+39	Via Nomentana, Roma	41.915	12.508	Villa Torlonia	4.5	park	\N
+40	Piazzale del Partigiano, Roma	41.928	12.475	Parco di Villa Glori	4.4	park	\N
+41	Via del Corso, 1, Roma	41.902782	12.496366	FitHub Central Gym	4.8	gym	\N
+42	Piazza del Colosseo, 1, Roma	41.8986	12.5083	Colosseum Fitness	4.5	gym	Lat Machine broken
+43	Piazza della Rotonda, Roma	41.907	12.475	Pantheon Gym & Spa	4.9	gym	\N
+44	Via della Lungaretta, Roma	41.889	12.471	Trastevere CrossFit	4.6	gym	\N
+45	Via Galvani, Roma	41.8765	12.478	Testaccio Boxing Club	4.7	gym	Dips Bar broken
+46	Via Cola di Rienzo, Roma	41.9065	12.4565	Prati Fitness Center	4.4	gym	\N
+47	Via Cavour, Roma	41.8955	12.501	Esquilino Gym	4.3	gym	\N
+48	Via dei Serpenti, Roma	41.8945	12.492	Monti Strength Studio	4.8	gym	\N
+49	Via Marsala, Roma	41.901	12.5025	Termini Wellness	4.2	gym	Pull-up bar needs maintenance
+50	Piazza Campo de Fiori, Roma	41.8954	12.4724	Campo de Fiori Gym	4.5	gym	\N
+51	Piazzale Napoleone I, Roma	41.9109	12.4818	Villa Borghese Park	4.7	park	\N
+52	Piazza di Santa Maria, Roma	41.8929	12.4825	Trastevere Workout Park	4.3	park	\N
+53	Via di Santa Sabina, Roma	41.885	12.488	Aventine Hill Park	4.6	park	Running track under repair
+54	Via Aurelia Antica, Roma	41.885	12.45	Villa Pamphili	4.8	park	\N
+55	Via Salaria, Roma	41.9325	12.5	Villa Ada Park	4.7	park	\N
+56	Via Lemonia, Roma	41.855	12.545	Parco degli Acquedotti	4.9	park	\N
+57	Viale del Monte Oppio, Roma	41.8925	12.4975	Colle Oppio Park	4.4	park	\N
+58	Via della Caffarella, Roma	41.855	12.515	Parco della Caffarella	4.6	park	\N
+59	Via Nomentana, Roma	41.915	12.508	Villa Torlonia	4.5	park	\N
+60	Piazzale del Partigiano, Roma	41.928	12.475	Parco di Villa Glori	4.4	park	\N
 \.
 
 
@@ -396,7 +464,28 @@ COPY public.notification (id, is_read, message, "timestamp", type, user_id) FROM
 --
 
 COPY public.workout_item (id, exercise_id, "position", sets, reps, note, plan_id, day_of_week) FROM stdin;
-
+76	12	0	3	10		33	THURSDAY
+77	15	1	3	10		33	THURSDAY
+78	13	2	3	10		33	THURSDAY
+18	1	0	4	8	Panca piana - focus tecnica	19	MONDAY
+19	2	1	4	10	Squat profondo	19	MONDAY
+20	3	2	4	6	Stacco pesante	19	MONDAY
+21	4	0	4	12	Lat machine dorsali	19	WEDNESDAY
+22	5	1	3	12	Curl concentrato	19	WEDNESDAY
+23	6	0	4	8	Military press spalle	19	FRIDAY
+24	7	1	4	15	Leg press gambe	19	FRIDAY
+36	12	0	3	10		23	MONDAY
+37	15	0	3	10		23	WEDNESDAY
+38	17	1	3	10		23	WEDNESDAY
+39	15	0	3	10		23	SUNDAY
+40	12	0	3	10		24	MONDAY
+41	13	0	3	10		25	MONDAY
+43	15	0	3	10		27	TUESDAY
+44	12	0	3	10		28	MONDAY
+72	7	0	3	10		32	TUESDAY
+73	19	1	3	10		32	TUESDAY
+74	12	0	3	10		32	THURSDAY
+75	15	1	3	10		32	THURSDAY
 \.
 
 
@@ -405,8 +494,15 @@ COPY public.workout_item (id, exercise_id, "position", sets, reps, note, plan_id
 --
 
 COPY public.workout_plan (id, user_id, start_date, end_date, created_at, title) FROM stdin;
+19	1	2025-12-01	2025-12-31	2026-01-04 18:02:57.425263	Scheda Dicembre 2025
+23	1	2026-01-04	2026-01-04	2026-01-04 18:53:37.308402	Scheda Allenamento
+24	1	2026-01-12	2026-03-20	2026-01-12 21:21:39.763818	Scheda Allenamento
+25	10	2026-01-12	2026-01-12	2026-01-12 21:57:34.560799	Scheda Allenamento
+27	10	2026-01-12	2026-01-12	2026-01-12 23:04:36.211346	Scheda Allenamento
+28	11	2026-01-13	2026-01-13	2026-01-13 19:42:46.480671	Scheda Allenamento
+32	10	2026-01-13	2026-01-13	2026-01-13 23:25:16.08066	Scheda Allenamento
+33	10	2026-01-14	2026-01-14	2026-01-14 00:00:36.496343	Scheda Allenamento
 \.
-
 
 
 --
@@ -455,14 +551,14 @@ SELECT pg_catalog.setval('public.notification_id_seq', 5, true);
 -- Name: workout_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.workout_item_id_seq', 43, true);
+SELECT pg_catalog.setval('public.workout_item_id_seq', 78, true);
 
 
 --
 -- Name: workout_plan_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.workout_plan_id_seq', 27, true);
+SELECT pg_catalog.setval('public.workout_plan_id_seq', 33, true);
 
 
 --
@@ -668,5 +764,5 @@ ALTER TABLE ONLY public.workout_plan
 -- PostgreSQL database dump complete
 --
 
-\unrestrict wVBmce96FKnGdq5BrqinlSRLTszoe07mPWM307Ygn7eQSmeGfcJX8vuDLlSQNCc
+\unrestrict cpQw0I67b1DN6wNXaJxTwIAtondcknnIlyLZ7QTgVO9OJEyqw4hCmkg7BYhtzU3
 
