@@ -153,6 +153,41 @@ button {
     border: 1px solid var(--glass-border);
 }
 
+/* ========================================= Global Scrollbar ========================================= */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--surface-dim);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--primary) 0%, var(--accent-violet) 100%);
+    border-radius: var(--radius-full);
+    border: 2px solid var(--surface-dim);
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--accent-violet) 0%, var(--accent-pink) 100%);
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--surface-dim);
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--surface-dim);
+}
+
+/* Custom scrollbar utility class (for specific elements) */
 .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
 }
@@ -382,11 +417,13 @@ button {
     margin-bottom: 16px;
 }
 
-.alert-error, .alert.error {
+.alert-error,
+.alert.error {
     background: linear-gradient(135deg, #ef4444, #dc2626);
 }
 
-.alert-success, .alert.success {
+.alert-success,
+.alert.success {
     background: linear-gradient(135deg, #22c55e, #16a34a);
 }
 
@@ -435,7 +472,9 @@ button {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* ========================================= Progress Bar ========================================= */
