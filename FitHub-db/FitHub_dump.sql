@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict cpQw0I67b1DN6wNXaJxTwIAtondcknnIlyLZ7QTgVO9OJEyqw4hCmkg7BYhtzU3
+\restrict f8Yub5YWDrjZBwfHGms6hurFejmxnEboI4frWTHgvmUHsRQZoxBtwS12jOk3XBe
 
 -- Dumped from database version 18.1
 -- Dumped by pg_dump version 18.1
@@ -36,7 +36,8 @@ CREATE TABLE public.app_user (
     current_streak integer DEFAULT 0,
     weekly_workouts_done integer DEFAULT 0,
     week_start_date date,
-    last_workout_date date
+    last_workout_date date,
+    is_admin boolean DEFAULT false NOT NULL
 );
 
 
@@ -330,12 +331,12 @@ ALTER TABLE ONLY public.workout_plan ALTER COLUMN id SET DEFAULT nextval('public
 -- Data for Name: app_user; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.app_user (id, email, username, password, is_public, current_streak, weekly_workouts_done, week_start_date, last_workout_date) FROM stdin;
-8	simone@gmail.com	simone	$2a$10$N9qo8uLOickgx2ZMRZoMy.MqDxOr8pWn/nw0gS.S4/3.g3M/3vGCa	f	50	0	\N	\N
-1	demo@fithub.it	demo	$2a$10$N9qo8uLOickgx2ZMRZoMy.MqDxOr8pWn/nw0gS.S4/3.g3M/3vGCa	f	50	0	\N	\N
-9	nuovo@test.com	nuovoutente	$2a$10$dXJ3SW6G7P50lGmMkkmwe.t8.r9g3XwLZoEHmM4v6b6f1CJAB0o9m	f	50	0	\N	\N
-11	test@test.com	Test User	$2a$10$nB37uVf31g.Wz2aPf1d9iucb58alWwFl4F6ex82/f83fBgIbR3.SO	f	50	1	2026-01-12	2026-01-13
-10	nuovouser123@test.com	nuovouser	$2a$10$FkdZLPdIRl8fi9VGPwKX7OjCfZT7.ysmZs.92N842mDoG9B8ncd.a	f	50	2	2026-01-12	2026-01-14
+COPY public.app_user (id, email, username, password, is_public, current_streak, weekly_workouts_done, week_start_date, last_workout_date, is_admin) FROM stdin;
+8	simone@gmail.com	simone	$2a$10$N9qo8uLOickgx2ZMRZoMy.MqDxOr8pWn/nw0gS.S4/3.g3M/3vGCa	f	50	0	\N	\N	f
+1	demo@fithub.it	demo	$2a$10$N9qo8uLOickgx2ZMRZoMy.MqDxOr8pWn/nw0gS.S4/3.g3M/3vGCa	f	50	0	\N	\N	f
+9	nuovo@test.com	nuovoutente	$2a$10$dXJ3SW6G7P50lGmMkkmwe.t8.r9g3XwLZoEHmM4v6b6f1CJAB0o9m	f	50	0	\N	\N	f
+11	test@test.com	Test User	$2a$10$nB37uVf31g.Wz2aPf1d9iucb58alWwFl4F6ex82/f83fBgIbR3.SO	f	50	1	2026-01-12	2026-01-13	f
+10	nuovouser123@test.com	nuovouser	$2a$10$FkdZLPdIRl8fi9VGPwKX7OjCfZT7.ysmZs.92N842mDoG9B8ncd.a	f	50	2	2026-01-12	2026-01-14	f
 \.
 
 
@@ -764,5 +765,5 @@ ALTER TABLE ONLY public.workout_plan
 -- PostgreSQL database dump complete
 --
 
-\unrestrict cpQw0I67b1DN6wNXaJxTwIAtondcknnIlyLZ7QTgVO9OJEyqw4hCmkg7BYhtzU3
+\unrestrict f8Yub5YWDrjZBwfHGms6hurFejmxnEboI4frWTHgvmUHsRQZoxBtwS12jOk3XBe
 
