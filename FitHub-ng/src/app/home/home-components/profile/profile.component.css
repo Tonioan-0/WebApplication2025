@@ -72,6 +72,7 @@
 .profile-email {
   color: var(--on-surface-variant);
   font-size: 1rem;
+  padding-bottom: 1rem;
 }
 
 .settings-container {
@@ -140,7 +141,7 @@
   bottom: 3px;
   background-color: #fff;
   transition: .3s cubic-bezier(0.4, 0.0, 0.2, 1);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .slider.round {
@@ -151,12 +152,12 @@
   border-radius: 50%;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background: var(--primary);
   border-color: var(--primary);
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   transform: translateX(24px);
 }
 

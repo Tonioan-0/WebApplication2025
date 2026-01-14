@@ -25,11 +25,11 @@ export class HomeComponent implements OnInit {
   streakIcon: 'frozen' | 'fire-small' | 'fire-medium' | 'fire-large' | 'star' | 'trophy' = 'frozen';
 
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
     private router: Router,
     public streakService: StreakService,
     private cdr: ChangeDetectorRef  //per forzare aggiornamento pagina
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     //in ascolto su streakService per cambiaemnti streak
