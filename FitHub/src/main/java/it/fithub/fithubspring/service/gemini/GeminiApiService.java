@@ -32,7 +32,7 @@ public class GeminiApiService {
             history.add(Content.fromParts(Part.fromText(userMessage)));
 
             GenerateContentResponse response = client.models.generateContent(
-                    "gemini-2.0-flash-exp",
+                    "gemini-2.5-flash",
                     history,
                     generationConfig);
 

@@ -26,9 +26,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request, HttpSession session) {
         try {
             User user = userService.register(request);
+
+            // Auto-login: store user in session immediately after registration
+            session.setAttribute("user", user);
 
             return ResponseEntity.ok(
                     new AuthResponse("Registration successful", user.getUsername(), user.getId()));

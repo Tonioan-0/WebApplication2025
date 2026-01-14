@@ -15,7 +15,7 @@
                 </svg>
             </div>
             <div class="header-text">
-                <h3>AI Assistant</h3>
+                <h3>Assistente AI</h3>
                 <span class="status">Online</span>
             </div>
         </div>
@@ -55,8 +55,8 @@
     </div>
 
     <div class="input-container">
-        <textarea rows="1" [(ngModel)]="userInput" (keydown)="onKeyDown($event)" placeholder="Ask me anything..."
-            [disabled]="isLoading" class="chat-input"></textarea>
+        <textarea rows="1" [(ngModel)]="userInput" (keydown)="onKeyDown($event)"
+            placeholder="Chiedimi qualsiasi cosa..." [disabled]="isLoading" class="chat-input"></textarea>
         <button class="send-btn" (click)="sendMessage()" [disabled]="!userInput.trim() || isLoading">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                 <path [attr.d]="svgIcons.send" />

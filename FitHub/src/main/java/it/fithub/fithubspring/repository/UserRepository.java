@@ -64,7 +64,7 @@ public class UserRepository {
     }
 
     private User insert(User user) {
-        String sql = "INSERT INTO app_user (username, email, password) VALUES (?, ?, ?) RETURNING id";
+        String sql = "INSERT INTO app_user (username, email, password, is_admin) VALUES (?, ?, ?, ?) RETURNING id";
 
         try (Connection conn = dataSource.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -72,6 +72,7 @@ public class UserRepository {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
+            stmt.setBoolean(4, user.getIsAdmin() != null ? user.getIsAdmin() : false);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -199,6 +200,7 @@ public class UserRepository {
         user.setEmail(rs.getString("email"));
         user.setPassword(rs.getString("password"));
         user.setIsPublic(rs.getBoolean("is_public"));
+        user.setIsAdmin(rs.getBoolean("is_admin"));
         // No need to set appointments manually, proxy handles it
         return user;
     }
@@ -207,7 +209,7 @@ public class UserRepository {
         String sql = "UPDATE app_user SET is_public = ? WHERE id = ?";
 
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setBoolean(1, isPublic);
             stmt.setLong(2, id);

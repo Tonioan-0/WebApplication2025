@@ -1,7 +1,7 @@
 import { FormsModule } from '@angular/forms';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/authService';
 import { Router } from '@angular/router';
 
@@ -11,18 +11,26 @@ import { Router } from '@angular/router';
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   username: string = '';
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
   errorMessage: string = '';
   successMessage: string = '';
+  isAdmin: boolean = false;
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.isAdmin = params['admin'] === 'true';
+    });
+  }
 
   onSubmit() {
     this.errorMessage = '';
@@ -43,19 +51,18 @@ export class RegisterComponent {
       return;
     }
 
-    this.authService.register(this.username, this.email, this.password)
+    this.authService.register(this.username, this.email, this.password, this.isAdmin)
       .subscribe({
         next: (response) => {
-          console.log('Registration succes:', response);
-          this.successMessage = response.message || 'Registration completed successfully';
+          console.log('Registration success:', response);
+          this.successMessage = 'Registrazione completata!';
 
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 2000)
+          // Session is already created by backend, navigate directly to home
+          this.router.navigate(['/home']);
         },
         error: (error) => {
           console.error('Registration failed:', error);
-          this.errorMessage = error.error.message || 'Registration failed';
+          this.errorMessage = error.error?.message || 'Registrazione fallita';
         }
       });
   }

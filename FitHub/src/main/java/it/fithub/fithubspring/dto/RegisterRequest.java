@@ -4,14 +4,16 @@ public class RegisterRequest {
     private String username;
     private String password;
     private String email;
+    private Boolean isAdmin = false;
 
     public RegisterRequest() {
     }
 
-    public RegisterRequest(String username, String email, String password) {
+    public RegisterRequest(String username, String email, String password, Boolean isAdmin) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.isAdmin = isAdmin != null ? isAdmin : false;
     }
 
     public String getUsername() {
@@ -36,5 +38,13 @@ public class RegisterRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getIsAdmin() {
+        return isAdmin != null ? isAdmin : false;
+    }
+
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin != null ? isAdmin : false;
     }
 }

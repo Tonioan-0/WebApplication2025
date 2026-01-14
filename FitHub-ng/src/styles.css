@@ -747,7 +747,7 @@ h1 {
     gap: 2rem;
 }
 
-.card {
+header .card {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--outline);
     border-radius: var(--radius-lg);
@@ -834,6 +834,25 @@ h1 {
     color: #f97316;
 }
 
+/* ========================================= Logo ========================================= */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--on-surface);
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* ========================================= Goals ========================================= */
 
 .goal-card {
@@ -841,7 +860,6 @@ h1 {
     align-items: center;
     gap: 1.5rem;
     padding: 1.5rem;
-    background: #0f1011;
 }
 
 .goal-card h4 {

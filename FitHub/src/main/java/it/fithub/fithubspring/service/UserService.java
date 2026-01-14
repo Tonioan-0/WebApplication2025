@@ -43,6 +43,7 @@ public class UserService {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordHash);
+        user.setIsAdmin(request.getIsAdmin());
 
         return userRepository.save(user);
     }

@@ -16,14 +16,17 @@ export class AuthService {
 
     constructor(private http: HttpClient) { }
 
-    register(username: string, email: string, password: string): Observable<any> {
+    register(username: string, email: string, password: string, isAdmin: boolean = false): Observable<any> {
         const registerData = {
             username: username,
             email: email,
-            password: password
+            password: password,
+            isAdmin: isAdmin
         };
 
-        return this.http.post(`${this.apiUrl}/register`, registerData);
+        return this.http.post(`${this.apiUrl}/register`, registerData, {
+            withCredentials: true
+        });
     }
 
     login(email: string, password: string): Observable<any> {

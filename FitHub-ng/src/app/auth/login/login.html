@@ -1,8 +1,8 @@
 <div class="auth-container">
     <div class="auth-card">
         <div class="auth-header">
-            <h2>Welcome Back</h2>
-            <p>Enter your details to access your account</p>
+            <h2>Bentornato</h2>
+            <p>Inserisci i tuoi dati per accedere al tuo account</p>
         </div>
 
         <form (ngSubmit)="onSubmit()">
@@ -12,7 +12,7 @@
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" placeholder="name@company.com" [(ngModel)]="email" name="email" required>
+                <input type="email" id="email" placeholder="nome@esempio.com" [(ngModel)]="email" name="email" required>
             </div>
 
             <div class="form-group">
@@ -23,18 +23,18 @@
 
             <div class="form-options">
                 <label class="checkbox-label">
-                    <input type="checkbox"> Remember me
+                    <input type="checkbox"> Ricordami
                 </label>
-                <a href="#" class="forgot-link">Forgot password?</a>
+                <a href="#" class="forgot-link">Password dimenticata?</a>
             </div>
 
             <button type="submit" class="btn-primary w-100" [disabled]="isLoading">
-                {{ isLoading ? 'Signing in...' : 'Sign In' }}
+                {{ isLoading ? 'Accesso in corso...' : 'Accedi' }}
             </button>
         </form>
 
         <div class="auth-footer">
-            <p>Don't have an account? <a routerLink="/register">Sign up</a></p>
+            <p>Non hai un account? <a routerLink="/register">Registrati</a></p>
         </div>
     </div>
 </div>

@@ -3,9 +3,9 @@
 
   <div class="map-overlay">
     <div class="search-bar">
-      <input type="text" placeholder="Cerca palestre o parchi..." aria-label="Search for gyms or parks"
+      <input type="text" placeholder="Cerca palestre o parchi..." aria-label="Cerca palestre o parchi"
         [(ngModel)]="searchQuery" (input)="onSearchInput()" (keydown.enter)="performSearchNow()">
-      <button class="search-btn" (click)="performSearchNow()" aria-label="Search">
+      <button class="search-btn" (click)="performSearchNow()" aria-label="Cerca">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
           <path [attr.d]="svgIcons.search" />
         </svg>
@@ -14,7 +14,7 @@
 
     <div class="filter-chips">
       <!-- My Location Button Moved Here -->
-      <button class="location-btn" (click)="getUserLocation()" title="My Location" *ngIf="!isSelectionMode">
+      <button class="location-btn" (click)="getUserLocation()" title="La mia posizione" *ngIf="!isSelectionMode">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
           <path
             d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
@@ -25,19 +25,19 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
           <path [attr.d]="svgIcons.all" />
         </svg>
-        All
+        Tutti
       </div>
       <div class="chip" [class.active]="activeFilter === 'gym'" (click)="setFilter('gym')">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
           <path [attr.d]="svgIcons.gym" />
         </svg>
-        Gym
+        Palestra
       </div>
       <div class="chip" [class.active]="activeFilter === 'park'" (click)="setFilter('park')">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
           <path [attr.d]="svgIcons.park" />
         </svg>
-        Park
+        Parco
       </div>
     </div>
 
@@ -57,7 +57,8 @@
 
         <div class="place-card-content">
           <h2 class="place-card-title">{{ selectedLocation.name }}</h2>
-          <p class="place-card-subtitle">{{ selectedLocation.type === 'gym' ? 'Fitness Center' : 'Outdoor Park' }}</p>
+          <p class="place-card-subtitle">{{ selectedLocation.type === 'gym' ? 'Centro Fitness' : 'Parco all\'Aperto' }}
+          </p>
 
           <div class="warning-badge" *ngIf="selectedLocation.warning">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
@@ -67,9 +68,10 @@
           </div>
 
           <p class="place-card-description">
-            {{ selectedLocation.address }} - Discover this amazing {{ selectedLocation.type }} with a rating of {{
-            selectedLocation.rating }} stars.
-            Perfect for your fitness journey and outdoor activities.
+            {{ selectedLocation.address }} - Scopri questo fantastico {{ selectedLocation.type === 'gym' ? 'centro
+            fitness' : 'parco' }} con una valutazione di {{
+            selectedLocation.rating }} stelle.
+            Perfetto per il tuo percorso fitness e le attività all'aperto.
           </p>
 
           <button class="warning-remove-btn" *ngIf="selectedLocation.warning"
@@ -77,7 +79,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
               <path [attr.d]="svgIcons.close" />
             </svg>
-            Remove Warning
+            Rimuovi Avviso
           </button>
 
           <button class="place-card-close" (click)="closeInfoCard()">
@@ -94,10 +96,10 @@
 
   <div class="selection-bottom-bar" *ngIf="isSelectionMode">
     <span class="selection-hint" *ngIf="!selectedLocationData">
-      Select a mark or double tap to add a temporary pin
+      Seleziona un marker o tocca due volte per aggiungere un segnaposto temporaneo
     </span>
     <button class="btn-return" *ngIf="selectedLocationData" (click)="returnToAppointment()">
-      Return to appointment
+      Torna all'appuntamento
     </button>
   </div>
 
@@ -105,39 +107,39 @@
   <div class="modal-backdrop" *ngIf="showCreateModal" (click)="closeCreateModal()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2>Add New Location</h2>
+        <h2>Aggiungi Nuovo Luogo</h2>
         <button class="close-btn" (click)="closeCreateModal()">✕</button>
       </div>
 
       <form (ngSubmit)="submitNewLocation()">
         <div class="form-group">
-          <label for="locationName">Name *</label>
+          <label for="locationName">Nome *</label>
           <input type="text" id="locationName" [(ngModel)]="newLocation.name" name="name" required
-            placeholder="e.g., Gold's Gym">
+            placeholder="es. Palestra Gold">
         </div>
 
         <div class="form-group">
-          <label for="locationType">Type *</label>
+          <label for="locationType">Tipo *</label>
           <select id="locationType" [(ngModel)]="newLocation.type" name="type" required>
-            <option value="gym">Gym</option>
-            <option value="park">Park</option>
+            <option value="gym">Palestra</option>
+            <option value="park">Parco</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="locationAddress">Address *</label>
+          <label for="locationAddress">Indirizzo *</label>
           <input type="text" id="locationAddress" [(ngModel)]="newLocation.address" name="address" required
-            placeholder="e.g., 123 Main Street, Rome">
+            placeholder="es. Via Roma 123, Roma">
         </div>
 
         <div class="form-group">
-          <label>Coordinates</label>
+          <label>Coordinate</label>
           <p class="coords-info">{{ newLocation.lat.toFixed(6) }}, {{ newLocation.lng.toFixed(6) }}</p>
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="btn-cancel" (click)="closeCreateModal()">Cancel</button>
-          <button type="submit" class="btn-save">Create Location</button>
+          <button type="button" class="btn-cancel" (click)="closeCreateModal()">Annulla</button>
+          <button type="submit" class="btn-save">Crea Luogo</button>
         </div>
       </form>
     </div>
