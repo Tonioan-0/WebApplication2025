@@ -2,21 +2,27 @@
     <div class="page-header">
         <div>
             <h1>Dashboard Overview</h1>
-            <p>Welcome back! Here's your fitness summary</p>
+            <p>Bentornato! Ecco il tuo riepilogo fitness</p>
         </div>
     </div>
 
+    <!-- Active Workout Card (Separate Component) -->
+    <div class="workout-section">
+        <app-active-workout-card (workoutCompleted)="onWorkoutCompleted()"></app-active-workout-card>
+    </div>
+
+    <!-- Stats Grid -->
     <div class="stats-grid">
         <div class="stat-card">
-            <h3>Workouts This Week</h3>
+            <h3>Allenamenti Settimana</h3>
             <p class="stat-value">12</p>
         </div>
         <div class="stat-card">
-            <h3>Calories Burned</h3>
+            <h3>Calorie Bruciate</h3>
             <p class="stat-value">2,450</p>
         </div>
         <div class="stat-card">
-            <h3>Active Minutes</h3>
+            <h3>Minuti Attivi</h3>
             <p class="stat-value">340</p>
         </div>
     </div>

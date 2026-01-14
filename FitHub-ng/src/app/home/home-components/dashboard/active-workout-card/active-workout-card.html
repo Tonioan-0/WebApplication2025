@@ -1,0 +1,134 @@
+<!-- Rotella caricamento card -->
+<div class="workout-card loading" *ngIf="workoutState === 'loading'">
+    <div class="loading-content">
+        <div class="spinner"></div>
+        <span>Caricamento scheda...</span>
+    </div>
+</div>
+
+<!-- Main Workout Card -->
+<div class="workout-card" *ngIf="workoutState !== 'loading' && workoutState !== 'no-plan'">
+    
+    <!-- Preview State -->
+    <ng-container *ngIf="workoutState === 'idle' && todaysWorkout">
+        <div class="workout-header">
+            <div class="workout-day-badge" [class.today]="isToday()">
+                <svg class="icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <span>{{ isToday() ? 'Oggi' : todaysWorkout.dayLabel }}</span>
+            </div>
+            <span class="plan-title">{{ activePlan?.title }}</span>
+        </div>
+        <div class="workout-preview">
+            <div class="preview-info">
+                <div class="exercise-count">
+                    <span class="count-number">{{ todaysWorkout.items.length }}</span>
+                    <span class="count-label">Esercizi</span>
+                </div>
+                <div class="exercise-list-preview">
+                    <span *ngFor="let item of todaysWorkout.items.slice(0, 3)" class="exercise-chip">
+                        {{ item.exercise?.name || 'Esercizio' }}
+                    </span>
+                    <span *ngIf="todaysWorkout.items.length > 3" class="more-exercises">
+                        +{{ todaysWorkout.items.length - 3 }} altri
+                    </span>
+                </div>
+            </div>
+            <button class="start-btn" (click)="startWorkout()">
+                <svg class="icon-sm" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                AVVIA ALLENAMENTO
+            </button>
+        </div>
+    </ng-container>
+
+    <!-- Stato: In Progress -->
+    <ng-container *ngIf="workoutState === 'in-progress' && currentExercise">
+        <div class="workout-header in-progress">
+            <div class="progress-indicator">
+                <span>{{ currentExerciseIndex + 1 }} / {{ todaysWorkout!.items.length }}</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+                </div>
+            </div>
+        </div>
+        <div class="exercise-active">
+            <div class="exercise-image-container">
+                <img [src]="getExerciseImage(currentExercise)" 
+                     [alt]="currentExercise.exercise?.name || 'Esercizio'"
+                     class="exercise-image"
+                     (error)="$any($event.target).src = 'assets/exercises/default.png'">
+            </div>
+            <div class="exercise-details">
+                <h3 class="exercise-name">{{ currentExercise.exercise?.name || 'Esercizio' }}</h3>
+                <div class="exercise-meta">
+                    <span class="meta-item">
+                        <svg class="meta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                            <polyline points="2 17 12 22 22 17"/>
+                            <polyline points="2 12 12 17 22 12"/>
+                        </svg>
+                        {{ currentExercise.sets }} Serie
+                    </span>
+                    <span class="meta-item">
+                        <svg class="meta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="17 1 21 5 17 9"/>
+                            <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                            <polyline points="7 23 3 19 7 15"/>
+                            <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                        </svg>
+                        {{ currentExercise.reps }} Reps
+                    </span>
+                </div>
+                <p class="exercise-note" *ngIf="currentExercise.note">{{ currentExercise.note }}</p>
+                <p class="muscle-group" *ngIf="currentExercise.exercise?.muscleGroup">
+                    <svg class="muscle-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    {{ currentExercise.exercise?.muscleGroup }}
+                </p>
+            </div>
+            <button class="complete-exercise-btn" (click)="completeExercise()">
+                <svg class="check-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span>Completato</span>
+            </button>
+        </div>
+    </ng-container>
+
+    <!-- Stato: Completed -->
+    <ng-container *ngIf="workoutState === 'completed'">
+        <div class="workout-completed">
+            <svg class="completed-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <h3>Allenamento Completato!</h3>
+            <p>Ottimo lavoro! Hai completato tutti gli esercizi di oggi.</p>
+            <button class="reset-btn" (click)="resetWorkout()">Torna alla Dashboard</button>
+        </div>
+    </ng-container>
+</div>
+
+<!-- Stato: No Plan -->
+<div class="workout-card no-plan" *ngIf="workoutState === 'no-plan'">
+    <div class="no-plan-content">
+        <svg class="no-plan-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <h3>Nessuna scheda attiva</h3>
+        <p>Crea una nuova scheda di allenamento per iniziare</p>
+        <a routerLink="/home/workouts" class="create-plan-btn">Crea Scheda</a>
+    </div>
+</div>

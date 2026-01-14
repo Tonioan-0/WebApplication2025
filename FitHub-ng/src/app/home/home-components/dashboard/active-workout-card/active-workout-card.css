@@ -1,0 +1,312 @@
+/* =========================================
+   Active Workout Card Component
+   Uses global CSS from styles.css:
+   - .spinner, .loading-content
+   - .progress-bar, .progress-fill
+   ========================================= */
+/* ========================================= Card Base ========================================= */
+.workout-card {
+    background: var(--gradient-surface);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-lg);
+    border: 1px solid var(--outline);
+    box-shadow: var(--shadow-2);
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+.workout-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-3);
+}
+.workout-card.loading {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* ========================================= Header ========================================= */
+.workout-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+.workout-day-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background: var(--primary-container);
+    color: var(--on-primary-container);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 14px;
+}
+.workout-day-badge.today {
+    background: var(--gradient-primary);
+    color: var(--on-primary);
+}
+.day-icon {
+    font-size: 16px;
+}
+.plan-title {
+    color: var(--on-surface-variant);
+    font-size: 14px;
+}
+/* ========================================= Preview State ========================================= */
+.workout-preview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+.preview-info {
+    flex: 1;
+}
+.exercise-count {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+.count-number {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1;
+}
+.count-label {
+    font-size: 16px;
+    color: var(--on-surface-variant);
+}
+.exercise-list-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+.exercise-chip {
+    background: var(--surface-dim);
+    color: var(--on-surface);
+    padding: 6px var(--spacing-md);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid var(--outline);
+}
+.more-exercises {
+    color: var(--on-surface-muted);
+    font-size: 12px;
+    padding: 6px 0;
+}
+.start-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    background: var(--gradient-primary);
+    color: var(--on-primary);
+    border: none;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition);
+    box-shadow: var(--elevation-2);
+}
+.start-btn:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-3);
+}
+.btn-icon {
+    font-size: 20px;
+}
+/* ========================================= In Progress State ========================================= */
+.workout-header.in-progress {
+    margin-bottom: var(--spacing-lg);
+}
+.progress-indicator {
+    width: 100%;
+}
+.progress-indicator > span {
+    display: block;
+    text-align: center;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: var(--spacing-sm);
+}
+/* Note: .progress-bar and .progress-fill are now global in styles.css */
+.exercise-active {
+    display: flex;
+    gap: var(--spacing-lg);
+    align-items: center;
+}
+.exercise-image-container {
+    flex-shrink: 0;
+    width: 160px;
+    height: 160px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--surface-dim);
+    border: 1px solid var(--outline);
+}
+.exercise-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.exercise-details {
+    flex: 1;
+}
+.exercise-name {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 var(--spacing-md) 0;
+    color: var(--on-surface);
+}
+.exercise-meta {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+}
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primary);
+}
+.meta-icon {
+    font-size: 16px;
+}
+.exercise-note {
+    color: var(--on-surface-muted);
+    font-size: 14px;
+    font-style: italic;
+    margin: var(--spacing-sm) 0;
+}
+.muscle-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--on-surface-muted);
+    font-size: 13px;
+    margin: 0;
+}
+.muscle-icon {
+    font-size: 14px;
+}
+.complete-exercise-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background: var(--gradient-success);
+    color: white;
+    border: none;
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition);
+    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.4);
+}
+.complete-exercise-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+}
+.check-icon {
+    font-size: 28px;
+    font-weight: bold;
+}
+/* ========================================= Completed State ========================================= */
+.workout-completed {
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-lg);
+}
+.completed-icon {
+    font-size: 64px;
+    margin-bottom: var(--spacing-md);
+}
+.workout-completed h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--on-surface);
+}
+.workout-completed p {
+    color: var(--on-surface-variant);
+    margin: 0 0 var(--spacing-lg) 0;
+}
+.reset-btn {
+    background: var(--surface-dim);
+    color: var(--on-surface);
+    border: 1px solid var(--outline);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+.reset-btn:hover {
+    background: var(--surface-bright);
+    border-color: var(--primary);
+}
+/* ========================================= No Plan State ========================================= */
+.workout-card.no-plan {
+    background: var(--surface-dim);
+}
+.no-plan-content {
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-lg);
+}
+.no-plan-icon {
+    font-size: 48px;
+    margin-bottom: var(--spacing-md);
+}
+.no-plan-content h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 var(--spacing-sm) 0;
+}
+.no-plan-content p {
+    color: var(--on-surface-variant);
+    margin: 0 0 var(--spacing-lg) 0;
+}
+.create-plan-btn {
+    display: inline-block;
+    background: var(--gradient-primary);
+    color: var(--on-primary);
+    text-decoration: none;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: all var(--transition);
+}
+.create-plan-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: var(--elevation-1);
+}
+/* ========================================= Responsive ========================================= */
+@media (max-width: 768px) {
+    .workout-preview {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .start-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .exercise-active {
+        flex-direction: column;
+        text-align: center;
+    }
+    .exercise-meta {
+        justify-content: center;
+    }
+    .complete-exercise-btn {
+        width: 100%;
+    }
+}

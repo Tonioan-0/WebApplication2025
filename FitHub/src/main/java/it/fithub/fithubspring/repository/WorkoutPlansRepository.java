@@ -19,7 +19,7 @@ public class WorkoutPlansRepository {
     public WorkoutPlansRepository(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
     }
-
+    /*Crea un nuovo workout plan */
     @Transactional
     public WorkoutPlanDto create(WorkoutPlanDto plan) {
         Long planId = jdbc.queryForObject(
@@ -30,7 +30,30 @@ public class WorkoutPlansRepository {
                 Date.valueOf(plan.getStartDate()),
                 Date.valueOf(plan.getEndDate()));
 
-        for (WorkoutItemDto item : plan.getItems()) {
+        insertItems(planId, plan.getItems());
+
+        return new WorkoutPlanDto(planId, plan.getUserId(), plan.getTitle(), plan.getStartDate(), plan.getEndDate(), plan.getItems());
+    }
+
+    /*Aggiorna un workout plan esistente */
+    @Transactional
+    public WorkoutPlanDto update(Long planId, WorkoutPlanDto plan) {
+        jdbc.update(
+                "UPDATE workout_plan SET title = ?, start_date = ?, end_date = ? WHERE id = ?",
+                plan.getTitle(),
+                Date.valueOf(plan.getStartDate()),
+                Date.valueOf(plan.getEndDate()),
+                planId);
+
+        jdbc.update("DELETE FROM workout_item WHERE plan_id = ?", planId);
+        insertItems(planId, plan.getItems());
+
+        return new WorkoutPlanDto(planId, plan.getUserId(), plan.getTitle(), plan.getStartDate(), plan.getEndDate(), plan.getItems());
+    }
+
+    /*Inserisce gli item di un workout plan */
+    private void insertItems(Long planId, List<WorkoutItemDto> items) {
+        for (WorkoutItemDto item : items) {
             jdbc.update(
                     "INSERT INTO workout_item (plan_id, exercise_id, day_of_week, position, sets, reps, note) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     planId,
@@ -41,10 +64,9 @@ public class WorkoutPlansRepository {
                     item.reps(),
                     item.note());
         }
-
-        return new WorkoutPlanDto(planId, plan.getUserId(), plan.getTitle(), plan.getStartDate(), plan.getEndDate(), plan.getItems());
     }
 
+    /*Tutti gli allenamenti attivi per un utente */
     public List<WorkoutPlanDto> findActive(Long userId, LocalDate referenceDate) {
         String sql = """
                   SELECT id, user_id, title, start_date, end_date
@@ -59,6 +81,7 @@ public class WorkoutPlansRepository {
         return loadPlansByIds(userId, planIds);
     }
 
+    /*Tutti gli allenamenti scaduti per un utente */
     public List<WorkoutPlanDto> findExpired(Long userId, LocalDate referenceDate) {
         String sql = """
                   SELECT id
@@ -71,10 +94,12 @@ public class WorkoutPlansRepository {
         return loadPlansByIds(userId, planIds);
     }
 
+    /*Elimina un allenamento esistente */
     public void delete(Long planId) {
         jdbc.update("DELETE FROM workout_plan WHERE id = ?", planId);
     }
 
+    /*Carica tutti gli allenamenti per un utente */
     private List<WorkoutPlanDto> loadPlansByIds(Long userId, List<Long> planIds) {
         List<WorkoutPlanDto> out = new ArrayList<>();
         for (Long planId : planIds) {

@@ -403,6 +403,74 @@ button {
     font-size: 14px;
 }
 
+/* ========================================= Loading & Spinner ========================================= */
+
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    color: var(--on-surface-muted);
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--outline);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.spinner-sm {
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
+}
+
+.spinner-lg {
+    width: 48px;
+    height: 48px;
+    border-width: 4px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================= Progress Bar ========================================= */
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--surface-dim);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.progress-bar-sm {
+    height: 4px;
+}
+
+.progress-bar-lg {
+    height: 12px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-sm);
+    transition: width 0.4s ease;
+}
+
+.progress-fill-success {
+    background: var(--gradient-success);
+}
+
+.progress-fill-secondary {
+    background: var(--gradient-secondary);
+}
+
 /* ========================================= Forms ========================================= */
 
 .form-input,

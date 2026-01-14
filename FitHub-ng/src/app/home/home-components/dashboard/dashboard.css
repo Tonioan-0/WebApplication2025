@@ -1,18 +1,18 @@
 .content-area {
-    padding: 40px;
+    padding: var(--spacing-xl);
 }
 
 .page-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 32px;
+    margin-bottom: var(--spacing-xl);
 }
 
 .page-header h1 {
     font-size: 28px;
     font-weight: 700;
-    margin: 0 0 8px 0;
+    margin: 0 0 var(--spacing-sm) 0;
 }
 
 .page-header p {
@@ -21,30 +21,40 @@
     font-size: 14px;
 }
 
+/* ========================================= Workout Section ========================================= */
+
+.workout-section {
+    margin-bottom: var(--spacing-xl);
+}
+
+/* ========================================= Stats Grid ========================================= */
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 24px;
-    margin-bottom: 32px;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
 }
 
 .stat-card {
-    background: var(--surface);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
     border-radius: var(--radius-lg);
-    padding: 24px;
+    padding: var(--spacing-lg);
     border: 1px solid var(--outline);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform var(--transition), box-shadow var(--transition);
 }
 
 .stat-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-2);
+    border-color: var(--primary);
 }
 
 .stat-card h3 {
     font-size: 14px;
     color: var(--on-surface-variant);
-    margin: 0 0 12px 0;
+    margin: 0 0 var(--spacing-md) 0;
     font-weight: 500;
 }
 
@@ -55,9 +65,11 @@
     margin: 0;
 }
 
+/* ========================================= Responsive ========================================= */
+
 @media (max-width: 768px) {
     .content-area {
-        padding: 20px;
+        padding: var(--spacing-lg);
     }
 
     .stats-grid {

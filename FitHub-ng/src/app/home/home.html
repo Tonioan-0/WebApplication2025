@@ -84,14 +84,17 @@
                 </svg>
             </button>
 
-            <div class="streak-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"
-                    class="fire-icon">
-                    <path [attr.d]="icons.fire" />
+            <div class="streak-badge" [class]="streakIcon">
+                <!-- Dynamic Streak Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" 
+                     [class]="'streak-icon ' + streakIcon"
+                     [attr.width]="streakIcon === 'fire-large' ? 28 : (streakIcon === 'frozen' || streakIcon === 'fire-small' ? 20 : 24)"
+                     [attr.height]="streakIcon === 'fire-large' ? 28 : (streakIcon === 'frozen' || streakIcon === 'fire-small' ? 20 : 24)">
+                    <path [attr.d]="streakIconPath"/>
                 </svg>
                 <div class="streak-info">
                     <span class="streak-label">Daily Streak</span>
-                    <span class="streak-value">12 days</span>
+                    <span class="streak-value">{{ streakLabel }}</span>
                 </div>
             </div>
 

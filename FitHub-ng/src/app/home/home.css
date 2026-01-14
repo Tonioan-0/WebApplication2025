@@ -131,14 +131,14 @@
 
 /* Header */
 .top-header {
-    height: 80px;
+    min-height: 80px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 40px;
     border-bottom: 1px solid var(--outline);
 }
-
+/*----INIAZIO STREAK BADGE----*/
 .streak-badge {
     background: var(--surface-dim);
     padding: 8px 16px;
@@ -147,36 +147,105 @@
     align-items: center;
     gap: 12px;
     border: 1px solid var(--outline);
+    transition: all 0.3s ease;
 }
 
-.fire-icon {
-    color: var(--accent-pink);
+.streak-icon {
+    transition: all 0.3s ease;
 }
 
-.streak-info {
+/* GIACCIO (streak = 0) */
+.streak-icon.frozen {
+    color: #64B5F6;
+}
+.streak-badge.frozen {
+    border-color: rgba(100, 181, 246, 0.3);
+}
+
+/* FUOCO PICCOLO (streak 1-4) */
+.streak-icon.fire-small {
+    color: #FF9800;
+}
+.streak-badge.fire-small {
+    border-color: rgba(255, 152, 0, 0.3);
+}
+
+/* FUOCO MEDIO (streak 5-9) */
+.streak-icon.fire-medium {
+    color: #FF5722;
+    filter: drop-shadow(0 0 4px rgba(255, 87, 34, 0.5));
+}
+.streak-badge.fire-medium {
+    border-color: rgba(255, 87, 34, 0.3);
+}
+
+/* FUOCO GRANDE (streak 10-24) */
+.streak-icon.fire-large {
+    color: #E91E63;
+    filter: drop-shadow(0 0 8px rgba(233, 30, 99, 0.5));
+    animation: pulse 1.5s ease-in-out infinite;
+}
+.streak-badge.fire-large {
+    border-color: rgba(233, 30, 99, 0.3);
+}
+
+/* STELLA (streak 25-49) */
+.streak-icon.star {
+    color: #D500F9; /* Vivid Purple */
+    filter: drop-shadow(0 0 8px rgba(213, 0, 249, 0.6));
+    animation: shine 2s ease-in-out infinite;
+}
+.streak-badge.star {
+    border-color: rgba(213, 0, 249, 0.5);
+    background: linear-gradient(135deg, rgba(74, 20, 140, 0.2), rgba(213, 0, 249, 0.2));
+    box-shadow: 0 0 10px rgba(213, 0, 249, 0.15);
+}
+
+/* TROFEO (streak 50+) */
+.streak-icon.trophy {
+    color: #FFD700;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7));
+    animation: trophy-pulse 2s ease-in-out infinite;
+}
+.streak-badge.trophy {
+    border-color: rgba(255, 215, 0, 0.5);
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(255, 215, 0, 0.2));
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+@keyframes shine {
+    0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7)); }
+    50% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 1)); }
+}
+@keyframes trophy-pulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(213, 0, 249, 0.6)); }
+    50% { transform: scale(1.2) rotate(10deg); filter: drop-shadow(0 0 15px rgba(213, 0, 249, 0.9)); }
+}
+
+.streak-info { /*contenitore streak*/
     display: flex;
     flex-direction: column;
     font-size: 12px;
 }
-
-.streak-label {
+.streak-label { /*etichetta streak*/
     color: var(--on-surface-variant);
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
-.streak-value {
+.streak-value { /*valore streak*/
     color: var(--secondary);
     font-weight: 600;
 }
-
+/*----FINE STREAK BADGE----*/
 .user-profile {
     display: flex;
     align-items: center;
     gap: 20px;
 }
-
 .notification-icon {
     position: relative;
     color: var(--on-surface-variant);
@@ -328,6 +397,12 @@ h1 {
 
     .top-header {
         padding: 0 20px;
+        justify-content: flex-start;
+        gap: 16px;
+    }
+
+    .user-profile {
+        margin-left: auto;
     }
 
     .content-area {
@@ -342,7 +417,13 @@ h1 {
         left: -100%;
     }
 
-    .streak-badge {
+    /*Solo Icona per Streak*/
+    .streak-badge { 
+        display: flex;
+        padding: 8px;
+        gap: 0;
+    }
+    .streak-info {
         display: none;
     }
 }

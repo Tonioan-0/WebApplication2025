@@ -5,6 +5,7 @@ import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-
 
 import { ExercisesService } from '../../../services/exercises.service';
 import { WorkoutPlansService } from '../../../services/workout-plans.service';
+import { WorkoutUtilsService } from '../../../services/workout-utils.service';
 import { AuthService } from '../../../services/authService';
 import { ExercisePreset } from '../../../models/exercise.model';
 import { DayOfWeek, WorkoutPlan, WorkoutPlanItem } from '../../../models/workout-plan.model';
@@ -25,9 +26,9 @@ export class WorkoutPlans implements OnInit {
 
   // UI piano
   selectedDay: DayOfWeek = 'MONDAY';
-  planTitle = 'Scheda Allenamento';
-  startDate = this.todayISO();
-  endDate = this.todayISO();
+  planTitle = '';
+  startDate = '';
+  endDate = '';
 
   // items per giorno (editor locale)
   dayItemsMap: Record<DayOfWeek, WorkoutPlanItem[]> = {
@@ -46,7 +47,8 @@ export class WorkoutPlans implements OnInit {
   tab: 'EDITOR' | 'ACTIVE' | 'EXPIRED' = 'EDITOR';
 
   // Stato modifica/dettagli
-  detailPlanId: number | null = null;   // scheda scaduta con dettagli aperti
+  detailPlanId: number | null = null;
+  editingPlanId: number | null = null;
 
   saving = false;
   errorMsg = '';
@@ -56,15 +58,18 @@ export class WorkoutPlans implements OnInit {
     private exercisesService: ExercisesService,
     private workoutPlansService: WorkoutPlansService,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef
-  ) { }
+    private cdr: ChangeDetectorRef,
+    public utils: WorkoutUtilsService
+  ) {}
 
   ngOnInit(): void {
+    this.startDate = this.utils.todayISO();
+    this.endDate = this.utils.todayISO();
     this.loadPresets();
     this.loadPlans();
   }
 
-  // ---------- LOAD ----------
+  // ---------- LOAD ESERCIZI----------
   loadPresets() {
     this.exercisesService.getPresets().subscribe({
       next: (data: ExercisePreset[]) => {
@@ -75,8 +80,9 @@ export class WorkoutPlans implements OnInit {
     });
   }
 
+  // ---------- LOAD SCHEDE ATTIVE/SCADUTE----------
   loadPlans() {
-    this.workoutPlansService.getActive(this.todayISO()).subscribe({
+    this.workoutPlansService.getActive(this.utils.todayISO()).subscribe({
       next: (p: WorkoutPlan[]) => (this.activePlans = p),
       error: () => (this.errorMsg = 'Errore nel caricamento schede attive.')
     });
@@ -99,16 +105,7 @@ export class WorkoutPlans implements OnInit {
   }
 
   getDayLabel(day: DayOfWeek): string {
-    const labels: Record<DayOfWeek, string> = {
-      MONDAY: 'Lunedì',
-      TUESDAY: 'Martedì',
-      WEDNESDAY: 'Mercoledì',
-      THURSDAY: 'Giovedì',
-      FRIDAY: 'Venerdì',
-      SATURDAY: 'Sabato',
-      SUNDAY: 'Domenica'
-    };
-    return labels[day];
+    return this.utils.getDayLabel(day);
   }
 
   // ---------- ADD (click) ----------
@@ -123,59 +120,14 @@ export class WorkoutPlans implements OnInit {
       reps: 10,
       note: ''
     });
-    this.reindex(items);
+    this.utils.reindexItems(items);
   }
 
-  // ---------- EXERCISE IMAGES ----------
+  // ---------- IMMAGINI ESERCIZI ----------
   getExerciseImage(exercise: ExercisePreset): string {
-  if (exercise.path) {
-    // aggiunge / per path assoluto
-    return exercise.path.startsWith('/') || exercise.path.startsWith('http') 
-      ? exercise.path 
-      : '/' + exercise.path;
+    return this.utils.getExerciseImageUrl(exercise);
   }
 
-  const nameMap: Record<string, string> = {
-    'panca piana': 'panca-piana',
-    'squat': 'squat',
-    'stacco da terra': 'stacco-da-terra',
-    'lat machine': 'lat-machine',
-    'curl manubri': 'curl-manubri',
-    'military press': 'military-press',
-    'leg press': 'leg-press',
-    'plank': 'plank',
-    'push up': 'push-ups',
-    'push ups': 'push-ups',
-    'piegamenti': 'push-ups',
-    'pull up': 'pull-ups',
-    'pull ups': 'pull-ups',
-    'trazioni': 'pull-ups',
-    'dips': 'dips',
-    'parallele': 'dips',
-    'affondi': 'affondi',
-    'lunges': 'affondi',
-    'croci manubri': 'croci-manubri',
-    'croci': 'croci-manubri',
-    'rematore': 'rematore',
-    'rematore bilanciere': 'rematore',
-    'barbell row': 'rematore',
-    'alzate laterali': 'alzate-laterali',
-    'lateral raise': 'alzate-laterali',
-    'french press': 'french-press',
-    'skull crusher': 'french-press',
-    'calf raise': 'calf-raises',
-    'calf raises': 'calf-raises',
-    'polpacci': 'calf-raises',
-    'leg curl': 'leg-curl',
-    'leg extension': 'leg-extension',
-    'crunch': 'crunch',
-    'addominali': 'crunch'
-  };
-  const key = exercise.name.toLowerCase();
-  const filename = nameMap[key] || 'default';
-  // Path assoluto per il fallback
-  return `/assets/exercises/${filename}.png`;
-}
   // ---------- DRAG & DROP ----------
   dropToDay(event: CdkDragDrop<any[]>) {
     if (event.previousContainer !== event.container) {
@@ -192,15 +144,15 @@ export class WorkoutPlans implements OnInit {
 
       const items = this.currentDayItems;
       items.splice(event.currentIndex, 0, newItem);
-      this.reindex(items);
+      this.utils.reindexItems(items);
       return;
     }
 
     moveItemInArray(this.currentDayItems, event.previousIndex, event.currentIndex);
-    this.reindex(this.currentDayItems);
+    this.utils.reindexItems(this.currentDayItems);
   }
 
-  // ---------- COUNTERS ----------
+  // ---------- COUNTERS ESERCIZI (+/-)----------
   incSets(item: WorkoutPlanItem) { item.sets = Math.min(99, item.sets + 1); }
   decSets(item: WorkoutPlanItem) { item.sets = Math.max(1, item.sets - 1); }
   incReps(item: WorkoutPlanItem) { item.reps = Math.min(999, item.reps + 1); }
@@ -208,7 +160,7 @@ export class WorkoutPlans implements OnInit {
 
   removeItem(index: number) {
     this.currentDayItems.splice(index, 1);
-    this.reindex(this.currentDayItems);
+    this.utils.reindexItems(this.currentDayItems);
   }
 
   // ---------- SAVE ----------
@@ -227,9 +179,8 @@ export class WorkoutPlans implements OnInit {
 
     // Raccogli tutti gli items da tutti i giorni
     const allItems: WorkoutPlanItem[] = [];
-    const days: DayOfWeek[] = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 
-    for (const day of days) {
+    for (const day of this.utils.dayOrder) {
       const dayItems = this.dayItemsMap[day];
       for (let i = 0; i < dayItems.length; i++) {
         allItems.push({
@@ -259,10 +210,15 @@ export class WorkoutPlans implements OnInit {
     console.log('Saving plan:', JSON.stringify(plan, null, 2));
 
     this.saving = true;
-    this.workoutPlansService.create(plan).subscribe({
+
+    const request$ = this.editingPlanId
+      ? this.workoutPlansService.update(this.editingPlanId, plan)
+      : this.workoutPlansService.create(plan);
+
+    request$.subscribe({
       next: () => {
         this.saving = false;
-        alert('✅ Scheda salvata con successo!');
+        alert(this.editingPlanId ? '✅ Scheda aggiornata!' : '✅ Scheda salvata!');
         window.location.reload();
       },
       error: (err: any) => {
@@ -281,48 +237,29 @@ export class WorkoutPlans implements OnInit {
   }
 
   // ---------- VALIDATION / UTILS ----------
-  todayISO(): string {
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const dd = String(d.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
-  }
-
   isDateRangeValid(): boolean {
-    const today = this.todayISO();
+    const today = this.utils.todayISO();
     return this.startDate >= today && this.endDate >= this.startDate;
   }
 
-  reindex(items: WorkoutPlanItem[]) {
-    items.forEach((it, idx) => (it.position = idx));
-  }
-
-
-
   // ---------- HELPER per visualizzazione schede salvate ----------
   getItemsByDay(plan: WorkoutPlan, day: DayOfWeek): WorkoutPlanItem[] {
-    return plan.items.filter((item: WorkoutPlanItem) => item.dayOfWeek === day);
+    return this.utils.getItemsByDay(plan, day);
   }
 
   getDaysWithItems(plan: WorkoutPlan): DayOfWeek[] {
-    const days = new Set<DayOfWeek>();
-    plan.items.forEach((item: WorkoutPlanItem) => days.add(item.dayOfWeek));
-    // Ordina i giorni
-    const order: DayOfWeek[] = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
-    return order.filter(d => days.has(d));
+    return this.utils.getDaysWithItems(plan);
   }
 
   // ---------- MODIFICA SCHEDA ATTIVA ----------
   editPlan(plan: WorkoutPlan) {
-    // Carica i dati della scheda nell'editor
+    this.editingPlanId = plan.id!;
     this.planTitle = plan.title;
     this.startDate = plan.startDate;
     this.endDate = plan.endDate;
 
     // Reset e popola i giorni
-    const days: DayOfWeek[] = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
-    days.forEach(d => (this.dayItemsMap[d] = []));
+    this.utils.dayOrder.forEach(d => (this.dayItemsMap[d] = []));
 
     for (const item of plan.items) {
       const exercise = this.presets.find(p => p.id === item.exerciseId);
@@ -332,40 +269,21 @@ export class WorkoutPlans implements OnInit {
       });
     }
 
-    // Vai all'editor
     this.tab = 'EDITOR';
     this.selectedDay = this.getDaysWithItems(plan)[0] || 'MONDAY';
   }
 
   // ---------- DETTAGLI SCHEDA SCADUTA ----------
   toggleDetails(planId: number) {
-    if (this.detailPlanId === planId) {
-      this.detailPlanId = null;
-    } else {
-      this.detailPlanId = planId;
-    }
+    this.detailPlanId = this.detailPlanId === planId ? null : planId;
   }
 
   // ---------- HELPER IMMAGINE PER ITEM ----------
   getItemImage(item: WorkoutPlanItem): string {
-    // Se l'item ha già l'esercizio caricato
-    if (item.exercise) {
-      return this.getExerciseImage(item.exercise);
-    }
-    // Altrimenti cerca nei presets
-    const preset = this.presets.find(p => p.id === item.exerciseId);
-    if (preset) {
-      return this.getExerciseImage(preset);
-    }
-    return 'assets/exercises/default.png';
+    return this.utils.getItemImageUrl(item, this.presets);
   }
 
   getItemName(item: WorkoutPlanItem): string {
-    if (item.exercise) {
-      return item.exercise.name;
-    }
-    const preset = this.presets.find(p => p.id === item.exerciseId);
-    return preset?.name || `Esercizio #${item.exerciseId}`;
+    return this.utils.getItemName(item, this.presets);
   }
 }
-

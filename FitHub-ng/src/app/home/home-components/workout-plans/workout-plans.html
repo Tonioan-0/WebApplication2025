@@ -21,7 +21,7 @@
 
       <div class="field"> <!--Data Inizio-->
         <label>Inizio</label>
-        <input type="date" [(ngModel)]="startDate" [min]="todayISO()">
+        <input type="date" [(ngModel)]="startDate" [min]="utils.todayISO()">
       </div>
 
       <div class="field"> <!--Data Fine-->
@@ -76,7 +76,7 @@
         </div>
       </aside>
 
-      <!-- RIGHT: day plan -->
+      <!-- DESTRA: day plan -->
       <main class="panel">
         <div class="panel-header">
           <h3>{{ getDayLabel(selectedDay) }}</h3>
@@ -175,7 +175,7 @@
         </button>
       </div>
 
-      <!-- Dettagli esercizi (collapsible) -->
+      <!-- Dettagli esercizi (collaps) -->
       <div class="plan-details" *ngIf="detailPlanId === p.id">
         <div class="day-section" *ngFor="let day of getDaysWithItems(p)">
           <h4 class="day-title">
@@ -239,7 +239,7 @@
         </button>
       </div>
 
-      <!-- Dettagli esercizi (collapsible) -->
+      <!-- Dettagli esercizi (collaps) -->
       <div class="plan-details" *ngIf="detailPlanId === p.id">
         <div class="day-section" *ngFor="let day of getDaysWithItems(p)">
           <h4 class="day-title">
