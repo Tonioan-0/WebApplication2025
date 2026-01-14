@@ -60,4 +60,8 @@ export class LocationService {
     removeWarning(locationId: number): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/${locationId}/warning`);
     }
+
+    deleteLocation(locationId: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${locationId}`);
+    }
 }

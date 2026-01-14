@@ -37,4 +37,11 @@
             <p>Don't have an account? <a routerLink="/register">Sign up</a></p>
         </div>
     </div>
+
+    <!-- Ban Popup for utenti bannati -->
+    <app-ban-popup 
+        *ngIf="showBanPopup" 
+        [reason]="banReason" 
+        (close)="closeBanPopup()">
+    </app-ban-popup>
 </div>

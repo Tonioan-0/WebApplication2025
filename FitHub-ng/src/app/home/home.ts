@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit {
   readonly icons = SVG_ICONS;
   sidebarCollapsed = false;
   mobileMenuOpen = false;
+  isAdmin = false;
 
   // Streak data
   streak: Streak = { currentStreak: 0, weeklyWorkoutsDone: 0, weeklyTarget: 3, lastWorkoutDate: null };
@@ -41,6 +42,12 @@ export class HomeComponent implements OnInit {
 
     // Richiedi dato iniziale
     this.streakService.refreshStreak();
+
+    // Subscribe to admin status
+    this.authService.isAdmin$.subscribe(isAdmin => {
+      this.isAdmin = isAdmin;
+      this.cdr.detectChanges();
+    });
   }
 
   loadStreak(): void {

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import it.fithub.fithubspring.dto.RegisterRequest;
 import it.fithub.fithubspring.service.UserService;
+import it.fithub.fithubspring.service.AdminService;
 import it.fithub.fithubspring.domain.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +21,11 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
     private final UserService userService;
+    private final AdminService adminService;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, AdminService adminService) {
         this.userService = userService;
+        this.adminService = adminService;
     }
 
     @PostMapping("/register")
@@ -31,7 +34,7 @@ public class AuthController {
             User user = userService.register(request);
 
             return ResponseEntity.ok(
-                    new AuthResponse("Registration successful", user.getUsername(), user.getId()));
+                    new AuthResponse("Registration successful", user.getUsername(), user.getId(), false));
         } catch (IllegalArgumentException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -51,10 +54,18 @@ public class AuthController {
 
             User user = userService.login(email, password);
 
-            // Store user in session
+            //check se l'utete e' bannato
+            if (adminService.isEmailBanned(email)) {
+                String reason = adminService.getBanReasonByEmail(email);
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body(new BannedResponse(true, reason));
+            }
+
             session.setAttribute("user", user);
 
-            return ResponseEntity.ok(new AuthResponse("Login successful", user.getUsername(), user.getId()));
+            return ResponseEntity.ok(new AuthResponse("Login successful", user.getUsername(), user.getId(), 
+                    Boolean.TRUE.equals(user.getIsAdmin())));
 
         } catch (IllegalArgumentException e) {
             return ResponseEntity
@@ -70,14 +81,15 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpSession session) {
         session.invalidate();
-        return ResponseEntity.ok(new AuthResponse("Logout successful", null, null));
+        return ResponseEntity.ok(new AuthResponse("Logout successful", null, null, false));
     }
 
     @GetMapping("/check")
     public ResponseEntity<?> checkAuth(HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user != null) {
-            return ResponseEntity.ok(new AuthResponse("Authenticated", user.getUsername(), user.getId()));
+            return ResponseEntity.ok(new AuthResponse("Authenticated", user.getUsername(), user.getId(),
+                    Boolean.TRUE.equals(user.getIsAdmin())));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
@@ -86,11 +98,13 @@ public class AuthController {
         private String message;
         private String username;
         private Long userId;
+        private Boolean isAdmin;
 
-        public AuthResponse(String message, String username, Long userId) {
+        public AuthResponse(String message, String username, Long userId, Boolean isAdmin) {
             this.message = message;
             this.username = username;
             this.userId = userId;
+            this.isAdmin = isAdmin;
         }
 
         public String getMessage() {
@@ -103,6 +117,29 @@ public class AuthController {
 
         public Long getUserId() {
             return userId;
+        }
+
+        public Boolean getIsAdmin() {
+            return isAdmin;
+        }
+    }
+
+    //classe per la risposta quando un utente e' bannato
+    static class BannedResponse {
+        private boolean banned;
+        private String reason;
+
+        public BannedResponse(boolean banned, String reason) {
+            this.banned = banned;
+            this.reason = reason;
+        }
+
+        public boolean isBanned() {
+            return banned;
+        }
+
+        public String getReason() {
+            return reason;
         }
     }
 

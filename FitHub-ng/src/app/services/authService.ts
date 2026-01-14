@@ -11,10 +11,19 @@ export class AuthService {
     private apiUrl = `${environment.apiUrl}/auth`;
     private currentUserSubject = new BehaviorSubject<string | null>(null);
     private currentUserIdSubject = new BehaviorSubject<number | null>(null);
+    private isAdminSubject = new BehaviorSubject<boolean>(false);
+    
     public currentUser$ = this.currentUserSubject.asObservable();
     public currentUserId$ = this.currentUserIdSubject.asObservable();
+    public isAdmin$ = this.isAdminSubject.asObservable();
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        // Restore isAdmin from localStorage on service init
+        const savedIsAdmin = localStorage.getItem('isAdmin');
+        if (savedIsAdmin === 'true') {
+            this.isAdminSubject.next(true);
+        }
+    }
 
     register(username: string, email: string, password: string): Observable<any> {
         const registerData = {
@@ -33,6 +42,9 @@ export class AuthService {
             tap(response => {
                 this.currentUserSubject.next(response.username);
                 this.currentUserIdSubject.next(response.userId);
+                const isAdmin = response.isAdmin === true;
+                this.isAdminSubject.next(isAdmin);
+                localStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
             })
         );
     }
@@ -42,6 +54,8 @@ export class AuthService {
             tap(() => {
                 this.currentUserSubject.next(null);
                 this.currentUserIdSubject.next(null);
+                this.isAdminSubject.next(false);
+                localStorage.removeItem('isAdmin');
             })
         );
     }
@@ -51,11 +65,16 @@ export class AuthService {
             tap(response => {
                 this.currentUserSubject.next(response.username);
                 this.currentUserIdSubject.next(response.userId);
+                const isAdmin = response.isAdmin === true;
+                this.isAdminSubject.next(isAdmin);
+                localStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
             }),
             map(() => true),
             catchError(() => {
                 this.currentUserSubject.next(null);
                 this.currentUserIdSubject.next(null);
+                this.isAdminSubject.next(false);
+                localStorage.removeItem('isAdmin');
                 return of(false);
             })
         );
@@ -67,5 +86,9 @@ export class AuthService {
 
     getCurrentUserId(): number | null {
         return this.currentUserIdSubject.value;
+    }
+
+    isAdmin(): boolean {
+        return this.isAdminSubject.value;
     }
 }

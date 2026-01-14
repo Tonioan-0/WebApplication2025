@@ -191,15 +191,12 @@ public class UserRepository {
     }
 
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
-        // Use Proxy for lazy loading
         User user = new UserProxy(rs.getLong("id"), appointmentRepository);
-        // Note: ID is already set in constructor
-
         user.setUsername(rs.getString("username"));
         user.setEmail(rs.getString("email"));
         user.setPassword(rs.getString("password"));
         user.setIsPublic(rs.getBoolean("is_public"));
-        // No need to set appointments manually, proxy handles it
+        user.setIsAdmin(rs.getBoolean("is_admin"));
         return user;
     }
 

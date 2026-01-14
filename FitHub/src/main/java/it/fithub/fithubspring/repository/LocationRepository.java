@@ -141,7 +141,6 @@ public class LocationRepository {
                 }
         }
 
-
         public List<Location> searchLocations(String query) {
                 if (query == null || query.trim().isEmpty()) {
                         return new ArrayList<>();
@@ -174,7 +173,6 @@ public class LocationRepository {
                 }
         }
 
-
         private List<Location> searchWithLike(String query) {
                 String pattern = "%" + query.trim() + "%";
                 String sql = "SELECT * FROM location " +
@@ -200,9 +198,7 @@ public class LocationRepository {
                 }
         }
 
-        /**
-         * Delete location by ID.
-         */
+        //rimuovi location con ID.
         public void deleteById(Long id) {
                 String sql = "DELETE FROM location WHERE id = ?";
 
@@ -213,6 +209,22 @@ public class LocationRepository {
                         stmt.executeUpdate();
                 } catch (SQLException e) {
                         throw new RuntimeException("Error deleting location", e);
+                }
+        }
+
+        //check se esiste una location con un certo id.
+        public boolean existsById(Long id) {
+                String sql = "SELECT 1 FROM location WHERE id = ?";
+
+                try (Connection conn = dataSource.getConnection();
+                                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                        stmt.setLong(1, id);
+                        try (ResultSet rs = stmt.executeQuery()) {
+                                return rs.next();
+                        }
+                } catch (SQLException e) {
+                        throw new RuntimeException("Error checking location existence", e);
                 }
         }
 
