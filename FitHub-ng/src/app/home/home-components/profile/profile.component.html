@@ -1,66 +1,34 @@
-<div class="section profile-section">
+<div class="container-fluid profile-container">
 
   @if (isLoading) {
-    <div class="loading-container">
+    <div class="text-center py-5">
       <div class="spinner-border text-primary" role="status"></div>
-      <p class="loading-text">Profile synchronization...</p>
     </div>
   }
 
   @if (!isLoading && userProfile) {
-    <div class="profile-card glass">
+    <div class="discord-card mx-auto fade-in">
 
-      <div class="profile-banner"></div>
+      <app-user-identity-card
+        [username]="userProfile.username"
+        [email]="userProfile.email">
+      </app-user-identity-card>
 
-      <div class="profile-body">
-        <div class="profile-avatar">
-          <span>{{ userProfile.username.charAt(0).toUpperCase() }}</span>
-        </div>
+      <app-user-stats-card
+        [streak]="userProfile.streak"
+        [weeklyWorkouts]="userProfile.weeklyWorkouts"
+        [statusMessage]="userProfile.statusMessage"
+        [isMyProfile]="true"
+        (statusChange)="updateStatus($event)">
+      </app-user-stats-card>
 
-        <div class="text-center mb-4">
-          <h2 class="profile-name gradient-text">{{ userProfile.username }}</h2>
-          <p class="profile-email">{{ userProfile.email }}</p>
-        </div>
+      <app-profile-settings-card
+        [isPublic]="userProfile.isPublic"
+        [currentUserId]="currentUserId"
+        (visibilityChange)="toggleVisibility($event)"
+        (logoutRequest)="logout()">
+      </app-profile-settings-card>
 
-        <div class="settings-container">
-
-          <div class="setting-item">
-            <div class="setting-info">
-              <div class="setting-label">
-                <i class="bi bi-eye"></i> Public profile
-              </div>
-              <p class="setting-desc">
-                Make your statistics visible in the community.
-              </p>
-            </div>
-
-            <label class="switch">
-              <input type="checkbox"
-                     [checked]="userProfile.isPublic"
-                     (change)="toggleVisibility($event)">
-              <span class="slider round"></span>
-            </label>
-          </div>
-
-        </div>
-
-        <div class="profile-footer">
-          <button class="btn-danger w-100 justify-center" (click)="logout()">
-            <i class="bi bi-box-arrow-right"></i> Disconnect
-          </button>
-        </div>
-      </div>
-    </div>
-  }
-
-  @if (!isLoading && !userProfile) {
-    <div class="empty-state glass">
-      <div class="icon-box orange-soft mx-auto">
-        <i class="bi bi-exclamation-triangle"></i>
-      </div>
-      <h3>Loading error</h3>
-      <p>We were unable to retrieve your data..</p>
-      <button class="btn-secondary mt-3" (click)="ngOnInit()">Try again</button>
     </div>
   }
 </div>

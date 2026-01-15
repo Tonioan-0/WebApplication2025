@@ -1,0 +1,47 @@
+<div class="stats-wrapper">
+
+  <div class="status-section mb-4">
+    <label class="section-label">STATO ATTUALE</label>
+
+    <div class="status-bubble">
+
+      <i class="bi bi-quote quote-icon"></i>
+
+      <div class="content-area">
+        @if (!isEditing) {
+          <span class="status-text text-truncate">
+            "{{ statusMessage || 'Nessuno stato inserito...' }}"
+          </span>
+        } @else {
+          <input type="text" class="ghost-input"
+                 [(ngModel)]="tempStatus"
+                 (keyup.enter)="saveStatus()"
+                 placeholder="Scrivi qui..."
+                 autofocus>
+        }
+      </div>
+
+      @if (isMyProfile) {
+        <button class="action-btn"
+                [ngClass]="{'btn-save': isEditing, 'btn-edit': !isEditing}"
+                (click)="isEditing ? saveStatus() : enableEdit()"
+                [title]="isEditing ? 'Salva' : 'Modifica'">
+
+          <i class="bi" [ngClass]="isEditing ? 'bi-check-lg' : 'bi-pencil-fill'"></i>
+        </button>
+      }
+
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-box">
+      <span class="stat-value text-white">{{ streak }}</span>
+      <span class="stat-label text-danger"><i class="bi bi-fire"></i> Streak</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-value text-white">{{ weeklyWorkouts }}</span>
+      <span class="stat-label text-warning"><i class="bi bi-activity"></i> Workout</span>
+    </div>
+  </div>
+</div>

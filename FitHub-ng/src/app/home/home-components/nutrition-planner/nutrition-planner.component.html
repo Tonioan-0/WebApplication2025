@@ -1,9 +1,9 @@
 <div class="section container fade-in">
 
   <div class="section-header">
-    <span class="hero-badge">Health & Balance</span>
-    <h2>Nutrition Center</h2>
-    <p>Search for foods, build your meal plan, and save your progress to the database.</p>
+    <span class="hero-badge">Macro calculator</span>
+    <h2>Nutrition center</h2>
+    <p>Cerca alimenti, crea il tuo piano pasti e salva le tue combinazioni preferite.</p>
   </div>
 
   <div class="search-wrapper">
@@ -12,15 +12,15 @@
         type="text"
         [(ngModel)]="searchQuery"
         (keyup.enter)="searchFood()"
-        placeholder="Search for a food (e.g. Apple, Rice, Chicken...)"
+        placeholder="Cerca un alimento (es. Riso, Pollo...)"
         class="form-input"
       />
 
       <button (click)="searchFood()" [disabled]="isLoading" class="btn-primary">
         @if (!isLoading) {
-          <span>🔍 Search</span>
+          <span>🔍 Cerca</span>
         } @else {
-          <span>⏳ Loading...</span>
+          <span>⏳ Caricamento...</span>
         }
       </button>
 
@@ -59,10 +59,10 @@
 
   @if (selectedFood) {
     <div class="editor-panel glass">
-      <h3>Customize: <span class="text-blue">{{ selectedFood.name }}</span></h3>
+      <h3>Personalizza: <span class="text-blue">{{ selectedFood.name }}</span></h3>
 
       <div class="input-group">
-        <label>How many grams?</label>
+        <label>Quanti grammi?</label>
         <input type="number" [(ngModel)]="inputGrams" min="1" class="form-input" />
         <span style="font-size: 1.2rem; font-weight: bold; color: var(--on-surface-variant)">g</span>
       </div>
@@ -72,13 +72,13 @@
           <li>🔥 {{ (selectedFood.nutriments.calories * inputGrams / 100) | number:'1.0-0' }} kcal</li>
           <li>🥩 {{ (selectedFood.nutriments.proteins * inputGrams / 100) | number:'1.1-1' }} P</li>
           <li>🍞 {{ (selectedFood.nutriments.carbohydrates * inputGrams / 100) | number:'1.1-1' }} C</li>
-          <li>🥑 {{ (selectedFood.nutriments.fats * inputGrams / 100) | number:'1.1-1' }} F</li>
+          <li>🥑 {{ (selectedFood.nutriments.fats * inputGrams / 100) | number:'1.1-1' }} G</li>
         </ul>
       </div>
 
       <div style="margin-top: 20px; display: flex; gap: 10px;">
-        <button (click)="addToMeal()" class="btn-primary">Add to Meal</button>
-        <button (click)="selectedFood = null" class="btn-outline-lg" style="padding: 0.75rem 1.5rem; font-size: 1rem;">Cancel</button>
+        <button (click)="addToMeal()" class="btn-primary">Aggiungi al Pasto</button>
+        <button (click)="selectedFood = null" class="btn-outline-lg" style="padding: 0.75rem 1.5rem; font-size: 1rem;">Annulla</button>
       </div>
     </div>
   }
@@ -89,7 +89,7 @@
 
   <div class="current-meal-section">
     <div class="section-header" style="text-align: left; margin-bottom: 20px;">
-      <h3>Your Current Meal</h3>
+      <h3>Il Tuo Pasto Attuale</h3>
     </div>
 
     @if (myMeal.length > 0) {
@@ -108,7 +108,7 @@
                   <span>{{ item.calories }} kcal</span>
                   <span>P: {{ item.proteins }}</span>
                   <span>C: {{ item.carbs }}</span>
-                  <span>F: {{ item.fats }}</span>
+                  <span>G: {{ item.fats }}</span>
                 </div>
               </div>
             </div>
@@ -117,14 +117,14 @@
       </div>
     } @else {
       <div class="empty-msg glass">
-        <p>Your plate is empty. Search for food above to start building your meal!</p>
+        <p>Il tuo piatto è vuoto. Cerca cibo qui sopra per iniziare a comporre il tuo pasto!</p>
       </div>
     }
   </div>
 
   @if (myMeal.length > 0) {
     <div class="totals-footer glass">
-      <h3>Nutritional Summary</h3>
+      <h3>Riepilogo Nutrizionale</h3>
 
       <div class="macro-row">
         <div class="macro-box">
@@ -133,25 +133,25 @@
         </div>
         <div class="macro-box">
           <span style="color: #ff6b6b; font-size: 1.5rem;">{{ totals.proteins | number:'1.0-0' }}g</span>
-          <span>Proteins</span>
+          <span>Proteine</span>
         </div>
         <div class="macro-box">
           <span style="color: #4ecdc4; font-size: 1.5rem;">{{ totals.carbs | number:'1.0-0' }}g</span>
-          <span>Carbs</span>
+          <span>Carboidrati</span>
         </div>
         <div class="macro-box">
           <span style="color: #ffe66d; font-size: 1.5rem;">{{ totals.fats | number:'1.0-0' }}g</span>
-          <span>Fats</span>
+          <span>Grassi</span>
         </div>
       </div>
 
-      <button (click)="openSaveModal()" class="btn-save-db">💾 Save Meal to Diary</button>
+      <button (click)="openSaveModal()" class="btn-save-db">💾 Salva Pasto nel Diario</button>
     </div>
   }
 
   <div class="history-section">
     <div class="section-header">
-      <h3>Meal History</h3>
+      <h3>Cronologia Pasti</h3>
     </div>
 
     <div class="history-list">
@@ -170,7 +170,7 @@
               <button class="btn-outline-lg"
                       style="padding: 5px 15px; font-size: 0.8rem;"
                       (click)="toggleDetails(meal.id)">
-                @if (expandedMealId === meal.id) { 🔼 Hide } @else { 🔽 Show }
+                @if (expandedMealId === meal.id) { 🔼 Nascondi } @else { 🔽 Mostra }
               </button>
             </div>
           </div>
@@ -198,7 +198,7 @@
                                     (click)="updateItemInBackend(item, +gramsInput.value)">OK</button>
                           </div>
                         } @else {
-                          <div (click)="startEditing(item)" style="cursor: pointer; display: inline-block;" title="Click to edit grams">
+                          <div (click)="startEditing(item)" style="cursor: pointer; display: inline-block;" title="Clicca per modificare i grammi">
                             <span class="grams-badge">{{ item.grams }}g ✏️</span>
                           </div>
                         }
@@ -209,7 +209,7 @@
                           <span>{{ item.calories }} kcal</span>
                           <span>P:{{ item.proteins | number:'1.0-0' }}</span>
                           <span>C:{{ item.carbs | number:'1.0-0' }}</span>
-                          <span>F:{{ item.fats | number:'1.0-0' }}</span>
+                          <span>G:{{ item.fats | number:'1.0-0' }}</span>
                         </div>
                       </div>
 
@@ -220,13 +220,13 @@
               </div>
             </div>
           }
-          <button class="btn-delete-meal" (click)="askDeleteConfirmation(meal.id)" title="Delete entire meal">
-            🗑️ Delete Meal
+          <button class="btn-delete-meal" (click)="askDeleteConfirmation(meal.id)" title="Elimina intero pasto">
+            🗑️ Elimina Pasto
           </button>
         </div>
       } @empty {
         <div class="empty-msg glass">
-          No meals saved yet.
+          Nessun pasto salvato ancora.
         </div>
       }
     </div>
@@ -234,12 +234,12 @@
   @if (showDeleteModal) {
     <div class="modal-backdrop fade-in">
       <div class="modal-box glass">
-        <h3>⚠️ Delete Meal?</h3>
-        <p>Are you sure you want to delete this entire meal?<br>This action cannot be undone.</p>
+        <h3>⚠️ Elimina Pasto?</h3>
+        <p>Sei sicuro di voler eliminare l'intero pasto?<br>Questa azione non può essere annullata.</p>
 
         <div class="modal-actions">
-          <button class="btn-outline-lg" (click)="closeModal()">Cancel</button>
-          <button class="btn-danger" (click)="confirmDelete()">Yes, Delete</button>
+          <button class="btn-outline-lg" (click)="closeModal()">Annulla</button>
+          <button class="btn-danger" (click)="confirmDelete()">Sì, Elimina</button>
         </div>
       </div>
     </div>
@@ -248,12 +248,12 @@
   @if (showDeleteItemModal) {
     <div class="modal-backdrop fade-in">
       <div class="modal-box glass">
-        <h3>⚠️ Remove Item?</h3>
-        <p>Are you sure you want to remove this food from your history?</p>
+        <h3>⚠️ Rimuovi Elemento?</h3>
+        <p>Sei sicuro di voler rimuovere questo alimento dalla cronologia?</p>
 
         <div class="modal-actions">
-          <button class="btn-outline-lg" (click)="closeModal()">Cancel</button>
-          <button class="btn-danger" (click)="confirmDeleteItem()">Yes, Remove</button>
+          <button class="btn-outline-lg" (click)="closeModal()">Annulla</button>
+          <button class="btn-danger" (click)="confirmDeleteItem()">Sì, Rimuovi</button>
         </div>
       </div>
     </div>
@@ -262,16 +262,16 @@
   @if (showSaveModal) {
     <div class="modal-backdrop fade-in">
       <div class="modal-box glass">
-        <h3>💾 Name Your Meal</h3>
-        <p>Give this meal a name to find it easily later.</p>
+        <h3>💾 Dai un nome al pasto</h3>
+        <p>Dai un nome a questo pasto per ritrovarlo facilmente.</p>
 
         <div style="margin: 20px 0;">
-          <input type="text" [(ngModel)]="mealNameInput" class="form-input" placeholder="e.g. Breakfast, Post-Workout..." style="text-align: center; font-size: 1.1rem;">
+          <input type="text" [(ngModel)]="mealNameInput" class="form-input" placeholder="es. Colazione, Post-Allenamento..." style="text-align: center; font-size: 1.1rem;">
         </div>
 
         <div class="modal-actions">
-          <button class="btn-outline-lg" (click)="closeModal()">Cancel</button>
-          <button class="btn-primary" (click)="confirmSaveMeal()">Save Meal</button>
+          <button class="btn-outline-lg" (click)="closeModal()">Annulla</button>
+          <button class="btn-primary" (click)="confirmSaveMeal()">Salva Pasto</button>
         </div>
       </div>
     </div>
@@ -281,9 +281,9 @@
     <div class="modal-backdrop fade-in" style="z-index: 3000;">
       <div class="modal-box glass" style="max-width: 350px;">
 
-        @if (alertType === 'success') { <h3 style="color: #4caf50;">Success</h3> }
-        @if (alertType === 'error') { <h3 style="color: #ff6b6b;">Error</h3> }
-        @if (alertType === 'warning') { <h3 style="color: #ffcc00;">Warning</h3> }
+        @if (alertType === 'success') { <h3 style="color: #4caf50;">Successo</h3> }
+        @if (alertType === 'error') { <h3 style="color: #ff6b6b;">Errore</h3> }
+        @if (alertType === 'warning') { <h3 style="color: #ffcc00;">Attenzione</h3> }
 
         <p style="font-size: 1.1rem;">{{ alertMessage }}</p>
 

@@ -2,6 +2,7 @@ package it.fithub.fithubspring.repository;
 
 import it.fithub.fithubspring.domain.User;
 import it.fithub.fithubspring.domain.proxy.UserProxy;
+import it.fithub.fithubspring.dto.UserProfileDTO;
 import it.fithub.fithubspring.repository.community.AppointmentRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -220,6 +221,50 @@ public class UserRepository {
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating user visibility", e);
+        }
+    }
+
+    public Optional<UserProfileDTO> getUserProfile(Long userId) {
+        String sql = "SELECT username, email, is_public, current_streak, weekly_workouts_done, status_message " +
+                "FROM app_user WHERE id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, userId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    UserProfileDTO dto = new UserProfileDTO(
+                            rs.getString("username"),
+                            rs.getString("email"),
+                            rs.getBoolean("is_public"),
+                            rs.getInt("current_streak"),
+                            rs.getInt("weekly_workouts_done"),
+                            rs.getString("status_message")
+                    );
+                    return Optional.of(dto);
+                }
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching user profile DTO", e);
+        }
+    }
+
+
+    public void updateStatusMessage(Long userId, String newStatus) {
+        String sql = "UPDATE app_user SET status_message = ? WHERE id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, newStatus);
+            stmt.setLong(2, userId);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating status message", e);
         }
     }
 }

@@ -1,0 +1,57 @@
+<div class="settings-footer">
+
+  <div class="privacy-box mb-3">
+    <div class="text-content">
+      <span class="privacy-title">Profilo Pubblico</span>
+      <span class="privacy-desc">Rendi visibili le tue statistiche nella community.</span>
+    </div>
+    <div class="form-check form-switch m-0">
+      <input class="form-check-input custom-switch" type="checkbox" [checked]="isPublic" (change)="onToggle($event)">
+    </div>
+  </div>
+
+  <button class="action-link" (click)="openModal()">
+    Modifica Password
+  </button>
+
+  <button class="logout-btn" (click)="onLogout()">
+    Disconnetti
+  </button>
+
+</div>
+
+@if (showPasswordModal) {
+<div class="modal-backdrop" (click)="closeModal()">
+  <div class="modal-glass-card" (click)="$event.stopPropagation()">
+
+    <h4 class="modal-title">Cambia Password</h4>
+
+    @if (errorMessage) { <div class="alert alert-danger p-2 small">{{ errorMessage }}</div> }
+    @if (successMessage) { <div class="alert alert-success p-2 small">{{ successMessage }}</div> }
+
+    <div class="form-group mb-3">
+      <label>Password Attuale</label>
+      <input type="password" [(ngModel)]="passData.currentPassword" class="glass-input" placeholder="••••••">
+    </div>
+
+    <div class="form-group mb-3">
+      <label>Nuova Password</label>
+      <input type="password" [(ngModel)]="passData.newPassword" class="glass-input" placeholder="Nuova password">
+    </div>
+
+    <div class="form-group mb-4">
+      <label>Conferma Nuova</label>
+      <input type="password" [(ngModel)]="passData.confirmPassword" class="glass-input"
+        placeholder="Ripeti nuova password">
+    </div>
+
+    <div class="d-flex gap-2 justify-content-end">
+      <button class="btn btn-secondary btn-sm" (click)="closeModal()">Annulla</button>
+      <button class="btn btn-primary btn-sm" (click)="submitPasswordChange()" [disabled]="isLoading">
+        {{ isLoading ? 'Salvataggio...' : 'Salva Modifiche' }}
+      </button>
+    </div>
+
+  </div>
+</div>
+}

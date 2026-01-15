@@ -1,5 +1,6 @@
 package it.fithub.fithubspring.service;
 
+import it.fithub.fithubspring.dto.ChangePasswordRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import it.fithub.fithubspring.dto.RegisterRequest;
@@ -64,5 +65,17 @@ public class UserService {
         }
 
         return user;
+    }
+
+    public void changePassword(Long userId, ChangePasswordRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Utente non trovato"));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new RuntimeException("La password attuale non è corretta");
+        }
+
+        String encodedNewPassword = passwordEncoder.encode(request.getNewPassword());
+        user.setPassword(encodedNewPassword);
+        userRepository.save(user);
     }
 }
