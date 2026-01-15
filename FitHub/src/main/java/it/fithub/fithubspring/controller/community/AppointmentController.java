@@ -71,4 +71,18 @@ public class AppointmentController {
         appointmentService.deleteAppointment(id, userId);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/{id}/confirm")
+    public ResponseEntity<Void> confirmAppointment(@PathVariable Long id, HttpSession session) {
+        Long userId = getUserIdFromSession(session);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        try {
+            appointmentService.confirmAppointment(id, userId);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 }

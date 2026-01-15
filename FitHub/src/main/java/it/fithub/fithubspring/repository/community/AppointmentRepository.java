@@ -143,6 +143,34 @@ public class AppointmentRepository {
         }
     }
 
+    public List<Appointment> findByCreatorIdIn(List<Long> creatorIds) {
+        if (creatorIds == null || creatorIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // Build placeholders for IN clause
+        String placeholders = String.join(",", creatorIds.stream().map(id -> "?").toList());
+        String sql = "SELECT * FROM appointment WHERE creator_id IN (" + placeholders + ") ORDER BY date_time DESC";
+
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < creatorIds.size(); i++) {
+                stmt.setLong(i + 1, creatorIds.get(i));
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Appointment> appointments = new ArrayList<>();
+                while (rs.next()) {
+                    appointments.add(mapResultSetToAppointment(rs));
+                }
+                return appointments;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching appointments by creator IDs", e);
+        }
+    }
+
     private Appointment mapResultSetToAppointment(ResultSet rs) throws SQLException {
         Appointment appointment = new Appointment();
         appointment.setId(rs.getLong("id"));

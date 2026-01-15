@@ -14,7 +14,8 @@
     <!-- Sezione Ban Utente -->
     <section class="admin-section">
         <h2>
-            <svg class="section-icon ban-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <svg class="section-icon ban-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                fill="currentColor">
                 <path [attr.d]="icons.ban" />
             </svg>
             Ban Utente
@@ -22,30 +23,17 @@
         <div class="ban-form">
             <div class="form-group">
                 <label for="userIdOrEmail">ID o Email Utente</label>
-                <input 
-                    type="text" 
-                    id="userIdOrEmail" 
-                    [(ngModel)]="userIdOrEmail"
-                    placeholder="Inserisci ID numerico o email"
-                    class="form-input"
-                >
+                <input type="text" id="userIdOrEmail" [(ngModel)]="userIdOrEmail"
+                    placeholder="Inserisci ID numerico o email" class="form-input">
             </div>
             <div class="form-group">
                 <label for="banReason">Motivazione</label>
-                <textarea 
-                    id="banReason" 
-                    [(ngModel)]="banReason"
-                    placeholder="Inserisci il motivo del ban..."
-                    class="form-textarea"
-                    rows="3"
-                ></textarea>
+                <textarea id="banReason" [(ngModel)]="banReason" placeholder="Inserisci il motivo del ban..."
+                    class="form-textarea" rows="3"></textarea>
             </div>
-            <button 
-                class="btn-ban" 
-                (click)="banUser()" 
-                [disabled]="banLoading"
-            >
-                <svg *ngIf="!banLoading" class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <button class="btn-ban" (click)="banUser()" [disabled]="banLoading">
+                <svg *ngIf="!banLoading" class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                    fill="currentColor">
                     <path [attr.d]="icons.ban" />
                 </svg>
                 {{ banLoading ? 'Bannando...' : 'Banna Utente' }}
@@ -86,7 +74,8 @@
                         <td>{{ entry.bannedAt | date:'dd/MM/yyyy HH:mm' }}</td>
                         <td>
                             <button class="btn-unban" (click)="unbanUser(entry.userId)">
-                                <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="currentColor">
                                     <path [attr.d]="icons.unban" />
                                 </svg>
                                 Rimuovi Ban
@@ -129,12 +118,33 @@
                     <h4>{{ loc.name }}</h4>
                     <p>{{ loc.address }}</p>
                     <small>{{ loc.type | uppercase }} • {{ loc.lat.toFixed(4) }}, {{ loc.lng.toFixed(4) }}</small>
+                    <div class="warning-badge" *ngIf="loc.warning">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="14"
+                            height="14">
+                            <path [attr.d]="icons.warning" />
+                        </svg>
+                        {{ loc.warning }}
+                    </div>
                 </div>
-                <button class="btn-delete" (click)="deleteLocation(loc.id!)">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path [attr.d]="icons.trash" />
-                    </svg>
-                </button>
+                <div class="location-actions">
+                    <button class="btn-warning" (click)="openWarningModal(loc)"
+                        [title]="loc.warning ? 'Modifica Warning' : 'Aggiungi Warning'">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path [attr.d]="icons.warning" />
+                        </svg>
+                    </button>
+                    <button class="btn-remove-warning" *ngIf="loc.warning" (click)="removeWarning(loc.id!)"
+                        title="Rimuovi Warning">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path [attr.d]="icons.close" />
+                        </svg>
+                    </button>
+                    <button class="btn-delete" (click)="deleteLocation(loc.id!)" title="Elimina Location">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path [attr.d]="icons.trash" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -175,6 +185,34 @@
                         <path [attr.d]="icons.add" />
                     </svg>
                     Aggiungi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Warning Modal -->
+    <div class="modal-overlay" *ngIf="showWarningModal" (click)="closeWarningModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <h3>
+                <svg class="section-icon warning-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <path [attr.d]="icons.warning" />
+                </svg>
+                {{ selectedLocationForWarning?.warning ? 'Modifica' : 'Aggiungi' }} Warning
+            </h3>
+            <p class="modal-subtitle" *ngIf="selectedLocationForWarning">{{ selectedLocationForWarning.name }}</p>
+            <div class="form-group">
+                <label>Testo Warning</label>
+                <textarea [(ngModel)]="warningText" class="form-textarea" rows="3"
+                    placeholder="Inserisci il testo del warning..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" (click)="closeWarningModal()">Annulla</button>
+                <button class="btn-warning-save" (click)="saveWarning()">
+                    <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path [attr.d]="icons.warning" />
+                    </svg>
+                    Salva Warning
                 </button>
             </div>
         </div>

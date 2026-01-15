@@ -57,8 +57,12 @@ export class LocationService {
         return this.http.post<Location>(this.apiUrl, location);
     }
 
+    addWarning(locationId: number, warning: string): Observable<void> {
+        return this.http.put<void>(`${this.apiUrl}/${locationId}/warning`, warning, { withCredentials: true });
+    }
+
     removeWarning(locationId: number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/${locationId}/warning`);
+        return this.http.delete<void>(`${this.apiUrl}/${locationId}/warning`, { withCredentials: true });
     }
 
     deleteLocation(locationId: number): Observable<void> {

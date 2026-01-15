@@ -8,11 +8,6 @@
             </div>
             <span class="logo-text">FitHub</span>
         </div>
-        <div class="nav-links" [class.active]="isMenuOpen">
-            <a (click)="scrollToSection('features'); isMenuOpen = false">Funzionalità</a>
-            <a (click)="scrollToSection('about'); isMenuOpen = false">Chi Siamo</a>
-            <a (click)="scrollToSection('success'); isMenuOpen = false">Storie di Successo</a>
-        </div>
         <div class="nav-actions">
             <button class="btn-text" routerLink="/login">Accedi</button>
             <button class="btn-primary" routerLink="/register">Registrati</button>
@@ -23,22 +18,22 @@
     <!-- Hero Section -->
     <header class="hero">
         <div class="hero-badge">
-            <span>⚡ Trasforma il Tuo Percorso Fitness</span>
+            <span>Trasforma il Tuo Percorso Fitness</span>
         </div>
         <h1>Il Tuo Centro <span class="gradient-text">Fitness</span></h1>
         <p class="hero-subtext">
             Scopri palestre e parchi fitness all'aperto, monitora i tuoi progressi con coaching AI,
-            connettiti con partner di allenamento e raggiungi i tuoi obiettivi con motivazione gamificata.
+            connettiti con partner di allenamento e raggiungi i tuoi obiettivi.
         </p>
         <div class="hero-buttons">
-            <button class="btn-primary-lg" routerLink="/register">Inizia Ora →</button>
+            <button class="btn-primary-lg" routerLink="/register">Registrati</button>
             <button class="btn-outline-lg" (click)="scrollToSection('features')">Scopri le Funzionalità</button>
         </div>
 
         <!-- Stats -->
         <div class="stats-container">
             <div class="stat-item">
-                <h3>10K+</h3>
+                <h3>4+</h3>
                 <p>Membri Attivi</p>
             </div>
             <div class="stat-item">
@@ -113,63 +108,6 @@
         </div>
     </section>
 
-    <!-- Goals/About Section
-    <section id="about" class="section goals-section">
-        <div class="goals-content">
-            <div class="goals-text">
-                <h2>Potenzia i Tuoi <br><span class="gradient-text-orange">Obiettivi Fitness</span></h2>
-                <p>FitHub è più di una semplice app fitness. Siamo una piattaforma guidata dalla community progettata
-                    per rendere il fitness accessibile, piacevole e sostenibile per tutti.</p>
-                <p>Che tu sia un principiante ai primi passi o un atleta che spinge i propri limiti, forniamo gli
-                    strumenti, la guida e la motivazione di cui hai bisogno per avere successo.</p>
-            </div>
-
-            <div class="goals-cards">
-                <div class="card goal-card">
-                    <div class="icon-circle blue-circle">
-                        <svg viewBox="0 0 24 24" fill="currentColor" class="icon-sm">
-                            <path
-                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h4>Piani Personalizzati</h4>
-                        <p class="sm-text">Piani di allenamento basati su AI adattati al tuo livello di forma e
-                            obiettivi.</p>
-                    </div>
-                </div>
-
-                <div class="card goal-card">
-                    <div class="icon-circle orange-circle">
-                        <svg viewBox="0 0 24 24" fill="currentColor" class="icon-sm">
-                            <path
-                                d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h4>Supporto Community</h4>
-                        <p class="sm-text">Connettiti con partner di allenamento e condividi il tuo percorso con altri.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="card goal-card">
-                    <div class="icon-circle blue-circle">
-                        <svg viewBox="0 0 24 24" fill="currentColor" class="icon-sm">
-                            <path
-                                d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 16c-2.33 0-7-1.17-7-3.5V11h14v4.5c0 2.33-4.67 3.5-7 3.5z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h4>Esperienza Gamificata</h4>
-                        <p class="sm-text">Traccia le serie consecutive, guadagna achievement e resta motivato ogni
-                            giorno.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-
     <!-- Testimonials -->
     <section id="success" class="section testimonials-section">
         <div class="section-header">
@@ -177,7 +115,7 @@
             <p>Unisciti a migliaia di persone che hanno trasformato la loro vita con FitHub</p>
         </div>
 
-        <div class="grid-3">
+        <div class="grid-4">
             <div class="card testimonial-card">
                 <div class="quote-icon">"</div>
                 <p class="quote-text">"FitHub mi ha aiutato a trovare posti che non sapevo esistessero"</p>
@@ -232,7 +170,5 @@
         </a>
     </div>
     <br><br>
-    <footer>
-        <p>&copy; 2025 FitHub. Tutti i diritti riservati.</p>
-    </footer>
+
 </div>

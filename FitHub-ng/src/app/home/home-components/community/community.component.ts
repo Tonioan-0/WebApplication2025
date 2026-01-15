@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WeeklyScheduleComponent } from './weekly-schedule/weekly-schedule.component';
 import { ManageFriendsComponent } from './manage-friends/manage-friends.component';
 import { ScheduleWorkoutModalComponent } from './schedule-workout-modal/schedule-workout-modal.component';
+import { NotificationService } from '../../../services/notification.service';
+import { Subscription } from 'rxjs';
 import { Appointment } from '../../../services/community.service';
 
 @Component({
@@ -18,16 +20,18 @@ import { Appointment } from '../../../services/community.service';
     templateUrl: './community.component.html',
     styleUrl: './community.component.css'
 })
-export class CommunityComponent implements OnInit {
+export class CommunityComponent implements OnInit, OnDestroy {
     showScheduleModal = false;
     selectedLocation = '';
     editingAppointment: Appointment | null = null;
+    private notificationSubscription: Subscription | null = null;
 
     @ViewChild(WeeklyScheduleComponent) weeklySchedule!: WeeklyScheduleComponent;
 
     constructor(
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private notificationService: NotificationService
     ) { }
 
     ngOnInit(): void {
@@ -41,6 +45,21 @@ export class CommunityComponent implements OnInit {
                 });
             }
         });
+
+        // Subscribe to new notification events
+        this.notificationSubscription = this.notificationService.newNotification$.subscribe(type => {
+            if (type === 'NEW_APPOINTMENT') {
+                if (this.weeklySchedule) {
+                    this.weeklySchedule.loadAppointments();
+                }
+            }
+        });
+    }
+
+    ngOnDestroy(): void {
+        if (this.notificationSubscription) {
+            this.notificationSubscription.unsubscribe();
+        }
     }
 
     openScheduleModal(): void {

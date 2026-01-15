@@ -12,7 +12,7 @@
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" placeholder="nome@esempio.com" [(ngModel)]="email" name="email" required>
+                <input type="email" id="email" placeholder="nome@fithub.com" [(ngModel)]="email" name="email" required>
             </div>
 
             <div class="form-group">
@@ -39,9 +39,6 @@
     </div>
 
     <!-- Ban Popup for utenti bannati -->
-    <app-ban-popup 
-        *ngIf="showBanPopup" 
-        [reason]="banReason" 
-        (close)="closeBanPopup()">
+    <app-ban-popup *ngIf="showBanPopup" [reason]="banReason" (close)="closeBanPopup()">
     </app-ban-popup>
 </div>

@@ -586,7 +586,7 @@ label {
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem 2rem;
-    background: rgba(10, 10, 10, 0.8);
+    background: var(--surface);
     backdrop-filter: blur(10px);
     position: fixed;
     top: 0;

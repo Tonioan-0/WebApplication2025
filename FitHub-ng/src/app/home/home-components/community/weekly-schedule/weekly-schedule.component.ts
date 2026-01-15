@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter, OnDestroy, ChangeDetectorRef }
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CommunityService, Appointment } from '../../../../services/community.service';
+import { NotificationService } from '../../../../services/notification.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -18,12 +19,14 @@ export class WeeklyScheduleComponent implements OnInit, OnDestroy {
     appointments: Appointment[] = [];
     filteredAppointments: Appointment[] = [];
     private refreshSubscription: Subscription | undefined;
+    private notificationSubscription: Subscription | undefined;
 
     @Output() editAppointment = new EventEmitter<Appointment>();
 
     constructor(
         private router: Router,
         private communityService: CommunityService,
+        private notificationService: NotificationService,
         private cdr: ChangeDetectorRef
     ) { }
 
@@ -35,11 +38,21 @@ export class WeeklyScheduleComponent implements OnInit, OnDestroy {
         this.refreshSubscription = this.communityService.refreshAppointments$.subscribe(() => {
             this.loadAppointments();
         });
+
+        // Auto-refresh on new appointment notification
+        this.notificationSubscription = this.notificationService.newNotification$.subscribe(type => {
+            if (type === 'NEW_APPOINTMENT') {
+                this.loadAppointments();
+            }
+        });
     }
 
     ngOnDestroy(): void {
         if (this.refreshSubscription) {
             this.refreshSubscription.unsubscribe();
+        }
+        if (this.notificationSubscription) {
+            this.notificationSubscription.unsubscribe();
         }
     }
 
@@ -170,4 +183,12 @@ export class WeeklyScheduleComponent implements OnInit, OnDestroy {
     onEditAppointment(appointment: Appointment): void {
         this.editAppointment.emit(appointment);
     }
+
+    onConfirmAppointment(appointment: Appointment): void {
+        this.communityService.confirmAppointment(appointment.id).subscribe({
+            next: () => this.loadAppointments(),
+            error: (err) => console.error('Error confirming appointment:', err)
+        });
+    }
 }
+

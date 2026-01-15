@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
-\restrict f8Yub5YWDrjZBwfHGms6hurFejmxnEboI4frWTHgvmUHsRQZoxBtwS12jOk3XBe
+\restrict D6tbTLDIvQCDiz6p7n9535QBotYgL6mw2mWzfS7dtBgHvMTw0FmhtrjxsOpYXW9
 
--- Dumped from database version 18.1
--- Dumped by pg_dump version 18.1
+-- Dumped from database version 16.11
+-- Dumped by pg_dump version 18.1 (Debian 18.1-2)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -74,6 +74,41 @@ CREATE TABLE public.appointment (
 ALTER TABLE public.appointment OWNER TO postgres;
 
 --
+-- Name: appointment_confirmation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.appointment_confirmation (
+    id bigint NOT NULL,
+    appointment_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    confirmed_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.appointment_confirmation OWNER TO postgres;
+
+--
+-- Name: appointment_confirmation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.appointment_confirmation_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.appointment_confirmation_id_seq OWNER TO postgres;
+
+--
+-- Name: appointment_confirmation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.appointment_confirmation_id_seq OWNED BY public.appointment_confirmation.id;
+
+
+--
 -- Name: appointment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -92,6 +127,43 @@ ALTER SEQUENCE public.appointment_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.appointment_id_seq OWNED BY public.appointment.id;
+
+
+--
+-- Name: blacklist; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.blacklist (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    email character varying(255) NOT NULL,
+    reason text,
+    banned_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    banned_by bigint
+);
+
+
+ALTER TABLE public.blacklist OWNER TO postgres;
+
+--
+-- Name: blacklist_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.blacklist_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.blacklist_id_seq OWNER TO postgres;
+
+--
+-- Name: blacklist_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.blacklist_id_seq OWNED BY public.blacklist.id;
 
 
 --
@@ -307,6 +379,20 @@ ALTER TABLE ONLY public.appointment ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: appointment_confirmation id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointment_confirmation ALTER COLUMN id SET DEFAULT nextval('public.appointment_confirmation_id_seq'::regclass);
+
+
+--
+-- Name: blacklist id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.blacklist ALTER COLUMN id SET DEFAULT nextval('public.blacklist_id_seq'::regclass);
+
+
+--
 -- Name: exercise_preset id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -337,6 +423,14 @@ COPY public.app_user (id, email, username, password, is_public, current_streak, 
 9	nuovo@test.com	nuovoutente	$2a$10$dXJ3SW6G7P50lGmMkkmwe.t8.r9g3XwLZoEHmM4v6b6f1CJAB0o9m	f	50	0	\N	\N	f
 11	test@test.com	Test User	$2a$10$nB37uVf31g.Wz2aPf1d9iucb58alWwFl4F6ex82/f83fBgIbR3.SO	f	50	1	2026-01-12	2026-01-13	f
 10	nuovouser123@test.com	nuovouser	$2a$10$FkdZLPdIRl8fi9VGPwKX7OjCfZT7.ysmZs.92N842mDoG9B8ncd.a	f	50	2	2026-01-12	2026-01-14	f
+12	ant@fithub.com	ant	$2a$10$yArmedxHhSbBRVchDAmpReY9dyvN8GC/xqrpskYr/2kikE1ateIzK	f	0	0	\N	\N	f
+13	testadmin@test.com	testadmin	$2a$10$3.5mZLLEhdNrBJcz7wcEvu4QusW42R/m4LIU8nLXj0AKfyoNqdLf.	f	0	0	\N	\N	t
+14	admin@test.com	test_admin	$2a$10$GnKnMfTdp7VSRWtu.cq9MuZkcaCy/LtU1qJuF9QQv2o1aardp4iVa	f	0	0	\N	\N	t
+15	user1@test.com	test_user1	$2a$10$PhCYpZZqtdnMd3oqffMPTuMBHxY1U8GspRhVmXcbdn6PMEr8a7UBW	f	0	0	\N	\N	f
+16	user2@test.com	test_user2	$2a$10$Tgl/uCq0oXe2k8viUyE/PedznWkLwOE7/IrNqhKEmrzQ0iIvW6Po6	f	0	0	\N	\N	f
+18	bob_120704@test.com	bob_120704	$2a$10$T/guMgimRfuOepNhdUP0m.fcqkewNSsqg0Yn808KJTICLa6Q3SEWS	f	0	0	\N	\N	f
+19	charlie_120704@test.com	charlie_120704	$2a$10$5X1io4/SK2WAuVO3daQWlOKcvYFi7oy0pwJL35H2IcglpYX/1f3ei	f	0	0	\N	\N	f
+17	alice_120704@test.com	alice_120704	$2a$10$omHNmG5h85LO7HMqMc9Ese9aK/YHzgw/KglYnkCxcq2o2Qzs6WkzO	t	0	0	\N	\N	t
 \.
 
 
@@ -345,6 +439,31 @@ COPY public.app_user (id, email, username, password, is_public, current_streak, 
 --
 
 COPY public.appointment (id, title, type, location, date_time, creator_id) FROM stdin;
+1	Gym Session	Workout	Main Gym	2026-01-20 10:00:00	15
+2	Cardio	Cardio	Park	2026-01-22 08:00:00	15
+3	Yoga Class	Class	Studio B	2026-01-21 18:00:00	16
+4	Allenamento mattutino	Workout	Palestra	2026-01-20 08:00:00	17
+6	ciao alice	STRENGTH	41.923738, 12.465019	2026-01-16 09:00:00	12
+9	certo	CARDIO	Trastevere CrossFit	2026-01-15 09:00:00	12
+11	hello	STRENGTH	ewfew	2026-01-15 09:00:00	12
+\.
+
+
+--
+-- Data for Name: appointment_confirmation; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.appointment_confirmation (id, appointment_id, user_id, confirmed_at) FROM stdin;
+3	6	17	2026-01-15 13:31:40.198654
+5	11	17	2026-01-15 16:03:39.923921
+\.
+
+
+--
+-- Data for Name: blacklist; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.blacklist (id, user_id, email, reason, banned_at, banned_by) FROM stdin;
 \.
 
 
@@ -381,6 +500,7 @@ COPY public.exercise_preset (id, name, muscle_group, equipment, path) FROM stdin
 --
 
 COPY public.friend_request (id, status, "timestamp", receiver_id, sender_id) FROM stdin;
+7	ACCEPTED	2026-01-15 12:23:07.727735	12	17
 \.
 
 
@@ -389,66 +509,7 @@ COPY public.friend_request (id, status, "timestamp", receiver_id, sender_id) FRO
 --
 
 COPY public.location (id, address, latitude, longitude, name, rating, type, warning) FROM stdin;
-1	Via del Corso, 1, Roma	41.902782	12.496366	FitHub Central Gym	4.8	gym	\N
-2	Piazza del Colosseo, 1, Roma	41.8986	12.5083	Colosseum Fitness	4.5	gym	Lat Machine broken
-3	Piazza della Rotonda, Roma	41.907	12.475	Pantheon Gym & Spa	4.9	gym	\N
-4	Via della Lungaretta, Roma	41.889	12.471	Trastevere CrossFit	4.6	gym	\N
-5	Via Galvani, Roma	41.8765	12.478	Testaccio Boxing Club	4.7	gym	Dips Bar broken
-6	Via Cola di Rienzo, Roma	41.9065	12.4565	Prati Fitness Center	4.4	gym	\N
-7	Via Cavour, Roma	41.8955	12.501	Esquilino Gym	4.3	gym	\N
-8	Via dei Serpenti, Roma	41.8945	12.492	Monti Strength Studio	4.8	gym	\N
-9	Via Marsala, Roma	41.901	12.5025	Termini Wellness	4.2	gym	Pull-up bar needs maintenance
-10	Piazza Campo de Fiori, Roma	41.8954	12.4724	Campo de Fiori Gym	4.5	gym	\N
-11	Piazzale Napoleone I, Roma	41.9109	12.4818	Villa Borghese Park	4.7	park	\N
-12	Piazza di Santa Maria, Roma	41.8929	12.4825	Trastevere Workout Park	4.3	park	\N
-13	Via di Santa Sabina, Roma	41.885	12.488	Aventine Hill Park	4.6	park	Running track under repair
-14	Via Aurelia Antica, Roma	41.885	12.45	Villa Pamphili	4.8	park	\N
-15	Via Salaria, Roma	41.9325	12.5	Villa Ada Park	4.7	park	\N
-16	Via Lemonia, Roma	41.855	12.545	Parco degli Acquedotti	4.9	park	\N
-17	Viale del Monte Oppio, Roma	41.8925	12.4975	Colle Oppio Park	4.4	park	\N
-18	Via della Caffarella, Roma	41.855	12.515	Parco della Caffarella	4.6	park	\N
-19	Via Nomentana, Roma	41.915	12.508	Villa Torlonia	4.5	park	\N
-20	Piazzale del Partigiano, Roma	41.928	12.475	Parco di Villa Glori	4.4	park	\N
-21	Via del Corso, 1, Roma	41.902782	12.496366	FitHub Central Gym	4.8	gym	\N
-22	Piazza del Colosseo, 1, Roma	41.8986	12.5083	Colosseum Fitness	4.5	gym	Lat Machine broken
-23	Piazza della Rotonda, Roma	41.907	12.475	Pantheon Gym & Spa	4.9	gym	\N
-24	Via della Lungaretta, Roma	41.889	12.471	Trastevere CrossFit	4.6	gym	\N
-25	Via Galvani, Roma	41.8765	12.478	Testaccio Boxing Club	4.7	gym	Dips Bar broken
-26	Via Cola di Rienzo, Roma	41.9065	12.4565	Prati Fitness Center	4.4	gym	\N
-27	Via Cavour, Roma	41.8955	12.501	Esquilino Gym	4.3	gym	\N
-28	Via dei Serpenti, Roma	41.8945	12.492	Monti Strength Studio	4.8	gym	\N
-29	Via Marsala, Roma	41.901	12.5025	Termini Wellness	4.2	gym	Pull-up bar needs maintenance
-30	Piazza Campo de Fiori, Roma	41.8954	12.4724	Campo de Fiori Gym	4.5	gym	\N
-31	Piazzale Napoleone I, Roma	41.9109	12.4818	Villa Borghese Park	4.7	park	\N
-32	Piazza di Santa Maria, Roma	41.8929	12.4825	Trastevere Workout Park	4.3	park	\N
-33	Via di Santa Sabina, Roma	41.885	12.488	Aventine Hill Park	4.6	park	Running track under repair
-34	Via Aurelia Antica, Roma	41.885	12.45	Villa Pamphili	4.8	park	\N
-35	Via Salaria, Roma	41.9325	12.5	Villa Ada Park	4.7	park	\N
-36	Via Lemonia, Roma	41.855	12.545	Parco degli Acquedotti	4.9	park	\N
-37	Viale del Monte Oppio, Roma	41.8925	12.4975	Colle Oppio Park	4.4	park	\N
-38	Via della Caffarella, Roma	41.855	12.515	Parco della Caffarella	4.6	park	\N
-39	Via Nomentana, Roma	41.915	12.508	Villa Torlonia	4.5	park	\N
-40	Piazzale del Partigiano, Roma	41.928	12.475	Parco di Villa Glori	4.4	park	\N
-41	Via del Corso, 1, Roma	41.902782	12.496366	FitHub Central Gym	4.8	gym	\N
-42	Piazza del Colosseo, 1, Roma	41.8986	12.5083	Colosseum Fitness	4.5	gym	Lat Machine broken
-43	Piazza della Rotonda, Roma	41.907	12.475	Pantheon Gym & Spa	4.9	gym	\N
-44	Via della Lungaretta, Roma	41.889	12.471	Trastevere CrossFit	4.6	gym	\N
-45	Via Galvani, Roma	41.8765	12.478	Testaccio Boxing Club	4.7	gym	Dips Bar broken
-46	Via Cola di Rienzo, Roma	41.9065	12.4565	Prati Fitness Center	4.4	gym	\N
-47	Via Cavour, Roma	41.8955	12.501	Esquilino Gym	4.3	gym	\N
-48	Via dei Serpenti, Roma	41.8945	12.492	Monti Strength Studio	4.8	gym	\N
-49	Via Marsala, Roma	41.901	12.5025	Termini Wellness	4.2	gym	Pull-up bar needs maintenance
-50	Piazza Campo de Fiori, Roma	41.8954	12.4724	Campo de Fiori Gym	4.5	gym	\N
-51	Piazzale Napoleone I, Roma	41.9109	12.4818	Villa Borghese Park	4.7	park	\N
-52	Piazza di Santa Maria, Roma	41.8929	12.4825	Trastevere Workout Park	4.3	park	\N
-53	Via di Santa Sabina, Roma	41.885	12.488	Aventine Hill Park	4.6	park	Running track under repair
-54	Via Aurelia Antica, Roma	41.885	12.45	Villa Pamphili	4.8	park	\N
-55	Via Salaria, Roma	41.9325	12.5	Villa Ada Park	4.7	park	\N
-56	Via Lemonia, Roma	41.855	12.545	Parco degli Acquedotti	4.9	park	\N
-57	Viale del Monte Oppio, Roma	41.8925	12.4975	Colle Oppio Park	4.4	park	\N
-58	Via della Caffarella, Roma	41.855	12.515	Parco della Caffarella	4.6	park	\N
-59	Via Nomentana, Roma	41.915	12.508	Villa Torlonia	4.5	park	\N
-60	Piazzale del Partigiano, Roma	41.928	12.475	Parco di Villa Glori	4.4	park	\N
+61	dw	41.9028	12.4964	ewfew	0	park	\N
 \.
 
 
@@ -457,6 +518,16 @@ COPY public.location (id, address, latitude, longitude, name, rating, type, warn
 --
 
 COPY public.notification (id, is_read, message, "timestamp", type, user_id) FROM stdin;
+7	f	alice_120704 has sent you a friend request.	2026-01-15 12:07:06.532789	FRIEND_REQUEST	19
+6	t	alice_120704 has sent you a friend request.	2026-01-15 12:07:06.377207	FRIEND_REQUEST	18
+8	t	alice_120704 has sent you a friend request.	2026-01-15 12:23:07.766356	FRIEND_REQUEST	12
+9	t	alice_120704 ha confermato la partecipazione a: Porto Alice al tiro al piattello	2026-01-15 13:07:32.305776	NEW_APPOINTMENT	12
+10	t	alice_120704 ha confermato la partecipazione a: ciao alice	2026-01-15 13:31:40.240553	NEW_APPOINTMENT	12
+11	t	ant ha creato un nuovo appuntamento: certo	2026-01-15 13:32:48.73316	NEW_APPOINTMENT	17
+13	t	ant ha confermato la partecipazione a: Non ce la faccio piu	2026-01-15 13:42:03.319109	NEW_APPOINTMENT	17
+12	t	alice_120704 ha creato un nuovo appuntamento: Non ce la faccio piu	2026-01-15 13:41:18.657871	NEW_APPOINTMENT	12
+14	t	ant ha creato un nuovo appuntamento: hello	2026-01-15 15:50:32.65159	NEW_APPOINTMENT	17
+15	t	alice_120704 ha confermato la partecipazione a: hello	2026-01-15 16:03:39.969066	NEW_APPOINTMENT	12
 \.
 
 
@@ -510,14 +581,28 @@ COPY public.workout_plan (id, user_id, start_date, end_date, created_at, title) 
 -- Name: app_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.app_user_id_seq', 11, true);
+SELECT pg_catalog.setval('public.app_user_id_seq', 19, true);
+
+
+--
+-- Name: appointment_confirmation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.appointment_confirmation_id_seq', 5, true);
 
 
 --
 -- Name: appointment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.appointment_id_seq', 1, false);
+SELECT pg_catalog.setval('public.appointment_id_seq', 11, true);
+
+
+--
+-- Name: blacklist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.blacklist_id_seq', 1, false);
 
 
 --
@@ -531,21 +616,21 @@ SELECT pg_catalog.setval('public.exercise_preset_id_seq', 20, true);
 -- Name: friend_request_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.friend_request_id_seq', 4, true);
+SELECT pg_catalog.setval('public.friend_request_id_seq', 7, true);
 
 
 --
 -- Name: location_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.location_id_seq', 60, true);
+SELECT pg_catalog.setval('public.location_id_seq', 61, true);
 
 
 --
 -- Name: notification_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.notification_id_seq', 5, true);
+SELECT pg_catalog.setval('public.notification_id_seq', 15, true);
 
 
 --
@@ -571,11 +656,35 @@ ALTER TABLE ONLY public.app_user
 
 
 --
+-- Name: appointment_confirmation appointment_confirmation_appointment_id_user_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointment_confirmation
+    ADD CONSTRAINT appointment_confirmation_appointment_id_user_id_key UNIQUE (appointment_id, user_id);
+
+
+--
+-- Name: appointment_confirmation appointment_confirmation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointment_confirmation
+    ADD CONSTRAINT appointment_confirmation_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: appointment appointment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.appointment
     ADD CONSTRAINT appointment_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: blacklist blacklist_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.blacklist
+    ADD CONSTRAINT blacklist_pkey PRIMARY KEY (id);
 
 
 --
@@ -706,6 +815,22 @@ CREATE INDEX idx_workout_plan_user_dates ON public.workout_plan USING btree (use
 
 
 --
+-- Name: appointment_confirmation appointment_confirmation_appointment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointment_confirmation
+    ADD CONSTRAINT appointment_confirmation_appointment_id_fkey FOREIGN KEY (appointment_id) REFERENCES public.appointment(id) ON DELETE CASCADE;
+
+
+--
+-- Name: appointment_confirmation appointment_confirmation_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointment_confirmation
+    ADD CONSTRAINT appointment_confirmation_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.app_user(id);
+
+
+--
 -- Name: appointment fk_appointment_creator; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -765,5 +890,5 @@ ALTER TABLE ONLY public.workout_plan
 -- PostgreSQL database dump complete
 --
 
-\unrestrict f8Yub5YWDrjZBwfHGms6hurFejmxnEboI4frWTHgvmUHsRQZoxBtwS12jOk3XBe
+\unrestrict D6tbTLDIvQCDiz6p7n9535QBotYgL6mw2mWzfS7dtBgHvMTw0FmhtrjxsOpYXW9
 

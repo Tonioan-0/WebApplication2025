@@ -250,3 +250,35 @@
 .btn-delete:hover {
     background: rgba(255, 107, 107, 0.1);
 }
+
+.btn-confirm {
+    background: transparent;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    padding: 0.25rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4CAF50;
+}
+
+.btn-confirm:hover {
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.confirmed-badge {
+    background: rgba(76, 175, 80, 0.15);
+    color: #4CAF50;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    margin-right: 0.25rem;
+}
+
+.confirmed-label {
+    font-size: 0.75rem;
+    color: #4CAF50;
+    font-weight: 500;
+}

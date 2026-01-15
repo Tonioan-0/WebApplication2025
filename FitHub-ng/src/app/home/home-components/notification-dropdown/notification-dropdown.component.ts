@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationService, Notification } from '../../../services/notification.service';
 import { SVG_ICONS } from '../../../shared/constants/svg-icons.constants';
@@ -18,12 +18,14 @@ export class NotificationDropdownComponent implements OnInit {
 
     constructor(
         private notificationService: NotificationService,
-        private elementRef: ElementRef
+        private elementRef: ElementRef,
+        private cdr: ChangeDetectorRef
     ) { }
 
     ngOnInit(): void {
         this.notificationService.unreadCount$.subscribe(count => {
             this.unreadCount = count;
+            this.cdr.detectChanges();
         });
 
         this.loadNotifications();
@@ -70,8 +72,8 @@ export class NotificationDropdownComponent implements OnInit {
         switch (type) {
             case 'FRIEND_REQUEST':
                 return this.svgIcons.community;
-            case 'APPOINTMENT_CREATED':
-            case 'APPOINTMENT_UPDATED':
+            case 'NEW_APPOINTMENT':
+            case 'WORKOUT_INVITATION':
                 return this.svgIcons.dumbbell;
             default:
                 return this.svgIcons.notification;

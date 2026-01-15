@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as L from 'leaflet';
 import { LocationService, type Location } from '../../../services/location.service';
+import { AuthService } from '../../../services/authService';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { SVG_ICONS } from '../../../shared/constants/svg-icons.constants';
@@ -50,6 +51,7 @@ export class MapFinderComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private cdr: ChangeDetectorRef,
     private locationService: LocationService,
+    private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -146,9 +148,9 @@ export class MapFinderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.mapMoveSubject.next();
     });
 
-    // Double click to create location
+    // Double click to create location (admin only)
     this.map.on('dblclick', (e: L.LeafletMouseEvent) => {
-      if (!this.isSelectionMode) {
+      if (!this.isSelectionMode && this.authService.isAdmin()) {
         this.openCreateModal(e.latlng.lat, e.latlng.lng);
       }
     });

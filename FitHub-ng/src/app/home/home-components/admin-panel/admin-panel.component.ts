@@ -37,11 +37,16 @@ export class AdminPanelComponent implements OnInit {
     lng: 0
   };
 
+  // Warning modal
+  showWarningModal = false;
+  selectedLocationForWarning: Location | null = null;
+  warningText = '';
+
   constructor(
     private adminService: AdminService,
     private locationService: LocationService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadBlacklist();
@@ -171,6 +176,46 @@ export class AdminPanelComponent implements OnInit {
       },
       error: (error) => {
         alert(error.error?.error || 'Errore durante l\'eliminazione');
+      }
+    });
+  }
+
+  // --- Gestione Warning ---
+  openWarningModal(location: Location): void {
+    this.selectedLocationForWarning = location;
+    this.warningText = location.warning || '';
+    this.showWarningModal = true;
+  }
+
+  closeWarningModal(): void {
+    this.showWarningModal = false;
+    this.selectedLocationForWarning = null;
+    this.warningText = '';
+  }
+
+  saveWarning(): void {
+    if (!this.selectedLocationForWarning) return;
+
+    this.locationService.addWarning(this.selectedLocationForWarning.id, this.warningText).subscribe({
+      next: () => {
+        this.closeWarningModal();
+        this.loadLocations();
+      },
+      error: (error) => {
+        alert(error.error?.error || 'Errore durante l\'aggiunta del warning');
+      }
+    });
+  }
+
+  removeWarning(locationId: number): void {
+    if (!confirm('Sei sicuro di voler rimuovere il warning?')) return;
+
+    this.locationService.removeWarning(locationId).subscribe({
+      next: () => {
+        this.loadLocations();
+      },
+      error: (error) => {
+        alert(error.error?.error || 'Errore durante la rimozione del warning');
       }
     });
   }

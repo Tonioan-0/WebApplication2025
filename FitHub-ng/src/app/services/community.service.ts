@@ -41,6 +41,9 @@ export interface Appointment {
     location: string;
     dateTime: string;
     creatorUsername: string;
+    isOwner: boolean;
+    isConfirmed: boolean;
+    confirmedCount: number;
 }
 
 @Injectable({
@@ -99,7 +102,14 @@ export class CommunityService {
         );
     }
 
+    confirmAppointment(id: number): Observable<void> {
+        return this.http.post<void>(`${this.apiUrl}/appointments/${id}/confirm`, {}).pipe(
+            tap(() => this.refreshAppointmentsSubject.next())
+        );
+    }
+
     unfriend(friendId: number): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/friends/${friendId}`);
     }
 }
+

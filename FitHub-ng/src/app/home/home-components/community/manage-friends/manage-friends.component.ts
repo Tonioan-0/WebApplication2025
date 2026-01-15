@@ -1,7 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { CommunityService, Friend, FriendRequest } from '../../../../services/community.service';
+import { NotificationService } from '../../../../services/notification.service';
 import { SVG_ICONS } from '../../../../shared/constants/svg-icons.constants';
 
 @Component({
@@ -11,7 +13,7 @@ import { SVG_ICONS } from '../../../../shared/constants/svg-icons.constants';
     templateUrl: './manage-friends.component.html',
     styleUrl: './manage-friends.component.css'
 })
-export class ManageFriendsComponent implements OnInit {
+export class ManageFriendsComponent implements OnInit, OnDestroy {
     protected readonly svgIcons = SVG_ICONS;
     friends: Friend[] = [];
     filteredFriends: Friend[] = [];
@@ -23,14 +25,31 @@ export class ManageFriendsComponent implements OnInit {
     error = '';
     sentRequestIds: Set<number> = new Set();
 
+    private notificationSubscription: Subscription | null = null;
+
     constructor(
         private communityService: CommunityService,
+        private notificationService: NotificationService,
         private cdr: ChangeDetectorRef
     ) { }
 
     ngOnInit(): void {
         this.loadFriends();
         this.loadPendingRequests();
+
+        // Subscribe to new notification events
+        this.notificationSubscription = this.notificationService.newNotification$.subscribe(type => {
+            if (type === 'FRIEND_REQUEST') {
+                console.log('New friend request notification received, refreshing...');
+                this.loadPendingRequests();
+            }
+        });
+    }
+
+    ngOnDestroy(): void {
+        if (this.notificationSubscription) {
+            this.notificationSubscription.unsubscribe();
+        }
     }
 
     loadFriends(): void {

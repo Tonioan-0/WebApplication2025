@@ -52,6 +52,14 @@ public class LocationService {
         return convertToDTO(savedLocation);
     }
 
+    public void addWarning(Long locationId, String warning) {
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new RuntimeException("Location not found with id: " + locationId));
+
+        location.setWarning(warning);
+        locationRepository.save(location);
+    }
+
     public void removeWarning(Long locationId) {
         Location location = locationRepository.findById(locationId)
                 .orElseThrow(() -> new RuntimeException("Location not found with id: " + locationId));
