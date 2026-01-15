@@ -10,7 +10,6 @@ export interface Location {
     name: string;
     type: 'gym' | 'park';
     address: string;
-    rating: number;
     warning?: string;
 }
 

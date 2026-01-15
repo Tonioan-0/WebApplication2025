@@ -438,7 +438,6 @@ export class MapFinderComponent implements OnInit, AfterViewInit, OnDestroy {
       address: this.newLocation.address,
       lat: this.newLocation.lat,
       lng: this.newLocation.lng,
-      rating: 0,
       warning: undefined
     };
 

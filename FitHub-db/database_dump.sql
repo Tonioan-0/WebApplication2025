@@ -242,7 +242,6 @@ CREATE TABLE public.location (
     latitude double precision NOT NULL,
     longitude double precision NOT NULL,
     name character varying(255) NOT NULL,
-    rating double precision NOT NULL,
     type character varying(255) NOT NULL,
     warning text
 );
@@ -508,8 +507,8 @@ COPY public.friend_request (id, status, "timestamp", receiver_id, sender_id) FRO
 -- Data for Name: location; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.location (id, address, latitude, longitude, name, rating, type, warning) FROM stdin;
-61	dw	41.9028	12.4964	ewfew	0	park	\N
+COPY public.location (id, address, latitude, longitude, name, type, warning) FROM stdin;
+61	dw	41.9028	12.4964	ewfew	park	\N
 \.
 
 

@@ -8,7 +8,6 @@ public class LocationDTO {
     private String name;
     private String type;
     private String address;
-    private Double rating;
     private String warning;
 
     // Constructors
@@ -16,14 +15,13 @@ public class LocationDTO {
     }
 
     public LocationDTO(Long id, Double lat, Double lng, String name, String type,
-            String address, Double rating, String warning) {
+            String address, String warning) {
         this.id = id;
         this.lat = lat;
         this.lng = lng;
         this.name = name;
         this.type = type;
         this.address = address;
-        this.rating = rating;
         this.warning = warning;
     }
 
@@ -74,14 +72,6 @@ public class LocationDTO {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public Double getRating() {
-        return rating;
-    }
-
-    public void setRating(Double rating) {
-        this.rating = rating;
     }
 
     public String getWarning() {

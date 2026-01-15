@@ -45,7 +45,6 @@ public class LocationService {
         location.setLatitude(dto.getLat());
         location.setLongitude(dto.getLng());
         location.setAddress(dto.getAddress());
-        location.setRating(dto.getRating() != null ? dto.getRating() : 0.0);
         location.setWarning(dto.getWarning());
 
         Location savedLocation = locationRepository.save(location);
@@ -83,7 +82,6 @@ public class LocationService {
                 location.getName(),
                 location.getType(),
                 location.getAddress(),
-                location.getRating(),
                 location.getWarning());
     }
 }

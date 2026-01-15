@@ -57,8 +57,8 @@ public class LocationRepository {
         }
 
         private Location insert(Location location) {
-                String sql = "INSERT INTO location (name, type, latitude, longitude, address, rating, warning) " +
-                                "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
+                String sql = "INSERT INTO location (name, type, latitude, longitude, address, warning) " +
+                                "VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
 
                 try (Connection conn = dataSource.getConnection();
                                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -68,8 +68,7 @@ public class LocationRepository {
                         stmt.setDouble(3, location.getLatitude());
                         stmt.setDouble(4, location.getLongitude());
                         stmt.setString(5, location.getAddress());
-                        stmt.setDouble(6, location.getRating());
-                        stmt.setString(7, location.getWarning());
+                        stmt.setString(6, location.getWarning());
 
                         try (ResultSet rs = stmt.executeQuery()) {
                                 if (rs.next()) {
@@ -84,7 +83,7 @@ public class LocationRepository {
 
         private Location update(Location location) {
                 String sql = "UPDATE location SET name = ?, type = ?, latitude = ?, longitude = ?, " +
-                                "address = ?, rating = ?, warning = ? WHERE id = ?";
+                                "address = ?, warning = ? WHERE id = ?";
 
                 try (Connection conn = dataSource.getConnection();
                                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -94,9 +93,8 @@ public class LocationRepository {
                         stmt.setDouble(3, location.getLatitude());
                         stmt.setDouble(4, location.getLongitude());
                         stmt.setString(5, location.getAddress());
-                        stmt.setDouble(6, location.getRating());
-                        stmt.setString(7, location.getWarning());
-                        stmt.setLong(8, location.getId());
+                        stmt.setString(6, location.getWarning());
+                        stmt.setLong(7, location.getId());
 
                         stmt.executeUpdate();
                         return location;
@@ -198,7 +196,7 @@ public class LocationRepository {
                 }
         }
 
-        //rimuovi location con ID.
+        // rimuovi location con ID.
         public void deleteById(Long id) {
                 String sql = "DELETE FROM location WHERE id = ?";
 
@@ -212,7 +210,7 @@ public class LocationRepository {
                 }
         }
 
-        //check se esiste una location con un certo id.
+        // check se esiste una location con un certo id.
         public boolean existsById(Long id) {
                 String sql = "SELECT 1 FROM location WHERE id = ?";
 
@@ -236,7 +234,7 @@ public class LocationRepository {
                 location.setLatitude(rs.getDouble("latitude"));
                 location.setLongitude(rs.getDouble("longitude"));
                 location.setAddress(rs.getString("address"));
-                location.setRating(rs.getDouble("rating"));
+
                 location.setWarning(rs.getString("warning"));
                 return location;
         }

@@ -8,7 +8,6 @@ public class Location {
     private Double latitude;
     private Double longitude;
     private String address;
-    private Double rating;
     private String warning; // Nullable - for broken equipment alerts
 
     // Constructors
@@ -16,13 +15,12 @@ public class Location {
     }
 
     public Location(String name, String type, Double latitude, Double longitude,
-            String address, Double rating, String warning) {
+            String address, String warning) {
         this.name = name;
         this.type = type;
         this.latitude = latitude;
         this.longitude = longitude;
         this.address = address;
-        this.rating = rating;
         this.warning = warning;
     }
 
@@ -73,14 +71,6 @@ public class Location {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public Double getRating() {
-        return rating;
-    }
-
-    public void setRating(Double rating) {
-        this.rating = rating;
     }
 
     public String getWarning() {

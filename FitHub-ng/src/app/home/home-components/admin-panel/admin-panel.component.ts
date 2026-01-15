@@ -152,8 +152,7 @@ export class AdminPanelComponent implements OnInit {
       type: this.newLocation.type,
       address: this.newLocation.address,
       lat: this.newLocation.lat,
-      lng: this.newLocation.lng,
-      rating: 0
+      lng: this.newLocation.lng
     };
 
     this.locationService.createLocation(locationData).subscribe({
