@@ -66,13 +66,20 @@ public class UserRepository {
     private User insert(User user) {
         String sql = "INSERT INTO app_user (username, email, password, is_admin) VALUES (?, ?, ?, ?) RETURNING id";
 
+        // DEBUG
+        System.out.println("=== INSERT DEBUG ===");
+        System.out.println("user.getIsAdmin() = " + user.getIsAdmin());
+        Boolean valueToInsert = user.getIsAdmin() != null ? user.getIsAdmin() : false;
+        System.out.println("valueToInsert = " + valueToInsert);
+        System.out.println("====================");
+
         try (Connection conn = dataSource.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
-            stmt.setBoolean(4, user.getIsAdmin() != null ? user.getIsAdmin() : false);
+            stmt.setBoolean(4, valueToInsert);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -192,16 +199,12 @@ public class UserRepository {
     }
 
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
-        // Use Proxy for lazy loading
         User user = new UserProxy(rs.getLong("id"), appointmentRepository);
-        // Note: ID is already set in constructor
-
         user.setUsername(rs.getString("username"));
         user.setEmail(rs.getString("email"));
         user.setPassword(rs.getString("password"));
         user.setIsPublic(rs.getBoolean("is_public"));
         user.setIsAdmin(rs.getBoolean("is_admin"));
-        // No need to set appointments manually, proxy handles it
         return user;
     }
 

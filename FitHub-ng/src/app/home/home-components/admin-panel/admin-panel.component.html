@@ -1,0 +1,182 @@
+<div class="content-area">
+    <div class="page-header">
+        <div>
+            <h1>
+                <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path [attr.d]="icons.shield" />
+                </svg>
+                Admin Panel
+            </h1>
+            <p>Gestisci utenti e contenuti della piattaforma</p>
+        </div>
+    </div>
+
+    <!-- Sezione Ban Utente -->
+    <section class="admin-section">
+        <h2>
+            <svg class="section-icon ban-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path [attr.d]="icons.ban" />
+            </svg>
+            Ban Utente
+        </h2>
+        <div class="ban-form">
+            <div class="form-group">
+                <label for="userIdOrEmail">ID o Email Utente</label>
+                <input 
+                    type="text" 
+                    id="userIdOrEmail" 
+                    [(ngModel)]="userIdOrEmail"
+                    placeholder="Inserisci ID numerico o email"
+                    class="form-input"
+                >
+            </div>
+            <div class="form-group">
+                <label for="banReason">Motivazione</label>
+                <textarea 
+                    id="banReason" 
+                    [(ngModel)]="banReason"
+                    placeholder="Inserisci il motivo del ban..."
+                    class="form-textarea"
+                    rows="3"
+                ></textarea>
+            </div>
+            <button 
+                class="btn-ban" 
+                (click)="banUser()" 
+                [disabled]="banLoading"
+            >
+                <svg *ngIf="!banLoading" class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path [attr.d]="icons.ban" />
+                </svg>
+                {{ banLoading ? 'Bannando...' : 'Banna Utente' }}
+            </button>
+            <div class="message error" *ngIf="banError">{{ banError }}</div>
+            <div class="message success" *ngIf="banSuccess">{{ banSuccess }}</div>
+        </div>
+    </section>
+
+    <!-- Sezione Blacklist -->
+    <section class="admin-section">
+        <h2>
+            <svg class="section-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path [attr.d]="icons.adminUser" />
+            </svg>
+            Utenti Bannati
+        </h2>
+        <div class="loading" *ngIf="blacklistLoading">Caricamento...</div>
+        <div class="empty-state" *ngIf="!blacklistLoading && blacklist.length === 0">
+            Nessun utente bannato
+        </div>
+        <div class="blacklist-table" *ngIf="blacklist.length > 0">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Email</th>
+                        <th>Motivo</th>
+                        <th>Data Ban</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let entry of blacklist">
+                        <td>{{ entry.userId }}</td>
+                        <td>{{ entry.email }}</td>
+                        <td class="reason-cell">{{ entry.reason }}</td>
+                        <td>{{ entry.bannedAt | date:'dd/MM/yyyy HH:mm' }}</td>
+                        <td>
+                            <button class="btn-unban" (click)="unbanUser(entry.userId)">
+                                <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path [attr.d]="icons.unban" />
+                                </svg>
+                                Rimuovi Ban
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Sezione Gestione Location -->
+    <section class="admin-section">
+        <div class="section-header">
+            <h2>
+                <svg class="section-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path [attr.d]="icons.locationPin" />
+                </svg>
+                Gestione Parchetti/Palestre
+            </h2>
+            <button class="btn-add" (click)="openAddLocationModal()">
+                <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path [attr.d]="icons.add" />
+                </svg>
+                Aggiungi Location
+            </button>
+        </div>
+        <div class="loading" *ngIf="locationsLoading">Caricamento...</div>
+        <div class="empty-state" *ngIf="!locationsLoading && locations.length === 0">
+            Nessuna location trovata
+        </div>
+        <div class="locations-grid" *ngIf="locations.length > 0">
+            <div class="location-card" *ngFor="let loc of locations">
+                <div class="location-icon" [class.park]="loc.type === 'park'" [class.gym]="loc.type === 'gym'">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path [attr.d]="loc.type === 'park' ? icons.tree : icons.fitness" />
+                    </svg>
+                </div>
+                <div class="location-info">
+                    <h4>{{ loc.name }}</h4>
+                    <p>{{ loc.address }}</p>
+                    <small>{{ loc.type | uppercase }} • {{ loc.lat.toFixed(4) }}, {{ loc.lng.toFixed(4) }}</small>
+                </div>
+                <button class="btn-delete" (click)="deleteLocation(loc.id!)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path [attr.d]="icons.trash" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Aggiungi Location -->
+    <div class="modal-overlay" *ngIf="showAddLocationModal" (click)="closeAddLocationModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <h3>Aggiungi Nuova Location</h3>
+            <div class="form-group">
+                <label>Nome</label>
+                <input type="text" [(ngModel)]="newLocation.name" class="form-input" placeholder="Nome location">
+            </div>
+            <div class="form-group">
+                <label>Tipo</label>
+                <select [(ngModel)]="newLocation.type" class="form-input">
+                    <option value="park">Parchetto</option>
+                    <option value="gym">Palestra</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Indirizzo</label>
+                <input type="text" [(ngModel)]="newLocation.address" class="form-input" placeholder="Indirizzo">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Latitudine</label>
+                    <input type="number" [(ngModel)]="newLocation.lat" class="form-input" step="0.0001">
+                </div>
+                <div class="form-group">
+                    <label>Longitudine</label>
+                    <input type="number" [(ngModel)]="newLocation.lng" class="form-input" step="0.0001">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" (click)="closeAddLocationModal()">Annulla</button>
+                <button class="btn-add" (click)="addLocation()">
+                    <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path [attr.d]="icons.add" />
+                    </svg>
+                    Aggiungi
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

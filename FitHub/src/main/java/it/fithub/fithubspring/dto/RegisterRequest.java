@@ -1,9 +1,13 @@
 package it.fithub.fithubspring.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RegisterRequest {
     private String username;
     private String password;
     private String email;
+    
+    @JsonProperty("isAdmin")
     private Boolean isAdmin = false;
 
     public RegisterRequest() {

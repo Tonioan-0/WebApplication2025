@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 import { guestGuard } from './guards/guest.guard';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   // Landing page (guests only)
@@ -58,6 +59,12 @@ export const routes: Routes = [
         path: 'community',
         loadComponent: () => import('./home/home-components/community/community.component').then(m => m.CommunityComponent),
         title: 'FitHub - Community & Scheduling'
+      },
+      {
+        path: 'admin',
+        loadComponent: () => import('./home/home-components/admin-panel/admin-panel.component').then(m => m.AdminPanelComponent),
+        title: 'FitHub - Admin Panel',
+        canActivate: [adminGuard]
       },
       {
         path: 'profile',

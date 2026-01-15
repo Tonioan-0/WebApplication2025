@@ -41,4 +41,9 @@ public class LocationController {
     public void removeWarning(@PathVariable Long id) {
         locationService.removeWarning(id);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteLocation(@PathVariable Long id) {
+        locationService.deleteLocation(id);
+    }
 }

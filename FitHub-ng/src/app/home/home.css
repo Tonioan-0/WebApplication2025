@@ -26,6 +26,12 @@
     flex-shrink: 0;
 }
 
+/* Admin section at bottom of sidebar */
+.sidebar-bottom {
+    margin-top: auto;
+    padding: 16px;
+}
+
 .dashboard-container.collapsed .sidebar {
     width: var(--sidebar-collapsed-width);
 }
@@ -91,6 +97,20 @@
 .nav-item.ai-coach {
     margin-top: 12px;
     color: var(--primary);
+}
+
+/* Admin nav item - distinct styling */
+.nav-item.admin-nav-item {
+    margin-top: 12px;
+    color: #FF9800;
+    border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.nav-item.admin-nav-item:hover,
+.nav-item.admin-nav-item.active {
+    background: linear-gradient(135deg, #FF9800, #F57C00);
+    color: white;
+    border-color: transparent;
 }
 
 /* Main Content */

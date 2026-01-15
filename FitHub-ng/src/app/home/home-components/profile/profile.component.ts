@@ -31,13 +31,22 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = true;
+    
+    // Check immediate value first
+    const currentId = this.authService.getCurrentUserId();
+    if (currentId) {
+      this.currentUserId = currentId;
+      this.loadProfile(currentId);
+    }
+    
+    // Also subscribe to future changes
     this.userSubscription = this.authService.currentUserId$.subscribe(userId => {
-      if (userId) {
+      if (userId && userId !== this.currentUserId) {
         this.currentUserId = userId;
         this.loadProfile(userId);
-      } else {
-          this.isLoading = false;
-          this.cdr.detectChanges();
+      } else if (!userId && !this.currentUserId) {
+        this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }

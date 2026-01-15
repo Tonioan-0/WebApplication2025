@@ -1,0 +1,22 @@
+<div class="popup-overlay" (click)="close.emit()">
+  <div class="popup-content" (click)="$event.stopPropagation()">
+    <div class="popup-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path [attr.d]="icons.ban" />
+      </svg>
+    </div>
+    <h2>Account Sospeso</h2>
+    <p class="popup-subtitle">Il tuo account è stato sospeso per violazione delle linee guida.</p>
+    
+    <div class="reason-box">
+      <h4>Motivo della sospensione:</h4>
+      <p class="reason-text">{{ reason || 'Nessuna motivazione specificata.' }}</p>
+    </div>
+
+    <p class="contact-info">
+      Se ritieni che ci sia stato un errore, contatta il supporto.
+    </p>
+    
+    <button class="btn-close" (click)="close.emit()">Ho capito</button>
+  </div>
+</div>

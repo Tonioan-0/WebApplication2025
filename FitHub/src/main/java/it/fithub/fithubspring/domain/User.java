@@ -18,7 +18,7 @@ public class User {
     private String email;
     private String password;
     private Boolean isPublic;
-    private Boolean isAdmin = false;
+    private Boolean isAdmin;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

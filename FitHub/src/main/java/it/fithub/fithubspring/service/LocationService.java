@@ -60,6 +60,13 @@ public class LocationService {
         locationRepository.save(location);
     }
 
+    public void deleteLocation(Long locationId) {
+        if (!locationRepository.existsById(locationId)) {
+            throw new RuntimeException("Location not found with id: " + locationId);
+        }
+        locationRepository.deleteById(locationId);
+    }
+
     private LocationDTO convertToDTO(Location location) {
         return new LocationDTO(
                 location.getId(),
