@@ -5,11 +5,15 @@ import { Subscription } from 'rxjs';
 import { CommunityService, Friend, FriendRequest } from '../../../../services/community.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { SVG_ICONS } from '../../../../shared/constants/svg-icons.constants';
+import {UserProfile} from '../../../../models/user-profile.model';
+import {ProfileService} from '../../../../services/profile.service';
+import {UserIdentityCardComponent} from '../../profile/user-identity-card/user-identity-card.component';
+import {UserStatsCardComponent} from '../../profile/user-stats-card/user-stats-card.component';
 
 @Component({
     selector: 'app-manage-friends',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, UserIdentityCardComponent, UserStatsCardComponent],
     templateUrl: './manage-friends.component.html',
     styleUrl: './manage-friends.component.css'
 })
@@ -24,12 +28,16 @@ export class ManageFriendsComponent implements OnInit, OnDestroy {
     loading = true;
     error = '';
     sentRequestIds: Set<number> = new Set();
+    selectedUserProfile: UserProfile | null = null;
+    showProfileModal: boolean = false;
+    isLoadingProfile: boolean = false;
 
     private notificationSubscription: Subscription | null = null;
 
     constructor(
         private communityService: CommunityService,
         private notificationService: NotificationService,
+        private profileService: ProfileService,
         private cdr: ChangeDetectorRef
     ) { }
 
@@ -160,4 +168,28 @@ export class ManageFriendsComponent implements OnInit, OnDestroy {
             });
         }
     }
+
+  viewUserProfile(userId: number): void {
+    this.isLoadingProfile = true;
+    this.showProfileModal = true;
+    this.selectedUserProfile = null; // Reset visuale
+
+    this.profileService.getUserProfile(userId).subscribe({
+      next: (profile) => {
+        this.selectedUserProfile = profile;
+        this.isLoadingProfile = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Errore caricamento profilo utente', err);
+        this.isLoadingProfile = false;
+        this.showProfileModal = false;
+      }
+    });
+  }
+
+  closeProfileModal(): void {
+    this.showProfileModal = false;
+    this.selectedUserProfile = null;
+  }
 }
