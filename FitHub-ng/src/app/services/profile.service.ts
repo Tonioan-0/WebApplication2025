@@ -29,6 +29,5 @@ export class ProfileService {
   }
 
   changePassword(userId: number, data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/users/${userId}/change-password`, data);
-  }
+    return this.http.post(`${this.apiUrl}/${userId}/change-password`, data);  }
 }

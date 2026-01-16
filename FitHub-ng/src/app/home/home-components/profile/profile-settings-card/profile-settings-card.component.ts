@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -29,7 +29,8 @@ export class ProfileSettingsCardComponent {
   errorMessage = '';
   successMessage = '';
 
-  constructor(private profileService: ProfileService) {}
+  constructor(private profileService: ProfileService,
+              private cdr: ChangeDetectorRef) {}
 
   onToggle(event: Event) {
     this.visibilityChange.emit(event);
@@ -53,18 +54,21 @@ export class ProfileSettingsCardComponent {
   submitPasswordChange(): void {
     if (this.passData.newPassword !== this.passData.confirmPassword) {
       this.errorMessage = 'Le nuove password non coincidono.';
-      return; // Blocca tutto, non chiama il server
+      return;
     }
     if (this.passData.newPassword.length < 6) {
-      this.errorMessage = 'La password deve avere almeno 6 caratteri.';
-      return; // Blocca tutto
+      this.errorMessage = 'La password deve essere di almeno 6 caratteri.';
+      return;
     }
     if (!this.currentUserId) {
       this.errorMessage = "Errore: Sessione utente non valida.";
       return;
     }
+
     this.isLoading = true;
     this.errorMessage = '';
+    this.successMessage = '';
+    this.cdr.detectChanges();
 
     const payload = {
       currentPassword: this.passData.currentPassword,
@@ -72,20 +76,37 @@ export class ProfileSettingsCardComponent {
     };
 
     this.profileService.changePassword(this.currentUserId, payload).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('Password cambiata!', response);
+
         this.isLoading = false;
         this.successMessage = 'Password aggiornata con successo!';
         this.passData = { currentPassword: '', newPassword: '', confirmPassword: '' };
-        setTimeout(() => this.closeModal(), 1500);
+        this.cdr.detectChanges();
+
+        setTimeout(() => {
+          this.closeModal();
+          this.cdr.detectChanges();
+        }, 1500);
       },
       error: (err) => {
-        console.error(err);
+
+        console.error('Errore cambio password:', err);
         this.isLoading = false;
-        if (err.status === 400 || err.status === 401) {
-          this.errorMessage = err.error?.message || err.error?.error || 'La password attuale non è corretta.';
-        } else {
-          this.errorMessage = 'Si è verificato un errore nel server. Riprova più tardi.';
+
+        if (err.status === 200) {
+          this.successMessage = 'Password aggiornata!';
+          this.cdr.detectChanges();
+          setTimeout(() => this.closeModal(), 1500);
+          return;
         }
+
+        if (err.status === 400 || err.status === 401) {
+          this.errorMessage = 'La password attuale non è corretta.';
+        } else {
+          this.errorMessage = 'Errore del server. Riprova.';
+        }
+        this.cdr.detectChanges();
       }
     });
   }
