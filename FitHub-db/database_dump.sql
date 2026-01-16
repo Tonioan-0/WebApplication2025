@@ -2,8 +2,6 @@
 -- PostgreSQL database dump
 --
 
-\restrict D6tbTLDIvQCDiz6p7n9535QBotYgL6mw2mWzfS7dtBgHvMTw0FmhtrjxsOpYXW9
-
 -- Dumped from database version 16.11
 -- Dumped by pg_dump version 18.1 (Debian 18.1-2)
 
@@ -37,7 +35,8 @@ CREATE TABLE public.app_user (
     weekly_workouts_done integer DEFAULT 0,
     week_start_date date,
     last_workout_date date,
-    is_admin boolean DEFAULT false NOT NULL
+    is_admin boolean DEFAULT false NOT NULL,
+    status_message text
 );
 
 
@@ -416,20 +415,20 @@ ALTER TABLE ONLY public.workout_plan ALTER COLUMN id SET DEFAULT nextval('public
 -- Data for Name: app_user; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.app_user (id, email, username, password, is_public, current_streak, weekly_workouts_done, week_start_date, last_workout_date, is_admin) FROM stdin;
-8	simone@gmail.com	simone	$2a$10$N9qo8uLOickgx2ZMRZoMy.MqDxOr8pWn/nw0gS.S4/3.g3M/3vGCa	f	50	0	\N	\N	f
-1	demo@fithub.it	demo	$2a$10$N9qo8uLOickgx2ZMRZoMy.MqDxOr8pWn/nw0gS.S4/3.g3M/3vGCa	f	50	0	\N	\N	f
-9	nuovo@test.com	nuovoutente	$2a$10$dXJ3SW6G7P50lGmMkkmwe.t8.r9g3XwLZoEHmM4v6b6f1CJAB0o9m	f	50	0	\N	\N	f
-11	test@test.com	Test User	$2a$10$nB37uVf31g.Wz2aPf1d9iucb58alWwFl4F6ex82/f83fBgIbR3.SO	f	50	1	2026-01-12	2026-01-13	f
-10	nuovouser123@test.com	nuovouser	$2a$10$FkdZLPdIRl8fi9VGPwKX7OjCfZT7.ysmZs.92N842mDoG9B8ncd.a	f	50	2	2026-01-12	2026-01-14	f
-12	ant@fithub.com	ant	$2a$10$yArmedxHhSbBRVchDAmpReY9dyvN8GC/xqrpskYr/2kikE1ateIzK	f	0	0	\N	\N	f
-13	testadmin@test.com	testadmin	$2a$10$3.5mZLLEhdNrBJcz7wcEvu4QusW42R/m4LIU8nLXj0AKfyoNqdLf.	f	0	0	\N	\N	t
-14	admin@test.com	test_admin	$2a$10$GnKnMfTdp7VSRWtu.cq9MuZkcaCy/LtU1qJuF9QQv2o1aardp4iVa	f	0	0	\N	\N	t
-15	user1@test.com	test_user1	$2a$10$PhCYpZZqtdnMd3oqffMPTuMBHxY1U8GspRhVmXcbdn6PMEr8a7UBW	f	0	0	\N	\N	f
-16	user2@test.com	test_user2	$2a$10$Tgl/uCq0oXe2k8viUyE/PedznWkLwOE7/IrNqhKEmrzQ0iIvW6Po6	f	0	0	\N	\N	f
-18	bob_120704@test.com	bob_120704	$2a$10$T/guMgimRfuOepNhdUP0m.fcqkewNSsqg0Yn808KJTICLa6Q3SEWS	f	0	0	\N	\N	f
-19	charlie_120704@test.com	charlie_120704	$2a$10$5X1io4/SK2WAuVO3daQWlOKcvYFi7oy0pwJL35H2IcglpYX/1f3ei	f	0	0	\N	\N	f
-17	alice_120704@test.com	alice_120704	$2a$10$omHNmG5h85LO7HMqMc9Ese9aK/YHzgw/KglYnkCxcq2o2Qzs6WkzO	t	0	0	\N	\N	t
+COPY public.app_user (id, email, username, password, is_public, current_streak, weekly_workouts_done, week_start_date, last_workout_date, is_admin, status_message) FROM stdin;
+8	simone@gmail.com	simone	$2a$10$N9qo8uLOickgx2ZMRZoMy.MqDxOr8pWn/nw0gS.S4/3.g3M/3vGCa	f	50	0	\N	\N	f	\N
+1	demo@fithub.it	demo	$2a$10$N9qo8uLOickgx2ZMRZoMy.MqDxOr8pWn/nw0gS.S4/3.g3M/3vGCa	f	50	0	\N	\N	f	\N
+9	nuovo@test.com	nuovoutente	$2a$10$dXJ3SW6G7P50lGmMkkmwe.t8.r9g3XwLZoEHmM4v6b6f1CJAB0o9m	f	50	0	\N	\N	f	\N
+11	test@test.com	Test User	$2a$10$nB37uVf31g.Wz2aPf1d9iucb58alWwFl4F6ex82/f83fBgIbR3.SO	f	50	1	2026-01-12	2026-01-13	f	\N
+10	nuovouser123@test.com	nuovouser	$2a$10$FkdZLPdIRl8fi9VGPwKX7OjCfZT7.ysmZs.92N842mDoG9B8ncd.a	f	50	2	2026-01-12	2026-01-14	f	\N
+12	ant@fithub.com	ant	$2a$10$yArmedxHhSbBRVchDAmpReY9dyvN8GC/xqrpskYr/2kikE1ateIzK	f	0	0	\N	\N	f	\N
+13	testadmin@test.com	testadmin	$2a$10$3.5mZLLEhdNrBJcz7wcEvu4QusW42R/m4LIU8nLXj0AKfyoNqdLf.	f	0	0	\N	\N	t	\N
+14	admin@test.com	test_admin	$2a$10$GnKnMfTdp7VSRWtu.cq9MuZkcaCy/LtU1qJuF9QQv2o1aardp4iVa	f	0	0	\N	\N	t	\N
+15	user1@test.com	test_user1	$2a$10$PhCYpZZqtdnMd3oqffMPTuMBHxY1U8GspRhVmXcbdn6PMEr8a7UBW	f	0	0	\N	\N	f	\N
+16	user2@test.com	test_user2	$2a$10$Tgl/uCq0oXe2k8viUyE/PedznWkLwOE7/IrNqhKEmrzQ0iIvW6Po6	f	0	0	\N	\N	f	\N
+18	bob_120704@test.com	bob_120704	$2a$10$T/guMgimRfuOepNhdUP0m.fcqkewNSsqg0Yn808KJTICLa6Q3SEWS	f	0	0	\N	\N	f	\N
+19	charlie_120704@test.com	charlie_120704	$2a$10$5X1io4/SK2WAuVO3daQWlOKcvYFi7oy0pwJL35H2IcglpYX/1f3ei	f	0	0	\N	\N	f	\N
+17	alice_120704@test.com	alice_120704	$2a$10$omHNmG5h85LO7HMqMc9Ese9aK/YHzgw/KglYnkCxcq2o2Qzs6WkzO	t	0	0	\N	\N	t	\N
 \.
 
 
@@ -888,6 +887,4 @@ ALTER TABLE ONLY public.workout_plan
 --
 -- PostgreSQL database dump complete
 --
-
-\unrestrict D6tbTLDIvQCDiz6p7n9535QBotYgL6mw2mWzfS7dtBgHvMTw0FmhtrjxsOpYXW9
 

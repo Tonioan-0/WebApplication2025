@@ -47,8 +47,10 @@
 }
 
 .action-link {
-  color: #888;
+  color: #ffffff;
   text-decoration: none;
+  background-color: #0d6efd;
+  border-radius: 8px;
   font-size: 0.9rem;
   text-align: center;
   padding: 5px;
@@ -59,12 +61,12 @@
 }
 
 .action-link:hover {
-  color: white;
-  text-decoration: underline;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(13, 110, 253, 0.37);
 }
 
 .logout-btn {
-  background: linear-gradient(90deg, #3b82f6, #2563eb);
+  background: #e02618;
   border: none;
   color: white;
   padding: 12px;
@@ -72,13 +74,12 @@
   font-weight: 700;
   font-size: 0.9rem;
   width: 100%;
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
   transition: transform 0.2s;
 }
 
 .logout-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 6px 20px rgba(238, 10, 10, 0.37);
 }
 
 .modal-backdrop {
