@@ -29,15 +29,15 @@ export class AiChatService {
     }
 
     private handleError(error: HttpErrorResponse): Observable<never> {
-        let errorMessage = 'An error occurred while communicating with the AI assistant.';
+        let errorMessage = 'Si è verificato un errore durante la comunicazione con l\'assistente AI.';
 
         if (error.status === 0) {
             // Network error or server unreachable
-            errorMessage = 'Unable to reach the server. Please check your connection and ensure the backend is running.';
+            errorMessage = 'Impossibile raggiungere il server. Si prega di verificare la connessione e assicurarsi che il backend sia in esecuzione.';
         } else if (error.status >= 500) {
-            errorMessage = 'The AI service is currently unavailable. Please try again later.';
+            errorMessage = 'Il servizio AI è attualmente non disponibile. Si prega di riprovare più tardi.';
         } else if (error.status >= 400) {
-            errorMessage = 'There was a problem with your request. Please try again.';
+            errorMessage = 'Si è verificato un problema con la tua richiesta. Si prega di riprovare.';
         }
 
         return throwError(() => new Error(errorMessage));

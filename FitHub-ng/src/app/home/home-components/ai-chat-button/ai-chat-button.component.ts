@@ -32,7 +32,7 @@ export class AiChatButtonComponent {
     ) {
         // Add welcome message
         this.messages.push({
-            text: 'Hi! I\'m Neko, your personal trainer assistant. How can I help you train smarter today?',
+            text: 'Ciao! Sono Neko, il tuo assistente di allenamento personale. Come posso aiutarti ad allenarti in modo più intelligente oggi?',
             isUser: false,
             timestamp: new Date()
         });

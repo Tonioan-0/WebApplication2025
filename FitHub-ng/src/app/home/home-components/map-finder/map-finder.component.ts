@@ -456,6 +456,11 @@ export class MapFinderComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  // Admin check for template
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+
   // Warning management
   removeWarningFromLocation(locationId: number): void {
     if (!confirm('Are you sure you want to remove this warning?')) {
