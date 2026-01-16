@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterDto {
-    private String fullName; // Mapped to username for now, or separate if splitting names
+    private String fullName;
     private String email;
     private String password;
 }
