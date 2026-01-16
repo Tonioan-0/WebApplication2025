@@ -4,12 +4,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.fithub.fithubspring.domain.proxy.WorkoutPlanProxy;
 import it.fithub.fithubspring.dto.workout.WorkoutItemDto;
 import it.fithub.fithubspring.dto.workout.WorkoutPlanDto;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -66,8 +66,9 @@ public class WorkoutPlansRepository {
         }
     }
 
-    /*Tutti gli allenamenti attivi per un utente */
+    // PROXY PATTERN: Carica i piani attivi con lazy loading degli items
     public List<WorkoutPlanDto> findActive(Long userId, LocalDate referenceDate) {
+        // System.out.println(">>> SCHEDE: Caricamento schede ATTIVE per user ID: " + userId);
         String sql = """
                   SELECT id, user_id, title, start_date, end_date
                   FROM workout_plan
@@ -76,22 +77,60 @@ public class WorkoutPlansRepository {
                     AND end_date >= ?
                   ORDER BY start_date DESC, id DESC
                 """;
-        List<Long> planIds = jdbc.query(sql, (rs, i) -> rs.getLong("id"), userId, Date.valueOf(referenceDate),
-                Date.valueOf(referenceDate));
-        return loadPlansByIds(userId, planIds);
+        return jdbc.query(sql, (rs, i) -> {
+            Long planId = rs.getLong("id");
+            Long planUserId = rs.getLong("user_id");
+            String title = rs.getString("title");
+            LocalDate startDate = rs.getDate("start_date").toLocalDate();
+            LocalDate endDate = rs.getDate("end_date").toLocalDate();
+            
+            // Crea il proxy con lazy loading: gli items vengono caricati solo quando richiesti
+            return new WorkoutPlanProxy(planId, planUserId, title, startDate, endDate,
+                    () -> findItemsByPlanId(planId));
+        }, userId, Date.valueOf(referenceDate), Date.valueOf(referenceDate));
     }
 
-    /*Tutti gli allenamenti scaduti per un utente */
+    // Carica gli items di un piano specifico
+    public List<WorkoutItemDto> findItemsByPlanId(Long planId) {
+        return jdbc.query(
+                """
+                SELECT id, exercise_id, day_of_week, position, sets, reps, note
+                FROM workout_item
+                WHERE plan_id = ?
+                ORDER BY day_of_week, position ASC
+                """,
+                (rs, i) -> new WorkoutItemDto(
+                        rs.getLong("id"),
+                        rs.getLong("exercise_id"),
+                        rs.getString("day_of_week"),
+                        rs.getInt("position"),
+                        rs.getInt("sets"),
+                        rs.getInt("reps"),
+                        rs.getString("note")),
+                planId);
+    }
+
+    // PROXY PATTERN: Carica i piani scaduti con lazy loading degli items
     public List<WorkoutPlanDto> findExpired(Long userId, LocalDate referenceDate) {
+        // System.out.println(">>> SCHEDE: Caricamento schede SCADUTE per user ID: " + userId);
         String sql = """
-                  SELECT id
+                  SELECT id, user_id, title, start_date, end_date
                   FROM workout_plan
                   WHERE user_id = ?
                     AND end_date < ?
                   ORDER BY end_date DESC, id DESC
                 """;
-        List<Long> planIds = jdbc.query(sql, (rs, i) -> rs.getLong("id"), userId, Date.valueOf(referenceDate));
-        return loadPlansByIds(userId, planIds);
+        return jdbc.query(sql, (rs, i) -> {
+            Long planId = rs.getLong("id");
+            Long planUserId = rs.getLong("user_id");
+            String title = rs.getString("title");
+            LocalDate startDate = rs.getDate("start_date").toLocalDate();
+            LocalDate endDate = rs.getDate("end_date").toLocalDate();
+            
+            // Crea il proxy con lazy loading
+            return new WorkoutPlanProxy(planId, planUserId, title, startDate, endDate,
+                    () -> findItemsByPlanId(planId));
+        }, userId, Date.valueOf(referenceDate));
     }
 
     /*Elimina un allenamento esistente */
@@ -99,44 +138,5 @@ public class WorkoutPlansRepository {
         jdbc.update("DELETE FROM workout_plan WHERE id = ?", planId);
     }
 
-    /*Carica tutti gli allenamenti per un utente */
-    private List<WorkoutPlanDto> loadPlansByIds(Long userId, List<Long> planIds) {
-        List<WorkoutPlanDto> out = new ArrayList<>();
-        for (Long planId : planIds) {
-            var header = jdbc.queryForObject(
-                    "SELECT id, user_id, title, start_date, end_date FROM workout_plan WHERE id = ? AND user_id = ?",
-                    (rs, i) -> new Object[] {
-                            rs.getLong("id"),
-                            rs.getLong("user_id"),
-                            rs.getString("title"),
-                            rs.getDate("start_date").toLocalDate(),
-                            rs.getDate("end_date").toLocalDate()
-                    },
-                    planId, userId);
 
-            String title = (String) header[2];
-            LocalDate start = (LocalDate) header[3];
-            LocalDate end = (LocalDate) header[4];
-
-            List<WorkoutItemDto> items = jdbc.query(
-                    """
-                            SELECT id, exercise_id, day_of_week, position, sets, reps, note
-                            FROM workout_item
-                            WHERE plan_id = ?
-                            ORDER BY day_of_week, position ASC
-                            """,
-                    (rs, i) -> new WorkoutItemDto(
-                            rs.getLong("id"),
-                            rs.getLong("exercise_id"),
-                            rs.getString("day_of_week"),
-                            rs.getInt("position"),
-                            rs.getInt("sets"),
-                            rs.getInt("reps"),
-                            rs.getString("note")),
-                    planId);
-
-            out.add(new WorkoutPlanDto(planId, userId, title, start, end, items));
-        }
-        return out;
-    }
 }

@@ -110,6 +110,7 @@
 .form-textarea {
     resize: vertical;
     min-height: 80px;
+    box-sizing: border-box;
 }
 
 .form-row {

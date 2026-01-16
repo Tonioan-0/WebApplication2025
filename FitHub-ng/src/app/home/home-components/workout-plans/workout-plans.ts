@@ -83,12 +83,18 @@ export class WorkoutPlans implements OnInit {
   // ---------- LOAD SCHEDE ATTIVE/SCADUTE----------
   loadPlans() {
     this.workoutPlansService.getActive(this.utils.todayISO()).subscribe({
-      next: (p: WorkoutPlan[]) => (this.activePlans = p),
+      next: (p: WorkoutPlan[]) => {
+        this.activePlans = p;
+        this.cdr.detectChanges();
+      },
       error: () => (this.errorMsg = 'Errore nel caricamento schede attive.')
     });
 
     this.workoutPlansService.getExpired().subscribe({
-      next: (p: WorkoutPlan[]) => (this.expiredPlans = p),
+      next: (p: WorkoutPlan[]) => {
+        this.expiredPlans = p;
+        this.cdr.detectChanges();
+      },
       error: () => (this.errorMsg = 'Errore nel caricamento schede scadute.')
     });
   }
@@ -218,7 +224,7 @@ export class WorkoutPlans implements OnInit {
     request$.subscribe({
       next: () => {
         this.saving = false;
-        alert(this.editingPlanId ? '✅ Scheda aggiornata!' : '✅ Scheda salvata!');
+        alert(this.editingPlanId ? 'Scheda aggiornata!' : 'Scheda salvata!');
         window.location.reload();
       },
       error: (err: any) => {
