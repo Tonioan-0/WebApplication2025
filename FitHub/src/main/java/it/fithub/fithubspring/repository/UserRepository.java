@@ -66,22 +66,13 @@ public class UserRepository {
 
     private User insert(User user) {
         String sql = "INSERT INTO app_user (username, email, password, is_admin) VALUES (?, ?, ?, ?) RETURNING id";
-
-        // DEBUG
-        System.out.println("=== INSERT DEBUG ===");
-        System.out.println("user.getIsAdmin() = " + user.getIsAdmin());
-        Boolean valueToInsert = user.getIsAdmin() != null ? user.getIsAdmin() : false;
-        System.out.println("valueToInsert = " + valueToInsert);
-        System.out.println("====================");
-
+        boolean isAdmin = user.getIsAdmin() != null ? user.getIsAdmin() : false;
         try (Connection conn = dataSource.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
-            stmt.setBoolean(4, valueToInsert);
-
+            stmt.setBoolean(4, isAdmin);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     user.setId(rs.getLong(1));
@@ -229,7 +220,7 @@ public class UserRepository {
                 "FROM app_user WHERE id = ?";
 
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, userId);
 
@@ -241,8 +232,7 @@ public class UserRepository {
                             rs.getBoolean("is_public"),
                             rs.getInt("current_streak"),
                             rs.getInt("weekly_workouts_done"),
-                            rs.getString("status_message")
-                    );
+                            rs.getString("status_message"));
                     return Optional.of(dto);
                 }
                 return Optional.empty();
@@ -252,12 +242,11 @@ public class UserRepository {
         }
     }
 
-
     public void updateStatusMessage(Long userId, String newStatus) {
         String sql = "UPDATE app_user SET status_message = ? WHERE id = ?";
 
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, newStatus);
             stmt.setLong(2, userId);

@@ -73,7 +73,7 @@
             Perfetto per il tuo percorso fitness e le attività all'aperto.
           </p>
 
-          <button class="warning-remove-btn" *ngIf="selectedLocation.warning"
+          <button class="warning-remove-btn" *ngIf="selectedLocation.warning && isAdmin()"
             (click)="removeWarningFromLocation(selectedLocation.id)">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
               <path [attr.d]="svgIcons.close" />
