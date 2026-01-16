@@ -22,14 +22,12 @@ public class DatabaseConfig {
     @Value("${spring.datasource.password}")
     private String password;
 
-    // Singleton instance holder
     private static class DataSourceHolder {
         private static volatile SingletonDataSource instance;
     }
 
     @PostConstruct
     public void validateConfiguration() {
-        // Validazione variabili di ambiente con messaggi in italiano
         if (url == null || url.trim().isEmpty()) {
             printRedError("ERRORE: La variabile di ambiente 'spring.datasource.url' non è configurata!");
             throw new IllegalStateException("Database URL non configurato");
@@ -47,7 +45,6 @@ public class DatabaseConfig {
 
     @Bean
     public DataSource dataSource() {
-        // Implementazione Singleton con lazy initialization e double-checked locking
         if (DataSourceHolder.instance == null) {
             synchronized (DataSourceHolder.class) {
                 if (DataSourceHolder.instance == null) {
@@ -58,10 +55,6 @@ public class DatabaseConfig {
         return DataSourceHolder.instance;
     }
 
-    /**
-     * Implementazione Singleton di DataSource usando pure JDBC.
-     * Questo pattern garantisce una singola istanza per tutta l'applicazione.
-     */
     private static class SingletonDataSource implements DataSource {
         private final String url;
         private final String username;
@@ -83,7 +76,6 @@ public class DatabaseConfig {
             return DriverManager.getConnection(url, username, password);
         }
 
-        // Unused methods required by DataSource interface
         @Override
         public java.io.PrintWriter getLogWriter() {
             return null;
@@ -118,9 +110,6 @@ public class DatabaseConfig {
         }
     }
 
-    /**
-     * Stampa un messaggio di errore in rosso sulla console.
-     */
     private void printRedError(String message) {
         String ANSI_RED = "\u001B[31m";
         String ANSI_RESET = "\u001B[0m";

@@ -4,6 +4,26 @@
     color: var(--on-surface-variant);
 }
 
+/* ========== MESSAGES (Error / Success) ========== */
+.message {
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.message.error {
+    background: rgba(229, 57, 53, 0.1);
+    color: #e53935;
+    border: 1px solid rgba(229, 57, 53, 0.3);
+}
+
+.message.success {
+    background: rgba(67, 160, 71, 0.1);
+    color: #43a047;
+    border: 1px solid rgba(67, 160, 71, 0.3);
+}
+
 /* ========== PAGE LAYOUT ========== */
 .page {
     width: 100%;

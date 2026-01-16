@@ -7,8 +7,8 @@
     </div>
   </header>
 
-  <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
-  <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
+  <div class="message error" *ngIf="errorMsg">{{ errorMsg }}</div>
+  <div class="message success" *ngIf="successMsg">{{ successMsg }}</div>
 
   <!-- ===================== EDITOR ===================== -->
   <section *ngIf="tab==='EDITOR'" class="editor">
