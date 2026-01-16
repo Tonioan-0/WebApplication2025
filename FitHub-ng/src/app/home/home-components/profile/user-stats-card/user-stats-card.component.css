@@ -3,12 +3,17 @@
 }
 
 .section-label {
-  font-size: 0.7rem; color: #888; font-weight: 700;
-  letter-spacing: 1px; margin-bottom: 8px; display: block;
+  font-size: 0.7rem;
+  color: #888;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: block;
 }
 
 /* --- SPAZIO AGGIUNTO QUI SOTTO (margin-bottom aumentato) --- */
 .status-section {
+
   margin-bottom: 2.5rem;
 }
 
@@ -24,7 +29,11 @@
   height: 60px;
 }
 
-.quote-icon { color: rgba(255,255,255,0.2); font-size: 1.2rem; flex-shrink: 0; }
+.quote-icon {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
 
 .content-area {
   flex-grow: 1;
@@ -34,7 +43,11 @@
 }
 
 .status-text {
-  color: #e2e8f0; font-style: italic; font-size: 0.95rem; display: block; width: 100%;
+  color: #e2e8f0;
+  font-style: italic;
+  font-size: 0.95rem;
+  display: block;
+  width: 100%;
 }
 
 .ghost-input {
@@ -49,21 +62,26 @@
 }
 
 .action-btn {
-  width: 36px; height: 36px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
 }
 
 .btn-edit {
-  background: rgba(255,255,255,0.1);
-  color: #aaa;
-}
-.btn-edit:hover {
-  background: rgba(255,255,255,0.2);
+  background: var(--primary);
   color: white;
+}
+
+.btn-edit:hover {
+  background: var(--primary-container);
+  color: white;
+  transform: scale(1.05);
 }
 
 .btn-save {
@@ -73,11 +91,28 @@
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
 
 .stat-box {
-  background: #111; border: 1px solid #2a2a2a;
-  padding: 15px; border-radius: 12px; text-align: center;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
 }
-.stat-value { font-size: 1.6rem; font-weight: 800; display: block; }
-.stat-label { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; }
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  display: block;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 700;
+}
