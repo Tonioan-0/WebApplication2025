@@ -181,7 +181,7 @@
               <div class="meal-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));">
 
                 @for (item of meal.items; track item.id) {
-                  <div class="quadrant-card" [style.background-image]="'url(' + (item.imageUrl || 'assets/placeholder-food.jpg') + ')'" style="height: 180px;">
+                  <div class="quadrant-card" [style.background-image]="'url(' + (item.imageUrl || '/assets/placeholder-food.jpg') + ')'" style="height: 180px;">
 
                     <div class="card-overlay">
 

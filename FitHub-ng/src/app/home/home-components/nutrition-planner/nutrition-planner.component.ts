@@ -34,7 +34,7 @@ export class NutritionPlannerComponent implements OnInit {
   showDeleteItemModal: boolean = false;
   itemIdToDelete: number | null = null;
   showSaveModal: boolean = false;
-  mealNameInput: string = "Champion's Lunch"; //default view
+  mealNameInput: string = "Pranzo del campione"; //default view
   alertMessage: string | null = null;
   alertType: 'success' | 'error' | 'warning' = 'success';
 
@@ -60,7 +60,7 @@ export class NutritionPlannerComponent implements OnInit {
 
   openSaveModal() {
     if (this.myMeal.length === 0) {
-      this.showAlert('Your plate is empty! Add some food first.', 'warning');
+      this.showAlert('Il tuo pasto è vuoto! Aggiungi qualche alimento.', 'warning');
       return;
     }
     this.showSaveModal = true;
@@ -77,17 +77,17 @@ export class NutritionPlannerComponent implements OnInit {
     this.mealService.saveMeal(requestData).subscribe({
       next: () => {
         this.showSaveModal = false;
-        this.showAlert('Meal saved successfully!', 'success');
+        this.showAlert('Pasto salvato con successo!', 'success');
 
         // Reset
         this.myMeal = [];
-        this.mealNameInput = "Champion's Lunch";
+        this.mealNameInput = "Pranzo del campione";
         this.updateTotals();
         this.loadHistory();
       },
       error: () => {
         this.showSaveModal = false;
-        this.showAlert('Error saving meal. Is the backend running?', 'error');
+        this.showAlert('Errore durante il salvataggio. Controllare il server', 'error');
       }
     });
   }
@@ -121,11 +121,11 @@ export class NutritionPlannerComponent implements OnInit {
         next: () => {
           this.loadHistory();
           this.closeModal();
-          this.showAlert('Meal deleted successfully', 'success');
+          this.showAlert('Pasto eliminato con successo', 'success');
         },
         error: () => {
           this.closeModal();
-          this.showAlert('Error deleting meal', 'error');
+          this.showAlert('Errore durante la cancellazione del pasto', 'error');
         }
       });
     }
@@ -214,7 +214,7 @@ export class NutritionPlannerComponent implements OnInit {
       const calculatedItem = {
         name: this.selectedFood.name,
         grams: this.inputGrams,
-        image: this.selectedFood.image || 'https://placehold.co/300x200/png?text=No+Image',
+        image: this.selectedFood.image || '/assets/placeholder-food.jpg',
         calories: Math.round(this.selectedFood.nutriments.calories * multiplier),
         proteins: Math.round(this.selectedFood.nutriments.proteins * multiplier),
         carbs: Math.round(this.selectedFood.nutriments.carbohydrates * multiplier),
