@@ -885,6 +885,132 @@ ALTER TABLE ONLY public.workout_plan
 
 
 --
+-- Name: meals; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.meals (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    total_calories integer DEFAULT 0,
+    date_eaten timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+ALTER TABLE public.meals OWNER TO postgres;
+
+--
+-- Name: meals_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.meals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public.meals_id_seq OWNER TO postgres;
+ALTER SEQUENCE public.meals_id_seq OWNED BY public.meals.id;
+ALTER TABLE ONLY public.meals ALTER COLUMN id SET DEFAULT nextval('public.meals_id_seq'::regclass);
+
+ALTER TABLE ONLY public.meals
+    ADD CONSTRAINT meals_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY public.meals
+    ADD CONSTRAINT meals_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.app_user(id) ON DELETE CASCADE;
+
+CREATE INDEX idx_meals_user_id ON public.meals USING btree (user_id);
+CREATE INDEX idx_meals_date_eaten ON public.meals USING btree (date_eaten DESC);
+
+
+--
+-- Name: meal_items; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.meal_items (
+    id bigint NOT NULL,
+    meal_id bigint NOT NULL,
+    food_name character varying(255) NOT NULL,
+    image_url character varying(512),
+    grams integer DEFAULT 0,
+    calories integer DEFAULT 0,
+    proteins double precision DEFAULT 0,
+    carbs double precision DEFAULT 0,
+    fats double precision DEFAULT 0
+);
+
+ALTER TABLE public.meal_items OWNER TO postgres;
+
+--
+-- Name: meal_items_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.meal_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public.meal_items_id_seq OWNER TO postgres;
+ALTER SEQUENCE public.meal_items_id_seq OWNED BY public.meal_items.id;
+ALTER TABLE ONLY public.meal_items ALTER COLUMN id SET DEFAULT nextval('public.meal_items_id_seq'::regclass);
+
+ALTER TABLE ONLY public.meal_items
+    ADD CONSTRAINT meal_items_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY public.meal_items
+    ADD CONSTRAINT meal_items_meal_id_fkey FOREIGN KEY (meal_id) REFERENCES public.meals(id) ON DELETE CASCADE;
+
+CREATE INDEX idx_meal_items_meal_id ON public.meal_items USING btree (meal_id);
+
+
+--
+-- Name: completed_workout; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.completed_workout (
+    id bigint NOT NULL,
+    plan_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    completed_date date NOT NULL,
+    day_of_week character varying(16) NOT NULL
+);
+
+ALTER TABLE public.completed_workout OWNER TO postgres;
+
+--
+-- Name: completed_workout_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.completed_workout_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public.completed_workout_id_seq OWNER TO postgres;
+ALTER SEQUENCE public.completed_workout_id_seq OWNED BY public.completed_workout.id;
+ALTER TABLE ONLY public.completed_workout ALTER COLUMN id SET DEFAULT nextval('public.completed_workout_id_seq'::regclass);
+
+ALTER TABLE ONLY public.completed_workout
+    ADD CONSTRAINT completed_workout_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY public.completed_workout
+    ADD CONSTRAINT completed_workout_user_plan_date_day_key UNIQUE (user_id, plan_id, completed_date, day_of_week);
+
+ALTER TABLE ONLY public.completed_workout
+    ADD CONSTRAINT completed_workout_plan_id_fkey FOREIGN KEY (plan_id) REFERENCES public.workout_plan(id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.completed_workout
+    ADD CONSTRAINT completed_workout_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.app_user(id) ON DELETE CASCADE;
+
+CREATE INDEX idx_completed_workout_user_id ON public.completed_workout USING btree (user_id);
+CREATE INDEX idx_completed_workout_date ON public.completed_workout USING btree (completed_date DESC);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
