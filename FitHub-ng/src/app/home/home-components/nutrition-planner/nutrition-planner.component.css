@@ -370,6 +370,7 @@ hr {
   border-radius: var(--radius-lg);
   transition: all 0.3s ease;
   overflow: hidden;
+  margin-bottom: 20px;
 }
 
 .history-card:hover {
