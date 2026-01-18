@@ -225,12 +225,12 @@ button {
 }
 
 /* Text Utilities */
-.text-blue {
-    color: #3b82f6;
+.text-purple {
+    color: #a855f7;
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, #3b82f6 0%, #f97316 100%);
+    background: linear-gradient(135deg, #9333ea 0%, #f97316 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -271,7 +271,7 @@ button {
 }
 
 .btn-primary-lg {
-    background: #3b82f6;
+    background: #9333ea;
     color: white;
     padding: 1rem 2rem;
     border-radius: 8px;
@@ -648,7 +648,7 @@ label {
 .hero {
     padding: 9rem 1rem 6rem;
     text-align: center;
-    background: radial-gradient(circle at 50% 20%, rgba(59, 130, 246, 0.15) 0%, rgba(10, 10, 10, 0) 50%);
+    background: radial-gradient(circle at 50% 20%, rgba(147, 51, 234, 0.15) 0%, rgba(10, 10, 10, 0) 50%);
     min-height: 80vh;
     display: flex;
     flex-direction: column;
@@ -658,12 +658,12 @@ label {
 
 .hero-badge {
     display: inline-block;
-    background: rgba(59, 130, 246, 0.1);
-    border: 1px solid rgba(59, 130, 246, 0.3);
+    background: rgba(147, 51, 234, 0.1);
+    border: 1px solid rgba(147, 51, 234, 0.3);
     padding: 0.5rem 1rem;
     border-radius: 20px;
     margin-bottom: 2rem;
-    color: #60a5fa;
+    color: #a855f7;
     font-size: 0.9rem;
     font-weight: 500;
 }
@@ -704,7 +704,7 @@ h1 {
     font-size: 2.5rem;
     font-weight: 700;
     margin: 0 0 0.5rem;
-    background: linear-gradient(to right, #3b82f6, #60a5fa);
+    background: linear-gradient(to right, #9333ea, #a855f7);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -763,7 +763,7 @@ header .card {
 
 .feature-card:hover {
     transform: translateY(-5px);
-    border-color: rgba(59, 130, 246, 0.4);
+    border-color: rgba(147, 51, 234, 0.4);
 }
 
 .feature-card:nth-child(2):hover,
@@ -806,9 +806,9 @@ header .card {
     height: 24px;
 }
 
-.blue-soft {
-    background: rgba(59, 130, 246, 0.1);
-    color: #60a5fa;
+.purple-soft {
+    background: rgba(147, 51, 234, 0.1);
+    color: #a855f7;
 }
 
 .orange-soft {
@@ -825,9 +825,9 @@ header .card {
     justify-content: center;
 }
 
-.blue-circle {
-    background: rgba(59, 130, 246, 0.2);
-    color: #3b82f6;
+.purple-circle {
+    background: rgba(147, 51, 234, 0.2);
+    color: #9333ea;
 }
 
 .orange-circle {
@@ -901,7 +901,7 @@ header .card {
 }
 
 .img-1 {
-    background-image: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    background-image: linear-gradient(135deg, #581c87, #9333ea);
 }
 
 .img-2 {
@@ -923,9 +923,9 @@ header .card {
     border-radius: 4px;
 }
 
-.user-badge.blue {
-    background: rgba(59, 130, 246, 0.1);
-    color: #60a5fa;
+.user-badge.purple {
+    background: rgba(147, 51, 234, 0.1);
+    color: #a855f7;
 }
 
 .user-badge.orange {

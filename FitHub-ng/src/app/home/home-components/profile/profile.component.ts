@@ -37,7 +37,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private profileService: ProfileService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -127,8 +127,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.authService.logout().subscribe({
-      next: () => this.router.navigate(['/login']),
-      error: () => this.router.navigate(['/login'])
+      next: () => this.router.navigate(['/']),
+      error: () => this.router.navigate(['/'])
     });
   }
 }
